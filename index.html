@@ -7,16 +7,30 @@
   <title>SISEC MUS 2016</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.3/css/bulma.min.css">
+  <style media="screen">
+    .hero-head {
+      padding: 0px 20px;
+    }
+    .hero-head {
+    background-color:#ad223e;
+    }
+    .hero-head .nav .title {
+      color: white;
+    }
+    .hero-head .nav-item a {
+      color: white;
+    }
+  </style>
 </head>
 <body>
-  <section class="hero is-fullheight is-default is-bold">
+  <section class="hero is-default is-bold">
     <div class="hero-head">
       <div class="container">
         <nav class="nav has-shadow">
           <div class="container">
             <div class="nav-left">
               <a class="nav-item" href="/">
-                <h1 class="title">SISEC MUS 2016 Evaluation</h1>
+                <h1 class="title is-4">SISEC MUS 2016</h1>
               </a>
             </div>
             <span class="nav-toggle">
@@ -26,7 +40,7 @@
             </span>
             <div class="nav-right nav-menu">
               <span class="nav-item">
-                <a class="button">
+                <a>
                   SISEC Website
                 </a>
               </span>
@@ -41,7 +55,7 @@
         <div class="columns">
           <div class="column is-10">
             <figure class="image is-10by3">
-              <img src="http://placehold.it/1000x1000" alt="Description">
+              <img src="http://placehold.it/1000x300" alt="Description">
             </figure>
           </div>
           <div class="column is-2">
@@ -70,16 +84,22 @@
         </div>
       </div>
     </div>
-
-    <div class="hero-foot">
-      <div class="container">
-        <div class="tabs is-centered">
-          <ul>
-            <li><a>Fabian-Robert Stöter</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
   </section>
+  <footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website by <a href="http://faroit.com">Fabian-Robert Stöter</a>. The source code is licensed
+        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
+      </p>
+      <p>
+        <a class="icon" href="https://github.com/faroit/sisec-mus-website">
+          <i class="fa fa-github"></i>
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>

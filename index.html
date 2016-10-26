@@ -5,7 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SISEC MUS 2016</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.3/css/bulma.min.css">
   <style media="screen">
     .hero-head {
@@ -21,6 +20,7 @@
       color: white;
     }
   </style>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
   <section class="hero is-default is-bold">
@@ -54,9 +54,7 @@
       <div class="container has-text-centered">
         <div class="columns">
           <div class="column is-10">
-            <figure class="image is-10by3">
-              <img src="http://placehold.it/1000x300" alt="Description">
-            </figure>
+            <div id="headmap"></div>
           </div>
           <div class="column is-2">
             <div class="control">
@@ -89,17 +87,53 @@
   <div class="container">
     <div class="content has-text-centered">
       <p>
-        Website by <a href="http://faroit.com">Fabian-Robert Stöter</a>. The source code is licensed
+        The source code of this website is licensed
         <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
         is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
       </p>
       <p>
-        <a class="icon" href="https://github.com/faroit/sisec-mus-website">
-          <i class="fa fa-github"></i>
-        </a>
       </p>
     </div>
   </div>
 </footer>
+<script type="text/javascript">
+//height of each row in the heatmap
+//width of each column in the heatmap
+var gridSize = 50,
+    h = gridSize,
+    w = gridSize,
+    rectPadding = 60;
+
+var colorLow = 'green', colorMed = 'yellow', colorHigh = 'red';
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 640 - margin.left - margin.right,
+    height = 380 - margin.top - margin.bottom;
+
+var colorScale = d3.scaleLinear()
+     .domain([-10, 0, 10])
+     .range([colorLow, colorMed, colorHigh]);
+
+var svg = d3.select("#heatmap").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("out.csv", function(data) {
+  var heatMap = svg.selectAll("rect")
+    .data(data)
+    .enter().append("rect")
+    .attr("x", function(d) { return d.estimate_name * w; })
+    .attr("y", function(d) { return d.track_id * h; })
+    .attr("width", function(d) { return w; })
+    .attr("height", function(d) { return h; })
+    .style("fill", function(d) { return colorScale(d.score); });
+
+    console.log(data[100].estimate_name);
+  });
+
+</script>
+
 </body>
 </html>

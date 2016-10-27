@@ -11,30 +11,28 @@
     .hero-head {
       padding: 0px 20px;
     }
-    .hero-head {
-    background-color:#ad223e;
-    }
-    .hero-head .nav .title {
+
+    .button.is-vocals {
+      background-color: #1F2F86;
       color: white;
-    }
-    .hero-head .nav-item a {
-      color: white;
+      border-width: 0;
     }
 
-    #heatmap {
-      height: 10em;
+    .button.is-acc {
+      background-color: #f818f1;
+      color: white;
+      border-width: 0;
     }
 
     div.tooltip {
       position: absolute;
       text-align: center;
-      width: 60px;
-      height: 28px;
-      padding: 2px;
+      width: 80px;
+      height: 36px;
+      padding: 5px;
       font: 12px sans-serif;
       background: lightsteelblue;
       border: 0px;
-      border-radius: 8px;
     }
   </style>
 </head>
@@ -67,35 +65,33 @@
     </div>
 
     <div class="hero-body">
-      <div class="container has-text-centered">
+      <div class="container">
         <div class="columns">
-          <div class="column is-10">
-            <div id="heatmap"></div>
-          </div>
-          <div class="column is-2">
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select>
-                  <option>Select Target!</option>
-                  <option>Vocals</option>
-                  <option>Accompaniment</option>
-                  <option>Drums</option>
-                  <option>Bass</option>
-                  <option>Other</option>
-                </select>
-              </div>
+          <div class="column is-narrow">
+            <div class="control has-addons">
+              <a class="button is-vocals">Vocals</a>
+              <a class="button">Accompaniment</a>
+              <a class="button">Drums</a>
+              <a class="button">Bass</a>
+              <a class="button">Other</a>
             </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select>
-                  <option>Select Subset!</option>
-                  <option>Dev</option>
-                  <option>Test</option>
-                </select>
-              </div>
+          </div>
+          <div class="column is-narrow">
+            <div class="control has-addons">
+              <a class="button is-primary">SDR</a>
+              <a class="button">ISR</a>
+              <a class="button">SIR</a>
+              <a class="button">SAR</a>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-addons">
+              <a class="button">Training</a>
+              <a class="button is-primary">Test</a>
             </div>
           </div>
         </div>
+        <div id="heatmap"></div>
       </div>
     </div>
   </section>
@@ -117,27 +113,25 @@
 <script type="text/javascript">
 //height of each row in the heatmap
 //width of each column in the heatmap
-var gridSize = 10,
+var margin = {top: 20, right: 0, bottom: 30, left: 0},
+width = parseInt(d3.select("#heatmap").style("width")) - margin.left - margin.right;
+
+var gridSize = width / 50, // add number of tracks here
 h = gridSize,
 w = gridSize,
 rectPadding = 0;
 
-var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2D86';
+height = gridSize * 24 + 1; // add the number of methods here
 
-var margin = {top: 20, right: 80, bottom: 30, left: 50},
-width = 720 - margin.left - margin.right,
-height = 380 - margin.top - margin.bottom;
+var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2F86';
 
 var colorScale = d3.scaleLinear()
- .domain([-10, 0, 10])
+ .domain([-8, 2, 10])
  .range([colorLow, colorMed, colorHigh]);
 
 var x = d3.scaleLinear()
  .domain([1, 100])
  .range([0, width]);
-
-var xAxis = d3.axisBottom()
- .scale(x)
 
 var svg = d3.select("#heatmap")
 .append("svg")
@@ -150,14 +144,17 @@ var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-d3.csv("out.csv", function(data) {
-    var heatMap = svg.selectAll(".tracks")
-    .data(data)
-    .enter().append("rect")
-    .attr("x", function(d) { return (d.track_id - 1) * w; })
-    .attr("y", function(d) { return (d.target_name -1) * h; })
-    .style("stroke", "white")
-    .style("stroke-opacity", 0.6)
+d3.csv("out.csv", init);
+
+function update(data) {
+    var heatMap = svg.selectAll(".track")
+    .data(data);
+
+    heatMap.enter().append("rect")
+    .attr("class", "track")
+    .merge(heatMap)
+    .attr("x", function(d) { return (d.track_id - 51) * w; })
+    .attr("y", function(d) { return (d.estimate_name - 1) * h; })
     .attr("width", function(d) { return w; })
     .attr("height", function(d) { return h; })
     .style("fill", function(d) { return colorScale(d.score); })
@@ -166,13 +163,29 @@ d3.csv("out.csv", function(data) {
          .duration(200)
          .style("opacity", .9);
        div.html(
-         '<a href= "http://google.com">' + // The first <a> tag
-         "</a>" +                          // closing </a> tag
-         "<br/>"  + d.track_id)
+         "Track: "  + d.track_id + "<br/>Method: " + d.estimate_name)
          .style("left", (d3.event.pageX) + "px")
-         .style("top", (d3.event.pageY - 28) + "px");
-       });
-});
+         .style("top", (d3.event.pageY - 36) + "px");
+       })
+    .on("mouseout", function(d) {
+        div.transition()
+          .duration(200)
+          .style("opacity", 0);
+    })
+
+    heatMap.exit().remove();
+}
+
+function init(data) {
+  update(data.filter(function(d) {
+    return d.target_name == 4 && d.metric == 2 && d.track_id >= 50;
+  }));
+  // setTimeout(function () {
+  //   update(data.filter(function(d) {
+  //     return d.target_name == 0 && d.metric == 2 && d.track_id >= 50;
+  //   }));
+  // }, 1000);
+}
 
 </script>
 

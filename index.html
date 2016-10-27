@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>SISEC MUS 2016</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.3/css/bulma.min.css">
   <style media="screen">
@@ -19,8 +20,23 @@
     .hero-head .nav-item a {
       color: white;
     }
+
+    #heatmap {
+      height: 10em;
+    }
+
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      width: 60px;
+      height: 28px;
+      padding: 2px;
+      font: 12px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+    }
   </style>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
   <section class="hero is-default is-bold">
@@ -54,7 +70,7 @@
       <div class="container has-text-centered">
         <div class="columns">
           <div class="column is-10">
-            <div id="headmap"></div>
+            <div id="heatmap"></div>
           </div>
           <div class="column is-2">
             <div class="control">
@@ -96,42 +112,67 @@
     </div>
   </div>
 </footer>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
 <script type="text/javascript">
 //height of each row in the heatmap
 //width of each column in the heatmap
-var gridSize = 50,
-    h = gridSize,
-    w = gridSize,
-    rectPadding = 60;
+var gridSize = 10,
+h = gridSize,
+w = gridSize,
+rectPadding = 0;
 
-var colorLow = 'green', colorMed = 'yellow', colorHigh = 'red';
+var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2D86';
 
 var margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = 640 - margin.left - margin.right,
-    height = 380 - margin.top - margin.bottom;
+width = 720 - margin.left - margin.right,
+height = 380 - margin.top - margin.bottom;
 
 var colorScale = d3.scaleLinear()
-     .domain([-10, 0, 10])
-     .range([colorLow, colorMed, colorHigh]);
+ .domain([-10, 0, 10])
+ .range([colorLow, colorMed, colorHigh]);
 
-var svg = d3.select("#heatmap").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var x = d3.scaleLinear()
+ .domain([1, 100])
+ .range([0, width]);
+
+var xAxis = d3.axisBottom()
+ .scale(x)
+
+var svg = d3.select("#heatmap")
+.append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
 d3.csv("out.csv", function(data) {
-  var heatMap = svg.selectAll("rect")
+    var heatMap = svg.selectAll(".tracks")
     .data(data)
     .enter().append("rect")
-    .attr("x", function(d) { return d.estimate_name * w; })
-    .attr("y", function(d) { return d.track_id * h; })
+    .attr("x", function(d) { return (d.track_id - 1) * w; })
+    .attr("y", function(d) { return (d.target_name -1) * h; })
+    .style("stroke", "white")
+    .style("stroke-opacity", 0.6)
     .attr("width", function(d) { return w; })
     .attr("height", function(d) { return h; })
-    .style("fill", function(d) { return colorScale(d.score); });
-
-    console.log(data[100].estimate_name);
-  });
+    .style("fill", function(d) { return colorScale(d.score); })
+    .on("mouseover", function(d) {
+       div.transition()
+         .duration(200)
+         .style("opacity", .9);
+       div.html(
+         '<a href= "http://google.com">' + // The first <a> tag
+         "</a>" +                          // closing </a> tag
+         "<br/>"  + d.track_id)
+         .style("left", (d3.event.pageX) + "px")
+         .style("top", (d3.event.pageY - 28) + "px");
+       });
+});
 
 </script>
 

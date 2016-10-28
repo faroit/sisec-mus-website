@@ -124,7 +124,7 @@
 var margin = {top: 50, right: 0, bottom: 30, left: 50},
   width = parseInt(d3.select("#heatmap").style("width")) - margin.left - margin.right;
 
-var gridSize = width / 51, // add number of tracks here
+var gridSize = Math.floor(width / 51), // add number of tracks here
   h = gridSize,
   w = gridSize,
   rectPadding = 0;
@@ -196,20 +196,24 @@ function update(data) {
     .key(function(d) { return d.track_id; })
     .entries(data);
 
+  var methods = d3.nest()
+    .key(function(d) { return d.estimate_name; })
+    .entries(data);
+
   var column = svg.selectAll(".track")
     .data(tracks);
 
-  column.enter().append("text")
-      // .classed("trackl", true)
-      .merge(column)
-      .text(function(d) { return d.key})
-      .attr("x", function(d, i) { return (i - 1) * gridSize; })
-      .attr("y", -52)
-      .style("text-anchor", "end")
-      .attr("transform", "translate(42," + gridSize + ")");
+  var row = svg.selectAll(".method")
+    .data(methods);
 
-  column.enter(column).append("g")
-      .classed("track", true)
+  row.enter().append("text")
+    .text(function(d) { return d.key})
+    .attr("x", -5)
+    .attr("y", function(d) { return (d.key - 1) * h; })
+    .style("text-anchor", "end")
+    .attr("transform", "translate(0, 15)");
+
+  var gcolumn = column.enter(column).append("g").classed("track", true)
     .merge(column)
       .on("click", function(dclick) {
         update(data.filter(function(d) {
@@ -224,10 +228,17 @@ function update(data) {
     .duration(750)
     .style("opacity", 0)
     .remove();
+
+  gcolumn.append("text")
+    .attr("class", "track_label")
+    .text(function(d) { return d.key})
+    .attr("y", -40)
+    .style("text-anchor", "start")
+    .attr("transform", "translate(5," + gridSize / 2 + ")");
 }
 
 function mouseover(p) {
-  console.log(p.key)
+  // Todo style fixen
   d3.selectAll(".screen text").classed("active", function(d, i) { return i == p.key - 1; });
 }
 

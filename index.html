@@ -26,9 +26,9 @@
 
     div.tooltip {
       position: absolute;
-      text-align: center;
-      width: 80px;
-      height: 36px;
+      text-align: left;
+      width: 120px;
+      height: 66px;
       padding: 5px;
       font: 12px sans-serif;
       background: lightsteelblue;
@@ -116,7 +116,7 @@
 var margin = {top: 20, right: 0, bottom: 30, left: 0},
 width = parseInt(d3.select("#heatmap").style("width")) - margin.left - margin.right;
 
-var gridSize = width / 50, // add number of tracks here
+var gridSize = width / 51, // add number of tracks here
 h = gridSize,
 w = gridSize,
 rectPadding = 0;
@@ -147,33 +147,39 @@ var div = d3.select("body").append("div")
 d3.csv("out.csv", init);
 
 function update(data) {
-    var heatMap = svg.selectAll(".track")
+  // read https://bost.ocks.org/mike/join/ to understand the concept
+  var heatMap = svg.selectAll("track")
     .data(data);
 
-    heatMap.enter().append("rect")
-    .attr("class", "track")
+  heatMap.enter().append("rect")
+      .attr("width", function(d) { return w; })
+      .attr("height", function(d) { return h; })
     .merge(heatMap)
-    .attr("x", function(d) { return (d.track_id - 51) * w; })
-    .attr("y", function(d) { return (d.estimate_name - 1) * h; })
-    .attr("width", function(d) { return w; })
-    .attr("height", function(d) { return h; })
-    .style("fill", function(d) { return colorScale(d.score); })
-    .on("mouseover", function(d) {
-       div.transition()
-         .duration(200)
-         .style("opacity", .9);
-       div.html(
-         "Track: "  + d.track_id + "<br/>Method: " + d.estimate_name)
-         .style("left", (d3.event.pageX) + "px")
-         .style("top", (d3.event.pageY - 36) + "px");
-       })
-    .on("mouseout", function(d) {
-        div.transition()
-          .duration(200)
-          .style("opacity", 0);
+      .attr("x", function(d) { return (d.track_id - 50) * w; })
+      .attr("y", function(d) { return (d.estimate_name) * h; })
+      .attr("class", function (d) {
+          return "rect track-" + d.track_id + ' ' + 'est-' + d.estimate_name;
+      })
+      .style("fill", function(d) { return colorScale(d.score); })
+      .on("mouseover", function(d) {
+         div.transition()
+           .duration(200)
+           .style("opacity", .9);
+         div.html(
+           "Track: "  + d.track_id +
+           "<br/>Method: " + d.estimate_name +
+           "<br/>Score: " + d.score
+         )
+           .style("left", (d3.event.pageX) + "px")
+           .style("top", (d3.event.pageY - 36) + "px");
+         })
+      .on("mouseout", function(d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", 0);
     })
 
-    heatMap.exit().remove();
+  heatMap.exit().remove();
 }
 
 function init(data) {

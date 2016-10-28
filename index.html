@@ -40,6 +40,7 @@
     .track.active {
       fill: red;
     }
+
   </style>
 </head>
 <body>
@@ -155,6 +156,7 @@ var div = d3.select(".columns")
 d3.csv("out.csv", init);
 
 function rect(data) {
+  // plot rects for each column
   var data = data.values;
 
   var heatMap = d3.select(this).selectAll("rect")

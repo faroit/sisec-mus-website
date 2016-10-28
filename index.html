@@ -25,14 +25,20 @@
     }
 
     div.tooltip {
-      position: absolute;
-      text-align: left;
-      width: 120px;
-      height: 66px;
-      padding: 5px;
+      position: relative;
+      text-align: right;
+      width: 300px;
+      height: 30px;
+      padding: 0px;
+      margin-top: 8px;
+      margin-right: 10px;
       font: 12px sans-serif;
-      background: lightsteelblue;
       border: 0px;
+      color: black;
+    }
+
+    .track.active {
+      fill: red;
     }
   </style>
 </head>
@@ -134,32 +140,31 @@ var x = d3.scaleLinear()
  .range([0, width]);
 
 var svg = d3.select("#heatmap")
-.append("svg")
-.attr("width", width + margin.left + margin.right)
-.attr("height", height + margin.top + margin.bottom)
-.append("g")
-.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("class", "screen")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+var div = d3.select(".columns")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
 d3.csv("out.csv", init);
 
-function update(data) {
-  // read https://bost.ocks.org/mike/join/ to understand the concept
-  var heatMap = svg.selectAll("track")
+function rect(data) {
+  var data = data.values;
+
+  var heatMap = d3.select(this).selectAll("rect")
     .data(data);
 
   heatMap.enter().append("rect")
       .attr("width", function(d) { return w; })
       .attr("height", function(d) { return h; })
     .merge(heatMap)
-      .attr("x", function(d) { return (d.track_id - 50) * w; })
       .attr("y", function(d) { return (d.estimate_name) * h; })
-      .attr("class", function (d) {
-          return "rect track-" + d.track_id + ' ' + 'est-' + d.estimate_name;
-      })
       .style("fill", function(d) { return colorScale(d.score); })
       .on("mouseover", function(d) {
          div.transition()
@@ -170,16 +175,44 @@ function update(data) {
            "<br/>Method: " + d.estimate_name +
            "<br/>Score: " + d.score
          )
-           .style("left", (d3.event.pageX) + "px")
-           .style("top", (d3.event.pageY - 36) + "px");
-         })
-      .on("mouseout", function(d) {
-          div.transition()
-            .duration(200)
-            .style("opacity", 0);
-    })
+          //  .style("left", (d3.event.pageX) + "px");
+          //  .style("top", "px");
+        })
+       .on("mouseout", function(d) {
+           div.transition()
+             .duration(200)
+             .style("opacity", 0);
+        });
 
-  heatMap.exit().remove();
+    heatMap.exit().remove();
+}
+
+function update(data) {
+  // read https://bost.ocks.org/mike/join/ to understand the concept
+  var tracks = d3.nest()
+    .key(function(d) { return d.track_id; })
+    .entries(data);
+
+  var column = svg.selectAll(".track")
+    .data(tracks);
+
+  column
+    .enter().append("g")
+      .classed("track", true)
+    .merge(column)
+      .on("click", function(dclick) {
+        update(data.filter(function(d) {
+          return d.track_id == dclick.key;
+        }));
+      })
+      .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
+      .each(rect);
+
+
+  column.exit().transition()
+    .duration(750)
+    .style("opacity", 0)
+    .remove();
 }
 
 function init(data) {
@@ -188,7 +221,7 @@ function init(data) {
   }));
   // setTimeout(function () {
   //   update(data.filter(function(d) {
-  //     return d.target_name == 0 && d.metric == 2 && d.track_id >= 50;
+  //     return d.target_name == 3 && d.metric == 2 && d.track_id >= 50;
   //   }));
   // }, 1000);
 }

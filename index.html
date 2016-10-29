@@ -205,10 +205,10 @@ function update(data) {
     .key(function(d) { return d.estimate_name; })
     .entries(data);
 
-  var column = svg.selectAll(".track")
+  var column = svg.selectAll("track")
     .data(tracks);
 
-  var row = svg.selectAll(".method")
+  var row = svg.selectAll("text")
     .data(methods);
 
   row.enter()
@@ -220,6 +220,9 @@ function update(data) {
       .attr("x", -5)
       .attr("y", function(d, i) { return (i - 1) * h; })
       .style("text-anchor", "end");
+
+  row.exit(row)
+    .remove();
 
   var gcolumn = column.enter(column).append("g").classed("track", true)
     .merge(column)
@@ -237,28 +240,26 @@ function update(data) {
       .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
       .each(rect);
 
-  column.exit().transition()
-    .duration(750)
-    .style("opacity", 0)
+  column.exit()
     .remove();
 
   gcolumn.append("text")
-    .attr("class", "track_label")
-    .text(function(d) { return d.key})
-    .attr("y", -40)
-    .style("text-anchor", "start")
-    .attr("transform", "translate(5," + gridSize / 2 + ")");
+      .attr("class", "track_label")
+      .text(function(d) { return d.key})
+      .attr("y", -40)
+      .style("text-anchor", "start")
+      .attr("transform", "translate(5," + gridSize / 2 + ")");
 }
 
 function init(data) {
   update(data.filter(function(d) {
-    return d.target_name == 4 && d.metric == 2 && d.track_id >= 51;
+    return d.target_name == 3 && d.metric == 2 && d.track_id >= 70;
   }));
-  // setTimeout(function () {
-  //   update(data.filter(function(d) {
-  //     return d.target_name == 3 && d.metric == 2 && d.track_id >= 50;
-  //   }));
-  // }, 1000);
+  setTimeout(function () {
+    update(data.filter(function(d) {
+      return d.target_name == 0 && d.metric == 2 && d.track_id >= 51;
+    }));
+  }, 1000);
 }
 
 </script>

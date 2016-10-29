@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>SISEC MUS 2016</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.3/css/bulma.min.css">
+  <link rel="stylesheet" href=".node_modules/node_modules/bulma/css/bulma.css">
   <style media="screen">
     .hero-head {
       padding: 0px 20px;
@@ -30,16 +30,19 @@
       width: 300px;
       height: 30px;
       padding: 0px;
-      margin-top: 8px;
+      margin-top: 0px;
       margin-right: 10px;
       font: 12px sans-serif;
       border: 0px;
       color: black;
     }
 
-    .screen text.active {
-      stroke: orange;
+    .grid text.method_label.active {
       fill: orange;
+    }
+
+    .grid text.track_label.active {
+      fill: green;
     }
 
   </style>
@@ -116,7 +119,8 @@
     </div>
   </div>
 </footer>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="headers.js"></script>
+<script src=".node_modules/node_modules/d3/build/d3.min.js"></script>
 
 <script type="text/javascript">
 //height of each row in the heatmap
@@ -129,12 +133,12 @@ var gridSize = Math.floor(width / 51), // add number of tracks here
   w = gridSize,
   rectPadding = 0;
 
-height = gridSize * 24; // add the number of methods here
+height = gridSize * headers.methods.length; // add the number of methods here
 
 var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2F86';
 
 var colorScale = d3.scaleLinear()
- .domain([-8, 2, 9])
+ .domain([-10, 2, 28])
  .range([colorLow, colorMed, colorHigh]);
 
 var x = d3.scaleLinear()
@@ -146,7 +150,7 @@ var svg = d3.select("#heatmap")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
-  .attr("class", "screen")
+  .attr("class", "grid")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var tooltip = d3.select(".columns")
@@ -156,18 +160,19 @@ var tooltip = d3.select(".columns")
 
 d3.csv("out.csv", init);
 
+// plot rects row by row for each track column
 function rect(data) {
-  // plot rects for each column
   var data = data.values;
 
-  var heatMap = d3.select(this).selectAll("rect")
+  var heatmap = d3.select(this).selectAll("rect")
     .data(data);
 
-  heatMap.enter().append("rect")
+  heatmap.enter().append("rect")
       .attr("width", function(d) { return w; })
       .attr("height", function(d) { return h; })
-    .merge(heatMap)
-      .attr("y", function(d) { return (d.estimate_name - 1) * h; })
+    .merge(heatmap)
+      // render only as many columns as participants
+      .attr("y", function(d, i) { return (i - 1) * h; })
       .style("fill", function(d) { return colorScale(d.score); })
       .on("mouseover", function(d) {
          tooltip.transition()
@@ -175,11 +180,11 @@ function rect(data) {
            .style("opacity", .9);
          tooltip.html(
            "Track: "  + d.track_id +
-           "<br/>Method: " + d.estimate_name +
-           "<br/>Score: " + d.score
+           "<br/>Method: " + headers.methods[d.estimate_name] +
+           "<br/>" + headers.metrics[d.metric] + ': ' + d.score +
+           "<br/>" + headers.targets[d.target_name]
          )
-          //  .style("left", (d3.event.pageX) + "px");
-          //  .style("top", "px");
+         d3.selectAll(".grid .method_label").classed("active", function(x) { return d.estimate_name == x.key; });
         })
        .on("mouseout", function(d) {
            tooltip.transition()
@@ -187,7 +192,7 @@ function rect(data) {
              .style("opacity", 0);
         });
 
-    heatMap.exit().remove();
+    heatmap.exit().remove();
 }
 
 function update(data) {
@@ -206,21 +211,29 @@ function update(data) {
   var row = svg.selectAll(".method")
     .data(methods);
 
-  row.enter().append("text")
-    .text(function(d) { return d.key})
-    .attr("x", -5)
-    .attr("y", function(d) { return (d.key - 1) * h; })
-    .style("text-anchor", "end")
-    .attr("transform", "translate(0, 15)");
+  row.enter()
+      .append("text")
+      .attr("class", "method_label")
+      .attr("transform", "translate(0, 15)")
+    .merge(row)
+      .text(function(d) { return headers.methods[d.key]})
+      .attr("x", -5)
+      .attr("y", function(d, i) { return (i - 1) * h; })
+      .style("text-anchor", "end");
 
   var gcolumn = column.enter(column).append("g").classed("track", true)
     .merge(column)
       .on("click", function(dclick) {
-        update(data.filter(function(d) {
-          return d.track_id == dclick.key;
-        }));
+        // render new site that displays more detailed track information
+        // update(data.filter(function(d) {
+        //   return d.track_id == dclick.key;
+        // }));
       })
-      .on("mouseover", mouseover)
+      .on("mouseover", function(dclick) {
+        // d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
+        d3.selectAll(".grid .track_label").classed("active", function(d) { return d.key == dclick.key; });
+        // d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
+      })
       .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
       .each(rect);
 
@@ -237,14 +250,9 @@ function update(data) {
     .attr("transform", "translate(5," + gridSize / 2 + ")");
 }
 
-function mouseover(p) {
-  // Todo style fixen
-  d3.selectAll(".screen text").classed("active", function(d, i) { return i == p.key - 1; });
-}
-
 function init(data) {
   update(data.filter(function(d) {
-    return d.target_name == 4 && d.metric == 2 && d.track_id <= 51;
+    return d.target_name == 4 && d.metric == 2 && d.track_id >= 51;
   }));
   // setTimeout(function () {
   //   update(data.filter(function(d) {

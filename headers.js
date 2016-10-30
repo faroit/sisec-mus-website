@@ -1,0 +1,1 @@
+var headers = {"metrics": ["ISR", "SAR", "SDR", "SIR"], "methods": ["CHA", "DUR", "GRA1", "GRA2", "GRA3", "HUA", "IBM", "JEO1", "JEO2", "KAM1", "KAM2", "KON1", "NUG1", "NUG2", "NUG3", "NUG4", "OZE", "RAF1", "RAF2", "RAF3", "STO1", "STO2", "UHL1", "UHL2", "UHL3"], "targets": ["accompaniment", "bass", "drums", "other", "vocals"]}

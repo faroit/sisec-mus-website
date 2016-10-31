@@ -1,0 +1,40 @@
+.hero-head {
+padding: 0px 20px;
+}
+
+.button.is-vocals {
+background-color: #1F2F86;
+color: white;
+border-width: 0;
+}
+
+.button.is-acc {
+background-color: #f818f1;
+color: white;
+border-width: 0;
+}
+
+div.tooltip {
+position: relative;
+text-align: right;
+width: 300px;
+height: 30px;
+padding: 0px;
+margin-top: 0px;
+margin-right: 10px;
+font: 12px sans-serif;
+border: 0px;
+color: black;
+}
+
+.grid text.method_label.active {
+fill: orange;
+}
+
+.grid text.track_label.active {
+fill: green;
+}
+
+.nav {
+margin-top: 10px
+}

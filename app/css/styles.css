@@ -27,7 +27,7 @@ border: 0px;
 color: black;
 }
 
-.grid text.method_label.active {
+text.method_label.active {
 fill: orange;
 }
 

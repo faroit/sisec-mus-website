@@ -25,7 +25,8 @@ var svg = d3.select("#heatmap")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+
+var g = svg.append("g")
     .attr("class", "grid")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -67,7 +68,7 @@ function rect(data) {
            "<br/>" + headers.metrics[d.metric] + ': ' + d.score +
            "<br/>" + headers.targets[d.target_name]
          )
-         d3.selectAll(".grid .method_label").classed("active", function(x) { return d.estimate_name == x.key; });
+         d3.selectAll(".method_label").classed("active", function(x) { return d.estimate_name == x.key; });
         })
        .on("mouseout", function(d) {
            tooltip.transition()
@@ -76,7 +77,6 @@ function rect(data) {
         });
 
     // delete rectangles
-    // TODO: Does not work, maybe the column (group) renderer needs update as well
     heatmap.exit().remove();
 }
 
@@ -98,21 +98,20 @@ function update(data) {
     .entries(data);
 
   // bind data to class
-  var track_column = svg.selectAll("track")
+  var track_column = g.selectAll("g")
     .data(tracks);
 
-  var method_label = svg.selectAll("text")
+  var method_label = svg.selectAll("text.method_label")
     .data(methods);
 
   // render method axis labels
   method_label.enter()
       .append("text")
-    .merge(method_label)
       .attr("class", "method_label")
+    .merge(method_label)
       .text(function(d) { return headers.methods[d.key]})
-      .attr("x", -5)
-      .attr("y", function(d, i) { return (i - 1) * h; })
-      .attr("transform", "translate(0, 15)")
+      .attr("x", 45)
+      .attr("y", function(d, i) { return (i + 2) * h - 3; })
       .style("text-anchor", "end");
 
   // remove method labels
@@ -120,10 +119,20 @@ function update(data) {
     .remove();
 
   // render actual column data (=tracks) into group elements
-  track_column.enter()
-      .append("g")
-      .classed("track", true)
+  var track_column_enter = track_column.enter()
+    .append("g")
     .merge(track_column)
+
+  track_column_enter
+    .append("text")
+    .attr("class", "track_label")
+    .attr("y", -28)
+    .style("text-anchor", "start");
+
+  track_column_enter.select("text")
+    .text(function(d) { return d.key });
+
+  track_column_enter
       .on("click", function(dclick) {
         // // render new site that displays more detailed track information
         // update(data.filter(function(d) {
@@ -133,6 +142,7 @@ function update(data) {
       .on("mouseover", function(dclick) {
         // d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
         d3.selectAll(".grid .track_label").classed("active", function(d) { return d.key == dclick.key; });
+        d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
         // d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
       })
       .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
@@ -140,16 +150,6 @@ function update(data) {
 
   track_column.exit()
     .remove();
-
-  // add track labels
-  // TODO enter() used twice... maybe not the right way
-  track_column.enter().append("text")
-      .attr("class", "track_label")
-    .merge(track_column)
-      .text(function(d) { return d.key})
-      .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
-      .attr("y", -28)
-      .style("text-anchor", "start");
 }
 
 // encapsulate init data

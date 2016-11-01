@@ -11,6 +11,12 @@ var gridSize = width / 50,
 // height is defined by maximum number of methods
 height = gridSize * headers.methods.length;
 
+var method_scale = d3.scaleBand()
+    .range([0, height]);
+
+var track_scale = d3.scaleLinear()
+    .range([0, width]);
+
 // Set color scale
 // TODO: make this dependent on min and mix of data.score
 // TODO: Also mage this log scales (d3.scaleLog does only allow neg. or pos. values)
@@ -53,7 +59,7 @@ function rect(data) {
     .attr("width", function(d) { return w; })
     .attr("height", function(d) { return h; })
     // shift them for numbers of rows available
-    .attr("y", function(d, i) { return (i - 1) * h; })
+    .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); })
     // fill with defined colorscale
     .style("fill", function(d) { return colorScale(d.score); })
     // render tooltip data
@@ -98,6 +104,9 @@ function update(data) {
     .key(function(d) { return d.estimate_name; })
     .entries(data);
 
+  method_scale.domain(methods.map(function(d) { return headers.methods[d.key]; }));
+  track_scale.domain([0, d3.max(tracks, function(d) { return d.key; })]);
+
   // bind data to class
   var track_column = g.selectAll("g")
     .data(tracks, function(d) { return d.key; });
@@ -109,7 +118,7 @@ function update(data) {
   method_label
       .text(function(d) { return headers.methods[d.key]})
       .transition(t)
-      .attr("y", function(d, i) { return (i + 2) * h - 3; })
+      .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
 
   // exit method_label
   method_label.enter()
@@ -118,7 +127,7 @@ function update(data) {
       .attr("x", 45)
       .style("text-anchor", "end")
       .text(function(d) { return headers.methods[d.key]})
-      .attr("y", function(d, i) { return (i + 2) * h - 3; })
+      .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
       .style("fill-opacity", 1e-6)
       .transition(t)
       .style("fill-opacity", 1);
@@ -131,7 +140,7 @@ function update(data) {
 
   track_column
     .transition(t)
-    .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
+    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .each(rect);
 
   // render actual column data (=tracks) into group elements
@@ -160,24 +169,24 @@ function update(data) {
       d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
       // d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
     })
-    .attr("transform", function(d, i) { return "translate(" + i * w + ", -1000)"; })
+    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", -1000)"; })
     .style("fill-opacity", 1e-6)
     .transition(t)
-    .attr("transform", function(d, i) { return "translate(" + i * w + ", 0)"; })
+    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .style("fill-opacity", 1)
     .each(rect);
 
   track_column.exit()
     .transition(t)
     .style("fill-opacity", 1e-6)
-    .attr("transform", function(d, i) { return "translate(" + i * w + ", 1000)"; })
+    // .attr("transform", function(d, i) { return "translate(" + i * w + ", 1000)"; })
     .remove();
 }
 
 // encapsulate init data
 function init(data) {
   update(data.filter(function(d) {
-    return d.target_name == 2 && d.metric == 2 && d.track_id >= 31;
+    return d.target_name == 0 && d.metric == 2 && d.track_id >= 51;
   }));
   setInterval(function () {
     var randval = Math.random() * 100;

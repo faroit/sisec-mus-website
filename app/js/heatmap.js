@@ -12,9 +12,11 @@ var gridSize = width / 50,
 height = gridSize * headers.methods.length;
 
 var method_scale = d3.scaleBand()
+    .round(1)
     .range([0, height]);
 
 var track_scale = d3.scaleBand()
+    .round(1)
     .range([0, width]);
 
 // Set color scale
@@ -114,7 +116,7 @@ function update(data) {
 
   method_scale.domain(methods.map(function(d) { return headers.methods[d.key]; }));
   track_scale.domain(d3.values(tracks).map(function(d) {
-    return d.key; 
+    return d.key;
   }));
 
   // bind data to class
@@ -128,16 +130,18 @@ function update(data) {
   method_label
       .text(function(d) { return headers.methods[d.key]})
       .transition(t)
+      .attr("transform", function(d) { return "translate(0, 65)"; })
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
 
   // exit method_label
   method_label.enter()
       .append("text")
       .attr("class", "method_label")
-      .attr("x", 45)
+      .attr("x", 40)
       .style("text-anchor", "end")
       .text(function(d) { return headers.methods[d.key]})
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
+      .attr("transform", function(d) { return "translate(0, 65)"; })
       .style("fill-opacity", 1e-6)
       .transition(t)
       .style("fill-opacity", 1);
@@ -159,11 +163,14 @@ function update(data) {
 
   track_column_enter.append("text")
     .attr("class", "track_label")
-    .attr("y", -28)
-    .style("text-anchor", "start")
+    .style("text-anchor", "middle")
+    .attr("y", -8)
+    .attr("x", 12)
     .text(function(d) { return d.key });
 
   track_column.select("text")
+    .style("text-anchor", "middle")
+    .attr("x", 12)
     .text(function(d) { return d.key });
 
   track_column_enter

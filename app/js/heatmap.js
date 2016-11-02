@@ -14,7 +14,7 @@ height = gridSize * headers.methods.length;
 var method_scale = d3.scaleBand()
     .range([0, height]);
 
-var track_scale = d3.scaleLinear()
+var track_scale = d3.scaleBand()
     .range([0, width]);
 
 // Set color scale
@@ -47,6 +47,8 @@ d3.csv("/data/data.csv", init);
 
 // plot the actual score rectangles row-wise for each track column
 function rect(data) {
+  var t = d3.transition()
+    .duration(950);
   var data = data.values;
 
   // Bind data to rectangles
@@ -55,9 +57,15 @@ function rect(data) {
 
   // Draw rectangles here
   // render only as many rows as there are methods (using array length instead of data)
+  heatmap
+    .transition(t)
+    .attr("width", function(d) { return track_scale.bandwidth(); })
+    .attr("height", function(d) { return method_scale.bandwidth(); })
+    .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); });
+
   heatmap.enter().append("rect")
-    .attr("width", function(d) { return w; })
-    .attr("height", function(d) { return h; })
+    .attr("width", function(d) { return track_scale.bandwidth(); })
+    .attr("height", function(d) { return method_scale.bandwidth(); })
     // shift them for numbers of rows available
     .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); })
     // fill with defined colorscale
@@ -105,11 +113,13 @@ function update(data) {
     .entries(data);
 
   method_scale.domain(methods.map(function(d) { return headers.methods[d.key]; }));
-  track_scale.domain([0, d3.max(tracks, function(d) { return d.key; })]);
+  track_scale.domain(d3.values(tracks).map(function(d) {
+    return d.key; 
+  }));
 
   // bind data to class
   var track_column = g.selectAll("g")
-    .data(tracks, function(d) { return d.key; });
+    .data(tracks, function(d) { return [d.key, d.values[0].target_name, d.values[0].metric] });
 
   var method_label = svg.selectAll("text.method_label")
     .data(methods, function(d) { return d.key; });
@@ -179,7 +189,7 @@ function update(data) {
   track_column.exit()
     .transition(t)
     .style("fill-opacity", 1e-6)
-    // .attr("transform", function(d, i) { return "translate(" + i * w + ", 1000)"; })
+    // .attr("transform", function(d, i) { return "translate(0, 1000)"; })
     .remove();
 }
 
@@ -193,8 +203,9 @@ function init(data) {
     var randval2 = Math.random() * 100;
     var randmin = Math.min(randval, randval2);
     var randmax = Math.max(randval, randval2);
+    var randtarget = Math.floor(Math.random() * 4);
     update(data.filter(function(d) {
-      return d.target_name == 2 && d.metric == 2 && d.track_id >= randmin && d.track_id < randmax;
+      return d.target_name == randtarget && d.metric == 2 && d.track_id >= randmin && d.track_id < randmax;
     }));
   }, 5000);
 }

@@ -45,7 +45,7 @@ function rect(data) {
 
   // Bind data to rectangles
   var heatmap = d3.select(this).selectAll("rect")
-    .data(data);
+    .data(data, function(d) { return d.estimate_name; });
 
   // Draw rectangles here
   // render only as many rows as there are methods (using array length instead of data)
@@ -91,13 +91,11 @@ function update(data) {
   // group by track_id
   var tracks = d3.nest()
     .key(function(d) { return d.track_id; })
-    .sortKeys(d3.ascending)
     .entries(data);
 
   // group by method_name (=estimate_name)
   var methods = d3.nest()
     .key(function(d) { return d.estimate_name; })
-    .sortKeys(d3.ascending)
     .entries(data);
 
   // bind data to class
@@ -187,7 +185,7 @@ function init(data) {
     var randmin = Math.min(randval, randval2);
     var randmax = Math.max(randval, randval2);
     update(data.filter(function(d) {
-      return d.target_name == Math.floor(Math.random() * 2) && d.metric == 2 && d.track_id >= randmin && d.track_id < randmax;
+      return d.target_name == 2 && d.metric == 2 && d.track_id >= randmin && d.track_id < randmax;
     }));
   }, 5000);
 }

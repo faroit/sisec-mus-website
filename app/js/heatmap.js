@@ -129,8 +129,9 @@ function update(data) {
   // update method_label
   method_label
       .text(function(d) { return headers.methods[d.key]})
+      .style("alignment-baseline", "middle")
+      .attr("dy", 65)
       .transition(t)
-      .attr("transform", function(d) { return "translate(0, 65)"; })
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
 
   // exit method_label
@@ -139,9 +140,11 @@ function update(data) {
       .attr("class", "method_label")
       .attr("x", 40)
       .style("text-anchor", "end")
+      .style("alignment-baseline", "middle")
       .text(function(d) { return headers.methods[d.key]})
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
-      .attr("transform", function(d) { return "translate(0, 65)"; })
+      .attr("height", method_scale.bandwidth())
+      .attr("dy", 65)
       .style("fill-opacity", 1e-6)
       .transition(t)
       .style("fill-opacity", 1);
@@ -182,9 +185,10 @@ function update(data) {
     })
     .on("mouseover", function(dclick) {
       // d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
-      d3.selectAll(".grid .track_label").classed("active", function(d) { return d.key == dclick.key; });
+      d3.selectAll(".grid .track_label").
+        classed("active", function(d) { return d.key == dclick.key; });
       d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
-      // d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
+      d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
     })
     .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", -1000)"; })
     .style("fill-opacity", 1e-6)
@@ -212,7 +216,7 @@ function init(data) {
     var randmax = Math.max(randval, randval2);
     var randtarget = Math.floor(Math.random() * 4);
     update(data.filter(function(d) {
-      return d.target_name == randtarget && d.metric == 2 && d.track_id >= randmin && d.track_id < randmax;
+      return d.target_name == randtarget && d.metric == 2 && d.track_id < 51;
     }));
-  }, 5000);
+  }, 3000);
 }

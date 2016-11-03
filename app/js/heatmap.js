@@ -176,6 +176,7 @@ function update(data) {
   method_label.enter()
       .append("text")
       .attr("class", "method_label")
+      .classed("oracle", function(d) { return d.value.isOracle == true; })
       .attr("x", 50)
       .style("text-anchor", "end")
       .style("alignment-baseline", "middle")

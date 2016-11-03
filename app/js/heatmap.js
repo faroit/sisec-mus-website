@@ -7,9 +7,8 @@ var margin = {top: 50, right: 0, bottom: 30, left: 50},
 var gridSize = width / 50,
   h = gridSize,
   w = gridSize,
+  height = gridSize * headers.methods.length;   // height is defined by maximum number of methods
 
-// height is defined by maximum number of methods
-height = gridSize * headers.methods.length;
 
 var method_scale = d3.scaleBand()
     .round(1)
@@ -23,16 +22,23 @@ var track_scale = d3.scaleBand()
 // TODO: make this dependent on min and mix of data.score
 // TODO: Also mage this log scales (d3.scaleLog does only allow neg. or pos. values)
 // TODO: Also defined a custom color scheme for each target
+
 var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2F86';
+
 var colorScale = d3.scaleLinear()
- .domain([-10, 2, 28])
- .range([colorLow, colorMed, colorHigh]);
+  .range([colorLow, colorMed, colorHigh]);
 
 // Create svg element
 var svg = d3.select("#heatmap")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+
+// var scale_legend = d3.select("#heatmap")
+//     .append("svg")
+//       .attr('width', 10)
+//       .attr('height', 400)
+//       .append('g');
 
 var g = svg.append("g")
     .attr("class", "grid")
@@ -51,7 +57,7 @@ d3.csv("/data/data.csv", init);
 function rect(data) {
   var t = d3.transition()
     .duration(950);
-  var data = data.values;
+  var data = data.value.payload;
 
   // Bind data to rectangles
   var heatmap = d3.select(this).selectAll("rect")
@@ -81,6 +87,7 @@ function rect(data) {
          "Track: "  + d.track_id +
          "<br/>Method: " + headers.methods[d.estimate_name] +
          "<br/>" + headers.metrics[d.metric] + ': ' + d.score +
+         "<br/>" +  + ': ' + d.mean +
          "<br/>" + headers.targets[d.target_name]
        )
        d3.selectAll(".method_label").classed("active", function(x) { return d.estimate_name == x.key; });
@@ -104,24 +111,55 @@ function update(data) {
     .duration(950);
   // read https://bost.ocks.org/mike/join/ to understand the concept of update and enter
 
+  colorScale.domain([
+    d3.min(data, function(d) { return parseInt(d.score); }),
+    0,
+    d3.max(data, function(d) { return parseInt(d.score); })
+  ]);
+
   // group by track_id
   var tracks = d3.nest()
     .key(function(d) { return d.track_id; })
+    .rollup(function(v) { return {
+        meanScoreByTrack: d3.median(v, function(d) { return d.score; }),
+        payload: v
+      };
+    })
     .entries(data);
+
+  tracks.sort(function(a, b) { return d3.ascending(parseInt(a.key), parseInt(b.key)); });
 
   // group by method_name (=estimate_name)
   var methods = d3.nest()
     .key(function(d) { return d.estimate_name; })
+    .rollup(function(v) { return {
+        meanScoreByMethod: d3.median(v, function(d) { return d.score; }),
+        isOracle: v[0].estimate_name == "6",
+        payload: v
+      };
+    })
     .entries(data);
 
+  // sort alphabetically
+  methods.sort(function(a, b) {
+    return d3.ascending(headers.methods[a.key], headers.methods[b.key]);
+  }).sort(function(a, b) {
+    return d3.descending(+a.value.isOracle, +b.value.isOracle);
+  });
+  // // sort by mean
+  // methods.sort(function(a, b) {
+  //   return d3.ascending(a.value.meanScoreByMethod, b.value.meanScoreByMethod);
+  // });
+
   method_scale.domain(methods.map(function(d) { return headers.methods[d.key]; }));
+  method_scale.range([0, gridSize * methods.length]);   // height is defined by maximum number of methods
   track_scale.domain(d3.values(tracks).map(function(d) {
     return d.key;
   }));
 
   // bind data to class
   var track_column = g.selectAll("g")
-    .data(tracks, function(d) { return [d.key, d.values[0].target_name, d.values[0].metric] });
+    .data(tracks, function(d) { return [d.key, d.value.payload[0].target_name, d.value.payload[0].metric] });
 
   var method_label = svg.selectAll("text.method_label")
     .data(methods, function(d) { return d.key; });
@@ -130,7 +168,7 @@ function update(data) {
   method_label
       .text(function(d) { return headers.methods[d.key]})
       .style("alignment-baseline", "middle")
-      .attr("dy", 65)
+      .attr("dy", 63)
       .transition(t)
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
 
@@ -138,13 +176,13 @@ function update(data) {
   method_label.enter()
       .append("text")
       .attr("class", "method_label")
-      .attr("x", 40)
+      .attr("x", 50)
       .style("text-anchor", "end")
       .style("alignment-baseline", "middle")
       .text(function(d) { return headers.methods[d.key]})
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
       .attr("height", method_scale.bandwidth())
-      .attr("dy", 65)
+      .attr("dy", 63)
       .style("fill-opacity", 1e-6)
       .transition(t)
       .style("fill-opacity", 1);
@@ -207,7 +245,7 @@ function update(data) {
 // encapsulate init data
 function init(data) {
   update(data.filter(function(d) {
-    return d.target_name == 0 && d.metric == 2 && d.track_id >= 51;
+    return d.target_name == 0 && d.metric == 0 && d.track_id <= 51;
   }));
   setInterval(function () {
     var randval = Math.random() * 100;
@@ -216,7 +254,7 @@ function init(data) {
     var randmax = Math.max(randval, randval2);
     var randtarget = Math.floor(Math.random() * 4);
     update(data.filter(function(d) {
-      return d.target_name == randtarget && d.metric == 2 && d.track_id < 51;
+      return d.target_name == randtarget && d.metric == 2 && d.track_id <= 51;
     }));
-  }, 3000);
+  }, 5000);
 }

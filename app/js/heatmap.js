@@ -164,8 +164,9 @@ function update(data) {
   // });
 
   height = gridSize * methods.length;   // height is defined by maximum number of methods
-  method_scale.domain(methods.map(function(d) { return headers.methods[d.key]; }));
-  method_scale.range([0, height]);
+  method_scale
+    .domain(methods.map(function(d) { return headers.methods[d.key]; }))
+    .range([0, height]);
 
   svg.transition(t).attr("height", height)
 
@@ -184,7 +185,9 @@ function update(data) {
   method_label
       .text(function(d) { return headers.methods[d.key]})
       .style("alignment-baseline", "middle")
-      .attr("dy", 63)
+      .style("font-size", .66 * gridSize + "px")
+      .attr("dx", 58)
+      .attr("dy", 62)
       .transition(t)
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
 
@@ -193,13 +196,14 @@ function update(data) {
       .append("text")
       .attr("class", "method_label")
       .classed("oracle", function(d) { return d.value.isOracle == true; })
-      .attr("x", 50)
+      .attr("dx", 58)
+      .attr("dy", 62)
+      .style("font-size", .66 * gridSize + "px")
       .style("text-anchor", "end")
       .style("alignment-baseline", "middle")
       .text(function(d) { return headers.methods[d.key]})
       .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
       .attr("height", method_scale.bandwidth())
-      .attr("dy", 63)
       .style("fill-opacity", 1e-6)
       .transition(t)
       .style("fill-opacity", 1);
@@ -221,14 +225,16 @@ function update(data) {
 
   track_column_enter.append("text")
     .attr("class", "track_label")
-    .style("text-anchor", "middle")
-    .attr("y", -16)
-    .attr("x", 12)
+    .style("text-anchor", "start")
+    .style("font-size", .66 * gridSize + "px")
+    .attr("y", - (.66 * gridSize))
+    .attr("x", 3)
     .text(function(d) { return d.key });
 
   track_column.select("text")
-    .style("text-anchor", "middle")
-    .attr("x", 12)
+    .style("text-anchor", "start")
+    .attr("y", - (.66 * gridSize))
+    .attr("x", 3)
     .text(function(d) { return d.key });
 
   track_column_enter
@@ -266,14 +272,14 @@ function init(data) {
   update(data.filter(function(d) {
     return d.target_name == 0 && d.metric == 0 && d.track_id <= 51;
   }));
-  // setInterval(function () {
-  //   var randval = Math.random() * 50;
-  //   var randval2 = Math.random() * 50;
-  //   var randmin = Math.min(randval, randval2);
-  //   var randmax = Math.max(randval, randval2);
-  //   var randtarget = Math.floor(Math.random() * 4);
-  //   update(data.filter(function(d) {
-  //     return d.target_name == randtarget && d.metric == 0 && randmin < d.track_id && d.track_id <= randmax;
-  //   }));
-  // }, 5000);
+  setInterval(function () {
+    var randval = Math.random() * 50;
+    var randval2 = Math.random() * 50;
+    var randmin = Math.min(randval, randval2);
+    var randmax = Math.max(randval, randval2);
+    var randtarget = Math.floor(Math.random() * 4);
+    update(data.filter(function(d) {
+      return d.target_name == randtarget && d.metric == 0 && d.track_id <= 51;
+    }));
+  }, 2000);
 }

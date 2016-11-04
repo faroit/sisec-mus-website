@@ -1,7 +1,10 @@
 // height of each row in the heatmap
 // width of each column in the heatmap
-var margin = {top: 50, right: 0, bottom: 30, left: 50},
-  width = parseInt(d3.select("#heatmap").style("width")) - margin.left - margin.right;
+
+var legendWidth = 20;
+
+var margin = {top: 50, right: 20, bottom: 30, left: 50},
+  width = parseInt(d3.select("#d3container").style("width")) - legendWidth - margin.left - margin.right;
 
 // grid is defined by maximum number of tracks = 50
 var gridSize = width / 50,
@@ -29,16 +32,26 @@ var colorScale = d3.scaleLinear()
   .range([colorLow, colorMed, colorHigh]);
 
 // Create svg element
-var svg = d3.select("#heatmap")
-  .append("svg")
+var svg = d3.select("#d3container #heatmap")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
 
-// var scale_legend = d3.select("#heatmap")
-//     .append("svg")
-//       .attr('width', 10)
-//       .attr('height', 400)
-//       .append('g');
+// add the legend now
+var legendFullHeight = height;
+var legendFullWidth = legendWidth;
+
+var legendMargin = { top: 20, bottom: 20, left: 5, right: 20 };
+
+// use same margins as main plot
+var legendWidth = legendFullWidth - legendMargin.left - legendMargin.right;
+var legendHeight = legendFullHeight - legendMargin.top - legendMargin.bottom;
+
+var legendSvg = d3.select('#legend')
+    .attr('width', legendFullWidth)
+    .attr('height', legendFullHeight)
+    .append('g')
+    .attr('transform', 'translate(' + legendMargin.left + ',' +
+    legendMargin.top + ')');
 
 var g = svg.append("g")
     .attr("class", "grid")
@@ -55,13 +68,13 @@ d3.csv("/data/data.csv", init);
 
 // plot the actual score rectangles row-wise for each track column
 function rect(data) {
+
   var t = d3.transition()
     .duration(950);
-  var data = data.value.payload;
 
   // Bind data to rectangles
   var heatmap = d3.select(this).selectAll("rect")
-    .data(data, function(d) { return d.estimate_name; });
+    .data(data.value.payload, function(d) { return d.estimate_name; });
 
   // Draw rectangles here
   // render only as many rows as there are methods (using array length instead of data)
@@ -72,6 +85,7 @@ function rect(data) {
     .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); });
 
   heatmap.enter().append("rect")
+    .classed("oracle", function(d) { return d.estimate_name == "6"; })
     .attr("width", function(d) { return track_scale.bandwidth(); })
     .attr("height", function(d) { return method_scale.bandwidth(); })
     // shift them for numbers of rows available
@@ -87,7 +101,7 @@ function rect(data) {
          "Track: "  + d.track_id +
          "<br/>Method: " + headers.methods[d.estimate_name] +
          "<br/>" + headers.metrics[d.metric] + ': ' + d.score +
-         "<br/>" +  + ': ' + d.mean +
+         "<br/>Mean" + data.value.meanScoreByTrack +
          "<br/>" + headers.targets[d.target_name]
        )
        d3.selectAll(".method_label").classed("active", function(x) { return d.estimate_name == x.key; });
@@ -104,8 +118,6 @@ function rect(data) {
 
 // Update callback: Filters data and displays updated data
 // TODO: aggregrates data and show means as well
-// TODO: Add sort based on mean, so that better methods appears on top
-// TODO: Make IBM render on top in any case. Add spacing for IBM
 function update(data) {
   var t = d3.transition()
     .duration(950);
@@ -151,8 +163,12 @@ function update(data) {
   //   return d3.ascending(a.value.meanScoreByMethod, b.value.meanScoreByMethod);
   // });
 
+  height = gridSize * methods.length;   // height is defined by maximum number of methods
   method_scale.domain(methods.map(function(d) { return headers.methods[d.key]; }));
-  method_scale.range([0, gridSize * methods.length]);   // height is defined by maximum number of methods
+  method_scale.range([0, height]);
+
+  svg.transition(t).attr("height", height)
+
   track_scale.domain(d3.values(tracks).map(function(d) {
     return d.key;
   }));
@@ -206,7 +222,7 @@ function update(data) {
   track_column_enter.append("text")
     .attr("class", "track_label")
     .style("text-anchor", "middle")
-    .attr("y", -8)
+    .attr("y", -16)
     .attr("x", 12)
     .text(function(d) { return d.key });
 
@@ -241,6 +257,8 @@ function update(data) {
     .style("fill-opacity", 1e-6)
     // .attr("transform", function(d, i) { return "translate(0, 1000)"; })
     .remove();
+
+  d3.selectAll(".oracle").attr("transform", "translate(0, -10)");
 }
 
 // encapsulate init data
@@ -248,14 +266,14 @@ function init(data) {
   update(data.filter(function(d) {
     return d.target_name == 0 && d.metric == 0 && d.track_id <= 51;
   }));
-  setInterval(function () {
-    var randval = Math.random() * 100;
-    var randval2 = Math.random() * 100;
-    var randmin = Math.min(randval, randval2);
-    var randmax = Math.max(randval, randval2);
-    var randtarget = Math.floor(Math.random() * 4);
-    update(data.filter(function(d) {
-      return d.target_name == randtarget && d.metric == 2 && d.track_id <= 51;
-    }));
-  }, 5000);
+  // setInterval(function () {
+  //   var randval = Math.random() * 50;
+  //   var randval2 = Math.random() * 50;
+  //   var randmin = Math.min(randval, randval2);
+  //   var randmax = Math.max(randval, randval2);
+  //   var randtarget = Math.floor(Math.random() * 4);
+  //   update(data.filter(function(d) {
+  //     return d.target_name == randtarget && d.metric == 0 && randmin < d.track_id && d.track_id <= randmax;
+  //   }));
+  // }, 5000);
 }

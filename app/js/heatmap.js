@@ -20,10 +20,6 @@ var track_scale = d3.scaleBand()
     .range([0, width]);
 
 // Set color scale
-// TODO: make this dependent on min and mix of data.score
-// TODO: Also mage this log scales (d3.scaleLog does only allow neg. or pos. values)
-// TODO: Also defined a custom color scheme for each target
-
 var colorLow = '#FFFFDD', colorHigh = '#1F2F86';
 
 var colorScale = d3.scaleLinear()
@@ -121,8 +117,6 @@ function rect(data) {
 
 }
 
-// Update callback: Filters data and displays updated data
-// TODO: aggregrates data and show means as well
 function update(data) {
   var t = d3.transition()
     .duration(950);

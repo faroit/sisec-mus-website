@@ -1,10 +1,8 @@
 // height of each row in the heatmap
 // width of each column in the heatmap
 
-var legendWidth = 20;
-
-var margin = {top: 50, right: 20, bottom: 30, left: 50},
-  width = parseInt(d3.select("#d3container").style("width")) - legendWidth - margin.left - margin.right;
+var margin = {top: 50, right: 100, bottom: 30, left: 50},
+  width = parseInt(d3.select("#d3container").style("width")) - margin.left - margin.right;
 
 // grid is defined by maximum number of tracks = 50
 var gridSize = width / 50,
@@ -26,32 +24,39 @@ var track_scale = d3.scaleBand()
 // TODO: Also mage this log scales (d3.scaleLog does only allow neg. or pos. values)
 // TODO: Also defined a custom color scheme for each target
 
-var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2F86';
+var colorLow = '#FFFFDD', colorHigh = '#1F2F86';
 
 var colorScale = d3.scaleLinear()
-  .range([colorLow, colorMed, colorHigh]);
+  .range([colorLow, colorHigh]);
 
 // Create svg element
 var svg = d3.select("#d3container #heatmap")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
 
-// add the legend now
-var legendFullHeight = height;
-var legendFullWidth = legendWidth;
+//Append a defs (for definition) element to your SVG
+var defs = svg.append("defs");
 
-var legendMargin = { top: 20, bottom: 20, left: 5, right: 20 };
+//Append a linearGradient element to the defs and give it a unique id
+var linearGradient = defs.append("linearGradient")
+    .attr("id", "linear-gradient");
 
-// use same margins as main plot
-var legendWidth = legendFullWidth - legendMargin.left - legendMargin.right;
-var legendHeight = legendFullHeight - legendMargin.top - legendMargin.bottom;
+//Vertical gradient
+linearGradient
+    .attr("x1", "0%")
+    .attr("y1", "100%")
+    .attr("x2", "0%")
+    .attr("y2", "0%");
 
-var legendSvg = d3.select('#legend')
-    .attr('width', legendFullWidth)
-    .attr('height', legendFullHeight)
-    .append('g')
-    .attr('transform', 'translate(' + legendMargin.left + ',' +
-    legendMargin.top + ')');
+//Set the color for the start (0%)
+linearGradient.append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", colorLow);
+
+//Set the color for the end (100%)
+linearGradient.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", colorHigh);
 
 var g = svg.append("g")
     .attr("class", "grid")
@@ -101,7 +106,6 @@ function rect(data) {
          "Track: "  + d.track_id +
          "<br/>Method: " + headers.methods[d.estimate_name] +
          "<br/>" + headers.metrics[d.metric] + ': ' + d.score +
-         "<br/>Mean" + data.value.meanScoreByTrack +
          "<br/>" + headers.targets[d.target_name]
        )
        d3.selectAll(".method_label").classed("active", function(x) { return d.estimate_name == x.key; });
@@ -114,6 +118,7 @@ function rect(data) {
 
     // delete rectangles
     heatmap.exit().remove();
+
 }
 
 // Update callback: Filters data and displays updated data
@@ -125,7 +130,6 @@ function update(data) {
 
   colorScale.domain([
     d3.min(data, function(d) { return parseInt(d.score); }),
-    0,
     d3.max(data, function(d) { return parseInt(d.score); })
   ]);
 
@@ -164,15 +168,17 @@ function update(data) {
   // });
 
   height = gridSize * methods.length;   // height is defined by maximum number of methods
+
   method_scale
     .domain(methods.map(function(d) { return headers.methods[d.key]; }))
     .range([0, height]);
 
-  svg.transition(t).attr("height", height)
+  svg.transition(t).attr("height", height + 3 * gridSize)
 
   track_scale.domain(d3.values(tracks).map(function(d) {
     return d.key;
   }));
+
 
   // bind data to class
   var track_column = g.selectAll("g")
@@ -183,30 +189,30 @@ function update(data) {
 
   // update method_label
   method_label
-      .text(function(d) { return headers.methods[d.key]})
-      .style("alignment-baseline", "middle")
-      .style("font-size", .66 * gridSize + "px")
-      .attr("dx", 58)
-      .attr("dy", 62)
-      .transition(t)
-      .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
+    .text(function(d) { return headers.methods[d.key]})
+    .style("alignment-baseline", "middle")
+    .style("font-size", .66 * gridSize + "px")
+    .attr("dx", 48)
+    .attr("dy", 62)
+    .transition(t)
+    .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
 
   // exit method_label
   method_label.enter()
-      .append("text")
-      .attr("class", "method_label")
-      .classed("oracle", function(d) { return d.value.isOracle == true; })
-      .attr("dx", 58)
-      .attr("dy", 62)
-      .style("font-size", .66 * gridSize + "px")
-      .style("text-anchor", "end")
-      .style("alignment-baseline", "middle")
-      .text(function(d) { return headers.methods[d.key]})
-      .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
-      .attr("height", method_scale.bandwidth())
-      .style("fill-opacity", 1e-6)
-      .transition(t)
-      .style("fill-opacity", 1);
+    .append("text")
+    .attr("class", "method_label")
+    .classed("oracle", function(d) { return d.value.isOracle == true; })
+    .attr("dx", 48)
+    .attr("dy", 62)
+    .style("font-size", .66 * gridSize + "px")
+    .style("text-anchor", "end")
+    .style("alignment-baseline", "middle")
+    .text(function(d) { return headers.methods[d.key]})
+    .attr("y", function(d) { return method_scale(headers.methods[d.key]); })
+    .attr("height", method_scale.bandwidth())
+    .style("fill-opacity", 1e-6)
+    .transition(t)
+    .style("fill-opacity", 1);
 
   // remove method_label
   method_label.exit()
@@ -239,10 +245,10 @@ function update(data) {
 
   track_column_enter
     .on("click", function(dclick) {
-      // // render new site that displays more detailed track information
-      // update(data.filter(function(d) {
-      //   return d.track_id == dclick.key;
-      // }));
+      // render new site that displays more detailed track information
+      update(data.filter(function(d) {
+        return d.track_id == dclick.key;
+      }));
     })
     .on("mouseover", function(dclick) {
       // d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
@@ -251,7 +257,7 @@ function update(data) {
       d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
       d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
     })
-    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", -1000)"; })
+    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", -1000)"; })
     .style("fill-opacity", 1e-6)
     .transition(t)
     .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
@@ -265,21 +271,46 @@ function update(data) {
     .remove();
 
   d3.selectAll(".oracle").attr("transform", "translate(0, -10)");
+
+  var svgLegend = g.append('g')
+    .attr("class", "legend")
+    .attr("transform", "translate("+ (d3.max(track_scale.range()) + track_scale.bandwidth() + gridSize) + ", 0)");
+
+  var svgLegendRect = svgLegend.append("rect")
+      .attr("width", gridSize)
+      .attr("transform", "translate("+ (- gridSize) + ", 0)")
+      // .attr("x", d3.extent(track_scale.range())[1] + track_scale.bandwidth())
+      .attr("y", d3.extent(method_scale.range())[0] - 10)
+      .attr("height", d3.extent(method_scale.range())[1] + 10)
+      .style("fill", "url(#linear-gradient)");
+
+  var yScale = d3.scaleLinear()
+  	 .range([parseInt(svgLegendRect.attr('height')) - 10, parseInt(svgLegendRect.attr('y'))])
+  	 .domain(colorScale.domain());
+
+  //Define x-axis
+  var yAxis = d3.axisRight()
+  	  .ticks(10)
+  	  .scale(yScale);
+
+  //Set up X axis
+  svgLegend
+    .call(yAxis);
 }
 
 // encapsulate init data
 function init(data) {
   update(data.filter(function(d) {
-    return d.target_name == 0 && d.metric == 0 && d.track_id <= 51;
+    return d.target_name == 4 && d.metric == 2 && d.track_id < 51;
   }));
-  setInterval(function () {
-    var randval = Math.random() * 50;
-    var randval2 = Math.random() * 50;
-    var randmin = Math.min(randval, randval2);
-    var randmax = Math.max(randval, randval2);
-    var randtarget = Math.floor(Math.random() * 4);
-    update(data.filter(function(d) {
-      return d.target_name == randtarget && d.metric == 0 && d.track_id <= 51;
-    }));
-  }, 2000);
+  // setInterval(function () {
+  //   var randval = Math.random() * 50;
+  //   var randval2 = Math.random() * 50;
+  //   var randmin = Math.min(randval, randval2);
+  //   var randmax = Math.max(randval, randval2);
+  //   var randtarget = Math.floor(Math.random() * 4);
+  //   update(data.filter(function(d) {
+  //     return d.target_name == randtarget && d.metric == 0 && d.track_id <= 51;
+  //   }));
+  // }, 2000);
 }

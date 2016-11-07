@@ -45,9 +45,6 @@ function init() {
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
-
-  // load data in init function
-  d3.csv("/data/data.csv", draw);
 }
 
 // plot the actual score rectangles row-wise for each track column
@@ -175,4 +172,4 @@ function draw(data) {
   }, 1000);
 }
 
-export default init;
+export default { init, draw, update }

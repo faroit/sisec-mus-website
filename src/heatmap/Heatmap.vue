@@ -6,25 +6,38 @@
 </template>
 
 <script>
-import d3 from 'd3'
+import * as d3 from 'd3'
 import MapMenu from './Menu.vue'
-import render from './render.js'
+import plot from './render.js'
 
 export default {
   components: { MapMenu },
+  data: function() {
+    return { data: {} }
+  },
   mounted: function() {
-    render()
+    plot.init();
+    d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
+  },
+  methods: {
+    update: function() {
+      plot.update(this.data.filter(function(d) {
+        return (
+          d.target_name == this.$route.params.target &&
+          d.metric == this.$route.params.metric &&
+          (
+            (this.$route.params.subset == 0 && d.track_id >= 51) ||
+            (this.$route.params.subset == 1 && d.track_id <= 50)
+          )
+        );
+      }.bind(this)));
+    }
   },
   watch: {
-    '$route.params.subset': function(v) {
-      console.log(v);
-    },
-    '$route.params.target': function(v) {
-      console.log(v);
-    },
-    '$route.params.metric': function(v) {
-      console.log(v);
-    },
+    'data': 'update',
+    '$route.params.subset': 'update',
+    '$route.params.target': 'update',
+    '$route.params.metric': 'update',
   }
 }
 </script>

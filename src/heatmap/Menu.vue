@@ -3,25 +3,25 @@
     menu {{$route.query.metric}}
     <div class="column is-narrow">
       <div class="control has-addons">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: 'vocals', metric: $route.params.metric }}">Vocals</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: 'accompaniment', metric: $route.params.metric }}">Accompaniment</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: 'drums', metric: $route.params.metric }}">Drums</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: 'bass', metric: $route.params.metric }}">Bass</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: 'other', metric: $route.params.metric }}">Other</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: '0', metric: $route.params.metric }}">Vocals</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: '1', metric: $route.params.metric }}">Accompaniment</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: '2', metric: $route.params.metric }}">Drums</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: '3', metric: $route.params.metric }}">Bass</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: '4', metric: $route.params.metric }}">Other</router-link>
       </div>
     </div>
     <div class="column is-narrow">
       <div class="control has-addons">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: 'sdr' }}">SDR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: 'isr' }}">ISR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: 'sir' }}">SIR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: 'sar' }}">SAR</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: '0' }}">SDR</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: '1' }}">ISR</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: '2' }}">SIR</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: $route.params.target, metric: '3' }}">SAR</router-link>
       </div>
     </div>
     <div class="column">
       <div class="control has-addons">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: 'training', target: $route.params.target, metric: $route.params.metric }}">Training</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: 'test', target: $route.params.target, metric: $route.params.metric }}">Test</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: '0', target: $route.params.target, metric: $route.params.metric }}">Training</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: '1', target: $route.params.target, metric: $route.params.metric }}">Test</router-link>
       </div>
     </div>
   </div>

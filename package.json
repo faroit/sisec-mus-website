@@ -8,6 +8,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "bulma": "^0.2.3",
     "d3": "^4.3.0",
     "vue": "^2.0.1",
     "vue-router": "^2.0.1"

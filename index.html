@@ -1,90 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-
-  <title>DSD100 Evaluation Results</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.3/css/bulma.min.css">
-  <link rel="stylesheet" href="/app/css/styles.css">
-</head>
-<body>
-  <section class="hero is-default is-bold">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="nav has-shadow">
-          <div class="container">
-            <div class="nav-left">
-              <a class="nav-item" href="/">
-                <h1 class="title is-4">DSD100 Evaluation Results</h1>
-              </a>
-            </div>
-            <span class="nav-toggle">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-            <div class="nav-right nav-menu">
-              <span class="nav-item">
-                <a>
-                  SISEC Website
-                </a>
-              </span>
-            </div>
-          </div>
-        </nav>
-      </div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>sisec-website</title>
+  </head>
+  <body>
+    <div id="app">
+      <router-view></router-view>
     </div>
-
-    <div class="hero-body">
-      <div class="container">
-        <div class="columns">
-          <div class="column is-narrow">
-            <div class="control has-addons">
-              <a class="button is-vocals">Vocals</a>
-              <a class="button">Accompaniment</a>
-              <a class="button">Drums</a>
-              <a class="button">Bass</a>
-              <a class="button">Other</a>
-            </div>
-          </div>
-          <div class="column is-narrow">
-            <div class="control has-addons">
-              <a class="button is-primary">SDR</a>
-              <a class="button">ISR</a>
-              <a class="button">SIR</a>
-              <a class="button">SAR</a>
-            </div>
-          </div>
-          <div class="column">
-            <div class="control has-addons">
-              <a class="button">Training</a>
-              <a class="button is-primary">Test</a>
-            </div>
-          </div>
-        </div>
-        <div id="heatmap"></div>
-      </div>
-    </div>
-  </section>
-  <footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <p>
-        The source code of this website is licensed
-        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
-      </p>
-      <p>
-      </p>
-    </div>
-  </div>
-</footer>
-
-<script src="/data/headers.js"></script>
-<script src="/app/js/heatmap.js"></script>
-
-</body>
+    <script src="/dist/build.js"></script>
+  </body>
 </html>

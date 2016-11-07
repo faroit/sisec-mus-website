@@ -1,7 +1,7 @@
 <template>
   <div id="d3container">
     <map-menu></map-menu>
-    <svg id='heatmap'></svg>
+    <svg id='heatmap' width="900" height="300"></svg>
   </div>
 </template>
 
@@ -14,6 +14,17 @@ export default {
   components: { MapMenu },
   mounted: function() {
     render()
+  },
+  watch: {
+    '$route.params.subset': function(v) {
+      console.log(v);
+    },
+    '$route.params.target': function(v) {
+      console.log(v);
+    },
+    '$route.params.metric': function(v) {
+      console.log(v);
+    },
   }
 }
 </script>

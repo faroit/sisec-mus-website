@@ -117,8 +117,7 @@ function rect(data) {
        tooltip.html(
          "Track: "  + d.track_id +
          "<br/>Method: " + headers.methods[d.estimate_name] +
-         "<br/>" + headers.metrics[d.metric] + ': ' + d.score +
-         "<br/>" + headers.targets[d.target_name]
+         "<br/>" + headers.metrics[d.metric] + ': ' + d.score
        )
        d3.selectAll(".method_label").classed("active", function(x) { return d.estimate_name == x.key; });
       })
@@ -231,7 +230,7 @@ function update(data) {
 
   track_column
     .transition(t)
-    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
+    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .each(rect);
 
   // render actual column data (=tracks) into group elements
@@ -265,12 +264,11 @@ function update(data) {
       d3.selectAll(".grid .track_label").
         classed("active", function(d) { return d.key == dclick.key; });
       d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
-      d3.selectAll(".track:not(.active) rect").attr("width", function(d, i) { return "5"; });
     })
-    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", -1000)"; })
+    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .style("fill-opacity", 1e-6)
     .transition(t)
-    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
+    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .style("fill-opacity", 1)
     .each(rect);
 

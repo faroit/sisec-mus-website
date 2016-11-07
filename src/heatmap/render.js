@@ -1,43 +1,54 @@
-// height of each row in the heatmap
-// width of each column in the heatmap
-var margin = {top: 50, right: 0, bottom: 30, left: 50},
-  width = parseInt(d3.select("#heatmap").style("width")) - margin.left - margin.right;
+import * as d3 from 'd3';
+import headers from './headers.js'
 
-// grid is defined by maximum number of tracks = 50
-var gridSize = width / 50,
-  h = gridSize,
-  w = gridSize,
+var margin = {}
+var width = 0, h = 0, w = 0, gridSize = 0, height = 0
+var colorLow = {}, colorMed = {}, colorHigh = {}, colorScale = {}
+var svg = {}, g = {}, tooltip = {}
 
-// height is defined by maximum number of methods
-height = gridSize * headers.methods.length;
 
-// Set color scale
-// TODO: make this dependent on min and mix of data.score
-// TODO: Also mage this log scales (d3.scaleLog does only allow neg. or pos. values)
-// TODO: Also defined a custom color scheme for each target
-var colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2F86';
-var colorScale = d3.scaleLinear()
- .domain([-10, 2, 28])
- .range([colorLow, colorMed, colorHigh]);
+function init() {
+  // height of each row in the heatmap
+  // width of each column in the heatmap
+  margin = {top: 50, right: 0, bottom: 30, left: 50},
+    width = parseInt(d3.select("#heatmap").style("width")) - margin.left - margin.right;
 
-// Create svg element
-var svg = d3.select("#heatmap")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+  // grid is defined by maximum number of tracks = 50
+  gridSize = width / 50,
+    h = gridSize,
+    w = gridSize,
 
-var g = svg.append("g")
-    .attr("class", "grid")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // height is defined by maximum number of methods
+  height = gridSize * headers.methods.length;
 
-// Create HUD element that displays information about currently selected data
-var tooltip = d3.select(".columns")
-  .append("div")
-  .attr("class", "tooltip")
-  .style("opacity", 0);
+  // Set color scale
+  // TODO: make this dependent on min and mix of data.score
+  // TODO: Also mage this log scales (d3.scaleLog does only allow neg. or pos. values)
+  // TODO: Also defined a custom color scheme for each target
+  colorLow = '#FFFFDD', colorMed = '#3E9583', colorHigh = '#1F2F86';
+  colorScale = d3.scaleLinear()
+   .domain([-10, 2, 28])
+   .range([colorLow, colorMed, colorHigh]);
 
-// load data in init function
-d3.csv("/data/data.csv", init);
+  // Create svg element
+  svg = d3.select("#heatmap")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+
+  g = svg.append("g")
+      .attr("class", "grid")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // Create HUD element that displays information about currently selected data
+  tooltip = d3.select(".columns")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  // load data in init function
+  d3.csv("/data/data.csv", draw);
+}
 
 // plot the actual score rectangles row-wise for each track column
 function rect(data) {
@@ -153,7 +164,7 @@ function update(data) {
 }
 
 // encapsulate init data
-function init(data) {
+function draw(data) {
   update(data.filter(function(d) {
     return d.target_name == 2 && d.metric == 2 && d.track_id >= 51;
   }));
@@ -163,3 +174,5 @@ function init(data) {
     }));
   }, 1000);
 }
+
+export default init;

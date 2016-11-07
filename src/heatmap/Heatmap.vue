@@ -8,8 +8,12 @@
 <script>
 import d3 from 'd3'
 import MapMenu from './Menu.vue'
+import render from './render.js'
 
 export default {
-  components: { MapMenu }
+  components: { MapMenu },
+  mounted: function() {
+    render()
+  }
 }
 </script>

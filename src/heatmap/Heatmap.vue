@@ -41,3 +41,25 @@ export default {
   }
 }
 </script>
+<style>
+div.tooltip {
+  position: relative;
+  text-align: right;
+  width: 300px;
+  height: 30px;
+  padding: 0px;
+  margin-top: 0px;
+  margin-right: 50px;
+  font: 12px sans-serif;
+  border: 0px;
+  color: black;
+}
+
+text.method_label.active {
+  fill: orange;
+}
+
+.grid text.track_label.active {
+  fill: green;
+}
+</style>

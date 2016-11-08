@@ -86,9 +86,6 @@ function init() {
 // plot the actual score rectangles row-wise for each track column
 function rect(data) {
 
-  var t = d3.transition()
-    .duration(950);
-
   // Bind data to rectangles
   var heatmap = d3.select(this).selectAll("rect")
     .data(data.value.payload, function(d) { return d.estimate_name; });
@@ -96,7 +93,6 @@ function rect(data) {
   // Draw rectangles here
   // render only as many rows as there are methods (using array length instead of data)
   heatmap
-    .transition(t)
     .attr("width", function(d) { return track_scale.bandwidth(); })
     .attr("height", function(d) { return method_scale.bandwidth(); })
     .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); });
@@ -134,7 +130,7 @@ function rect(data) {
 
 function update(data) {
   var t = d3.transition()
-    .duration(950);
+    .duration(500);
   // read https://bost.ocks.org/mike/join/ to understand the concept of update and enter
 
   colorScale.domain([
@@ -260,16 +256,16 @@ function update(data) {
       }));
     })
     .on("mouseover", function(dclick) {
-      // d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
+      d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
       d3.selectAll(".grid .track_label").
         classed("active", function(d) { return d.key == dclick.key; });
-      d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
+      // d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
     })
     .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
-    .style("fill-opacity", 1e-6)
-    .transition(t)
-    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
-    .style("fill-opacity", 1)
+    // .style("fill-opacity", 1e-6)
+    // .transition(t)
+    // // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
+    // .style("fill-opacity", 1)
     .each(rect);
 
   track_column.exit()

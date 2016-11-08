@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import bulma from 'bulma/css/bulma.css';
 import MainMenu from './Menu.vue'
 
 export default {

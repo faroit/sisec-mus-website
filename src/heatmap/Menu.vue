@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import bulma from 'bulma/css/bulma.css';
 import headers from './headers.js'
 
 export default {
@@ -35,8 +36,6 @@ export default {
 </script>
 
 <style media="screen">
-@import '~bulma/css/bulma.css';
-
 .button.is-vocals {
     background-color: #1F2F86;
     color: white;

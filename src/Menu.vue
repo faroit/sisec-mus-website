@@ -10,13 +10,13 @@
 </template>
 
 <script>
+import bulma from 'bulma/css/bulma.css';
+
 export default {
 }
 </script>
 
 <style media="screen">
-@import '~bulma/css/bulma.css';
-
 .nav {
     margin-top: 10px
 }

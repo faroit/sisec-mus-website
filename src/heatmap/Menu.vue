@@ -1,6 +1,5 @@
 <template>
   <div class="columns">
-    {{$route.query.metric}}
     <div class="column is-narrow">
       <div class="control has-addons">
         <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { subset: $route.params.subset, target: '4', metric: $route.params.metric }}">Vocals</router-link>

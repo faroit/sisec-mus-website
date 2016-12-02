@@ -43,7 +43,6 @@ function load() {
       "muted": true,
     }
   ]);
-  ee.emit("play");
 }
 
 export default { init, load }

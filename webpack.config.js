@@ -13,14 +13,14 @@ module.exports = {
     loaders: [
       {
         test: /\.vue$/,
-        loader: 'vue',
+        loader: 'vue-loader',
         options: {
           // vue-loader options go here
         }
       },
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
       },
       {

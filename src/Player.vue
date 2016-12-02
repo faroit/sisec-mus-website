@@ -2,7 +2,7 @@
   <div>
     <div class="control has-addons">
       <!-- TODO: I don't know howto emit signals to the player -->
-      <a class="button" active-class="is-primary" v-on:click='ee.emit("play")'>Play</a>
+      <a class="button" active-class="is-primary" v-on:click='play'>Play</a>
     </div>
     <div id="playlist"></div>
     <form>
@@ -24,7 +24,12 @@ export default {
   mounted: function() {
     playlist.init();
     playlist.load();
-  }
+  },
+  methods: {
+    play: function() {
+      ee.emit("play");
+    }
+  },
 }
 </script>
 

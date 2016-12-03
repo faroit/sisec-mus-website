@@ -1,8 +1,10 @@
 <template>
   <div>
     <div class="control has-addons">
-      <a class="button is-success" active-class="is-primary" v-on:click='play'><icon name="play"></icon></a>
-      <a class="button is-success" v-on:click='pause'><icon name="pause"></icon></a>
+      <a class="button is-success"
+        v-bind:class="{ 'is-active': isPlaying }"
+        v-on:click='playpause'><icon v-bind:name="isPlaying ? 'pause' : 'play' "></icon>
+      </a>
       <a class="button is-danger" v-on:click='stop'><icon name="stop"></icon></a>
     </div>
     <div id="playlist"></div>
@@ -34,15 +36,24 @@ export default {
     player.init();
     player.load();
   },
+  data: function () {
+    return {
+      isPlaying: false
+    }
+  },
   methods: {
-    play: function() {
-      player.playlist.getEventEmitter().emit('play')
-    },
-    pause: function() {
-      player.playlist.getEventEmitter().emit('pause')
+    playpause: function() {
+      if (this.isPlaying) {
+        player.playlist.getEventEmitter().emit('pause')
+      }
+      else {
+        player.playlist.getEventEmitter().emit('play')
+      }
+      this.isPlaying = ! this.isPlaying
     },
     stop: function() {
       player.playlist.getEventEmitter().emit('stop')
+      this.isPlaying = false
     }
   },
 }

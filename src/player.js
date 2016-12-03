@@ -1,7 +1,6 @@
 import * as WaveformPlaylist from 'waveform-playlist'
 
 var playlist
-var ee
 
 function init() {
   playlist = WaveformPlaylist.init({
@@ -16,11 +15,10 @@ function init() {
     },
     controls: {
       show: true, //whether or not to include the track controls
-      width: 200 //width of controls in pixels
+      width: 140 //width of controls in pixels
     },
     zoomLevels: [1360]
   });
-  ee = playlist.getEventEmitter();
 }
 
 function load() {
@@ -32,17 +30,17 @@ function load() {
   // "{track_id}_{estimate_name}_{target_name}.wav"
   playlist.load([
     {
-      "src": "media/audio/1_GRA2_vocals.wav",
+      "src": "media/test.wav",
       "name": "vocals", // should be {target_name}
       "muted": true,
       "soloed": true,
     },
     {
-      "src": "/media/audio/1_GRA2_accompaniment.wav",
+      "src": "/media/test.wav",
       "name": "Accompaniment",
       "muted": true,
     }
   ]);
 }
 
-export default { init, load }
+export { init, load, playlist }

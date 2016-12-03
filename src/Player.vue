@@ -3,6 +3,9 @@
     <div class="control has-addons">
       <!-- TODO: I don't know howto emit signals to the player -->
       <a class="button" active-class="is-primary" v-on:click='play'>Play</a>
+      <a class="button" v-on:click='pause'>Pause</a>
+      <a class="button" v-on:click='stop'>Stop</a>
+
     </div>
     <div id="playlist"></div>
     <form>
@@ -17,17 +20,22 @@
 <script>
 import bulma from 'bulma/css/bulma.css';
 import * as WaveformPlaylist from 'waveform-playlist'
-import playlist from './player.js'
-import ee from './player.js'
+import * as player from './player.js'
 
 export default {
   mounted: function() {
-    playlist.init();
-    playlist.load();
+    player.init();
+    player.load();
   },
   methods: {
     play: function() {
-      ee.emit("play");
+      player.playlist.getEventEmitter().emit('play')
+    },
+    pause: function() {
+      player.playlist.getEventEmitter().emit('pause')
+    },
+    stop: function() {
+      player.playlist.getEventEmitter().emit('stop')
     }
   },
 }
@@ -136,18 +144,5 @@ export default {
       background: #ccc; }
     .playlist .controls input[type=range]:focus::-moz-range-track {
       background: #ccc; }
-
-.track-drop {
-  border: 2px dashed blue;
-  height: 100px;
-  width: 200px;
-  margin: 1em 0; }
-  .track-drop::before {
-    content: "Drop audio file(s) here!"; }
-  .track-drop.drag-enter {
-    border: 2px solid orange; }
-
-footer {
-  margin-top: 2em; }
 
 </style>

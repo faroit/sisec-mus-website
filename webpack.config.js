@@ -21,7 +21,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
+        exclude: /node_modules(?![\\/]vue-awesome[\\/])|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
       },
       {
         test: /\.(png|jpg|gif|svg)$/,

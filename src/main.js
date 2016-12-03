@@ -9,8 +9,6 @@ import Home from './Home.vue'
 
 import Icon from 'vue-awesome/components/Icon.vue'
 
-Vue.component('icon', Icon)
-
 Vue.use(VueRouter);
 
 const router = new VueRouter({

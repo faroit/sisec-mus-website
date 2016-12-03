@@ -4,9 +4,7 @@
       <a class="button" active-class="is-primary" v-on:click='play'>Play</a>
       <a class="button" v-on:click='pause'>Pause</a>
       <a class="button" v-on:click='stop'>Stop</a>
-      <!-- TODO: loading the icon does not work
-      <icon name="repo"></icon>
-      -->
+      <icon name="flag"></icon>
     </div>
     <div id="playlist"></div>
     <form>
@@ -24,12 +22,15 @@ import bulma from 'bulma/css/bulma.css';
 import Icon from 'vue-awesome/components/Icon.vue'
 
 // pick your icons
-import 'vue-awesome/icons/flag'
+import 'vue-awesome/icons'
 
 import * as WaveformPlaylist from 'waveform-playlist'
 import * as player from './player.js'
 
 export default {
+  components: {
+    Icon
+  },
   mounted: function() {
     player.init();
     player.load();

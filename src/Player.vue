@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="control has-addons">
-      <a class="button" active-class="is-primary" v-on:click='play'>Play</a>
-      <a class="button" v-on:click='pause'>Pause</a>
-      <a class="button" v-on:click='stop'>Stop</a>
-      <icon name="flag"></icon>
+      <a class="button is-success" active-class="is-primary" v-on:click='play'><icon name="play"></icon></a>
+      <a class="button is-success" v-on:click='pause'><icon name="pause"></icon></a>
+      <a class="button is-danger" v-on:click='stop'><icon name="stop"></icon></a>
     </div>
     <div id="playlist"></div>
     <form>

@@ -1,28 +1,22 @@
 <template>
   <div>
+    <h1 class="title">Playback {{ this.$route.params.method }} Track {{ this.$route.params.trackid }}</h1>
     <div class="control has-addons">
       <a class="button is-success"
         v-bind:class="{ 'is-active': isPlaying }"
         v-on:click='playpause'><icon v-bind:name="isPlaying ? 'pause' : 'play' "></icon>
       </a>
-      <a class="button is-danger" v-on:click='stop'><icon name="stop"></icon></a>
+      <a class="button is-light" v-on:click='stop'><icon name="stop"></icon></a>
     </div>
     <div id="playlist"></div>
-    <form>
-      <label>Master Volume: <input type="range" min="0" max="100" value="100" class="master-gain input-small form-control"></label>
-    </form>
     <div class="sound-status"></div>
     <div class="loading-data"></div>
-
   </div>
 </template>
 
 <script>
 import bulma from 'bulma/css/bulma.css';
-
 import Icon from 'vue-awesome/components/Icon.vue'
-
-// pick your icons
 import 'vue-awesome/icons'
 
 import * as WaveformPlaylist from 'waveform-playlist'
@@ -34,7 +28,7 @@ export default {
   },
   mounted: function() {
     player.init();
-    player.load();
+    player.loadTargets(this.$route.params.trackid, this.$route.params.method);
   },
   data: function () {
     return {
@@ -42,6 +36,9 @@ export default {
     }
   },
   methods: {
+    update: function() {
+      player.loadTargets(this.$route.params.trackid, this.$route.params.method);
+    },
     playpause: function() {
       if (this.isPlaying) {
         player.playlist.getEventEmitter().emit('pause')
@@ -56,6 +53,10 @@ export default {
       this.isPlaying = false
     }
   },
+  watch: {
+    '$route.params.trackid': 'update',
+    '$route.params.method': 'update',
+  }
 }
 </script>
 

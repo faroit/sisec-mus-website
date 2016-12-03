@@ -1,4 +1,5 @@
 import * as WaveformPlaylist from 'waveform-playlist'
+import headers from './heatmap/headers.js'
 
 var playlist
 
@@ -21,26 +22,25 @@ function init() {
   });
 }
 
-function load() {
-
-  // TODO: clear playlist
-  // playlist.tracks = []
+function loadTargets(trackid, method) {
 
   // Route to wav files:
-  // "{track_id}_{estimate_name}_{target_name}.wav"
-  playlist.load([
-    {
-      "src": "media/test.wav",
-      "name": "vocals", // should be {target_name}
-      "muted": true,
-      "soloed": true,
-    },
-    {
-      "src": "/media/test.wav",
-      "name": "Accompaniment",
-      "muted": true,
-    }
-  ]);
+  // "{track_id}_Reference_{target_name}.wav"
+
+  playlist.getEventEmitter().emit('stop')
+  playlist.tracks = []
+  var tracksToLoad = []
+  for (let target of headers.targets) {
+    tracksToLoad.push(
+      {
+        "src": "/media/" + trackid + '_' + method + '_' + target + '.wav',
+        "name": target, // should be {target_name}
+        "muted": false,
+        "soloed": false,
+      }
+    );
+  }
+  playlist.load(tracksToLoad);
 }
 
-export { init, load, playlist }
+export { init, loadTargets, playlist }

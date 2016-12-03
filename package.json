@@ -24,6 +24,7 @@
     "json-loader": "^0.5.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "vue-awesome": "^2.0.3",
     "vue-loader": "^9.7.0",
     "waveform-playlist": "^2.4.2",
     "webpack": "^2.1.0-beta.25",

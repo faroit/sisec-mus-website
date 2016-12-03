@@ -1,11 +1,12 @@
 <template>
   <div>
     <div class="control has-addons">
-      <!-- TODO: I don't know howto emit signals to the player -->
       <a class="button" active-class="is-primary" v-on:click='play'>Play</a>
       <a class="button" v-on:click='pause'>Pause</a>
       <a class="button" v-on:click='stop'>Stop</a>
-
+      <!-- TODO: loading the icon does not work
+      <icon name="repo"></icon>
+      -->
     </div>
     <div id="playlist"></div>
     <form>
@@ -19,6 +20,12 @@
 
 <script>
 import bulma from 'bulma/css/bulma.css';
+
+import Icon from 'vue-awesome/components/Icon.vue'
+
+// pick your icons
+import 'vue-awesome/icons/flag'
+
 import * as WaveformPlaylist from 'waveform-playlist'
 import * as player from './player.js'
 

@@ -18,8 +18,8 @@ const router = new VueRouter({
     { path: '/', component: App,
       children: [
         { path: '', component: Home },
-        { path: 'heatmap', redirect: { name: 'heatmap', params: { subset: '0', target: '0', metric: '0' } } },
-        { path: 'heatmap/:subset/:target/:metric', name: 'heatmap', component: Heatmap },
+        { path: 'heatmap', redirect: { name: 'heatmap', params: { is_dev: '1', target_id: '4', metric_id: '2' } } },
+        { path: 'heatmap/:is_dev/:target_id/:metric_id', name: 'heatmap', component: Heatmap },
         { path: 'player/:trackid/', redirect: { name: 'player', params: { method: 'Reference' } } },
         { path: 'player/:trackid/:method', name: 'player', component: Player },
         { path: 'about', component: About },

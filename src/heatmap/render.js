@@ -99,21 +99,21 @@ function rect(data) {
 
   // Bind data to rectangles
   var heatmap = d3.select(this).selectAll("rect")
-    .data(data.value.payload, function(d) { return d.estimate_name; });
+    .data(data.value.payload, function(d) { return d.method_id; });
 
   // Draw rectangles here
   // render only as many rows as there are methods (using array length instead of data)
   heatmap
     .attr("width", function(d) { return track_scale.bandwidth(); })
     .attr("height", function(d) { return method_scale.bandwidth(); })
-    .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); });
+    .attr("y", function(d) { return method_scale(headers.methods[d.method_id]); });
 
   heatmap.enter().append("rect")
-    .classed("oracle", function(d) { return d.estimate_name == "6"; })
+    .classed("oracle", function(d) { return d.method_id == headers.methods.indexOf("IBM"); })
     .attr("width", function(d) { return track_scale.bandwidth(); })
     .attr("height", function(d) { return method_scale.bandwidth(); })
     // shift them for numbers of rows available
-    .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); })
+    .attr("y", function(d) { return method_scale(headers.methods[d.method_id]); })
     // fill with defined colorscale
     .style("fill", function(d) { return colorScale(d.score); })
     .style("cursor", "pointer")
@@ -124,10 +124,10 @@ function rect(data) {
          .style("opacity", .9);
        tooltip.html(
          "Track: "  + d.track_id +
-         "<br/>Method: " + headers.methods[d.estimate_name] +
-         "<br/>" + headers.metrics[d.metric] + ': ' + d.score
+         "<br/>Method: " + headers.methods[d.method_id] +
+         "<br/>" + headers.metrics[d.metric_id] + ': ' + d.score
        )
-       d3.selectAll(".method_label").classed("active", function(x) { return d.estimate_name == x.key; });
+       d3.selectAll(".method_label").classed("active", function(x) { return d.method_id == x.key; });
       })
      .on("mouseout", function(d) {
          tooltip.transition()
@@ -162,12 +162,12 @@ function update(data) {
 
   tracks.sort(function(a, b) { return d3.ascending(parseInt(a.key), parseInt(b.key)); });
 
-  // group by method_name (=estimate_name)
+  // group by method_name (=method_id)
   var methods = d3.nest()
-    .key(function(d) { return d.estimate_name; })
+    .key(function(d) { return d.method_id; })
     .rollup(function(v) { return {
         meanScoreByMethod: d3.median(v, function(d) { return d.score; }),
-        isOracle: v[0].estimate_name == "6",
+        isOracle: v[0].method_id == headers.methods.indexOf("IBM"),
         payload: v
       };
     })
@@ -201,7 +201,7 @@ function update(data) {
 
   // bind data to class
   var track_column = g.selectAll("g.track")
-    .data(tracks, function(d) { return [d.key, d.value.payload[0].target_name, d.value.payload[0].metric] });
+    .data(tracks, function(d) { return [d.key, d.value.payload[0].target_id, d.value.payload[0].metric_id] });
 
   // update method_label
   method_label

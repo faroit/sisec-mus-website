@@ -23,21 +23,18 @@ export default {
     update: function() {
       plot.update(this.data.filter(function(d) {
         return (
-          d.target_name == this.$route.params.target &&
-          d.metric == this.$route.params.metric &&
-          (
-            (this.$route.params.subset == 0 && d.track_id >= 51) ||
-            (this.$route.params.subset == 1 && d.track_id <= 50)
-          )
+          d.target_id == this.$route.params.target_id &&
+          d.metric_id == this.$route.params.metric_id &&
+          d.is_dev == this.$route.params.is_dev
         );
       }.bind(this)));
     }
   },
   watch: {
     'data': 'update',
-    '$route.params.subset': 'update',
-    '$route.params.target': 'update',
-    '$route.params.metric': 'update',
+    '$route.params.is_dev': 'update',
+    '$route.params.target_id': 'update',
+    '$route.params.metric_id': 'update',
   }
 }
 </script>

@@ -267,10 +267,8 @@ function update(data) {
       }));
     })
     .on("mouseover", function(dclick) {
-      d3.selectAll(".track").classed("active", function(d) { return d.key == dclick.key; });
       d3.selectAll(".grid .track_label").
         classed("active", function(d) { return d.key == dclick.key; });
-      // d3.selectAll(".grid .method_label").classed("active", function(d) { return d.key == dclick.key; });
     })
     .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     // .style("fill-opacity", 1e-6)

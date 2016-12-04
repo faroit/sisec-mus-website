@@ -1,6 +1,8 @@
 <template>
   <div class="hero-body">
-    about
+      <div class="container has-text-centered">
+          Presenting the DSD100 Dataset
+      </div>
   </div>
 </template>
 

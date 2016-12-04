@@ -4,6 +4,12 @@
       <router-link :to="{ path: '/heatmap' }">Results</router-link>
     </span>
     <span class="nav-item">
+      <router-link :to="{ path: '/dataset' }">Dataset</router-link>
+    </span>
+    <span class="nav-item">
+      <router-link :to="{ path: '/methods' }">Methods</router-link>
+    </span>
+    <span class="nav-item">
       <router-link :to="{ path: '/about' }">About</router-link>
     </span>
   </div>

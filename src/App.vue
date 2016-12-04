@@ -7,7 +7,7 @@
            <div class="container">
              <div class="nav-left">
                <a class="nav-item" href="/">
-                 <h1 class="title is-4">DSD100 Evaluation Results</h1>
+                 <h1 class="title is-4">SiSEC MUS 2017</h1>
                </a>
              </div>
              <span class="nav-toggle">
@@ -36,6 +36,9 @@
          is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
        </p>
        <p>
+         <!--
+         TODO: Add Logos here
+         <img src="https://www.inria.fr/extension/site_inria/design/site_inria/images/logos/logo_INRIA.png" alt="Inria"> -->
        </p>
      </div>
    </div>

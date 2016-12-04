@@ -5,6 +5,8 @@ import App from './App.vue'
 import Heatmap from './heatmap/Heatmap.vue'
 import Player from './Player.vue'
 import About from './About.vue'
+import Methods from './Methods.vue'
+import Dataset from './Dataset.vue'
 import Home from './Home.vue'
 
 import Icon from 'vue-awesome/components/Icon.vue'
@@ -21,6 +23,8 @@ const router = new VueRouter({
         { path: 'player/:trackid/', redirect: { name: 'player', params: { method: 'Reference' } } },
         { path: 'player/:trackid/:method', name: 'player', component: Player },
         { path: 'about', component: About },
+        { path: 'methods', component: Methods },
+        { path: 'dataset', component: Dataset },
       ]
     },
   ]

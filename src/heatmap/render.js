@@ -116,6 +116,7 @@ function rect(data) {
     .attr("y", function(d) { return method_scale(headers.methods[d.estimate_name]); })
     // fill with defined colorscale
     .style("fill", function(d) { return colorScale(d.score); })
+    .style("cursor", "pointer")
     // render tooltip data
     .on("mouseover", function(d) {
        tooltip.transition()
@@ -245,20 +246,6 @@ function update(data) {
     .append("g")
     .attr("class", "track")
 
-  track_column_enter.append("text")
-    .attr("class", "track_label")
-    .style("text-anchor", "start")
-    .style("font-size", .66 * gridSize + "px")
-    .attr("y", - (.66 * gridSize))
-    .attr("x", 3)
-    .text(function(d) { return d.key });
-
-  track_column.select("text")
-    .style("text-anchor", "start")
-    .attr("y", - (.66 * gridSize))
-    .attr("x", 3)
-    .text(function(d) { return d.key });
-
   track_column_enter
     .on("click", function(dclick) {
       // render new site that displays more detailed track information
@@ -275,7 +262,43 @@ function update(data) {
     // .transition(t)
     // // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     // .style("fill-opacity", 1)
-    .each(rect);
+    .each(rect)
+
+  var track_column_enter_label = track_column_enter
+    .append("g")
+    .attr("class", "track_label_group")
+    .on("mouseover", function(dclick) {
+        d3.selectAll(".grid .track_label_group").
+          classed("active", function(d) { return d.key == dclick.key; });
+    });
+
+  track_column_enter_label
+    .append('rect')
+    .attr("class", "track_label_rect")
+    .attr("y", -31)
+    .attr("height", gridSize)
+    .style("fill-opacity", 1e-6)
+    .style("fill", "red")
+    .style("cursor", "pointer")
+    .attr("width", gridSize)
+    .on("mouseover", function(dclick) {
+        d3.select(this)
+          .style("fill-opacity", 0.5);
+    })
+    .on("mouseout", function(dclick) {
+        d3.select(this)
+          .style("fill-opacity", 0);
+    });
+
+  track_column_enter_label
+    .append('text')
+    .attr("class", "track_label")
+    .style("text-anchor", "start")
+    .style("font-size", .66 * gridSize + "px")
+    .style("cursor", "pointer")
+    .attr("y", - (.66 * gridSize))
+    .attr("x", 4)
+    .text(function(d) { return d.key });
 
   track_column.exit()
     .transition(t)

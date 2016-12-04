@@ -60,6 +60,12 @@ text.method_label.active {
 }
 
 .grid text.track_label.active {
-  fill: green;
+  fill: red;
 }
+
+.grid .track_label_group rect.active {
+  fill: blue;
+  fill-opacity: 1;
+}
+
 </style>

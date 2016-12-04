@@ -17,6 +17,8 @@ var width
 var height
 var h
 var w
+var svgLegend
+var svgLegendRect
 
 function init() {
   margin = {top: 50, right: 100, bottom: 30, left: 50},
@@ -75,6 +77,15 @@ function init() {
   g = svg.append("g")
       .attr("class", "grid")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svgLegend = g.append('g')
+    .attr("class", "legend")
+    .attr("transform", "translate("+ (d3.max(track_scale.range()) + gridSize + gridSize) + ", 0)");
+
+  svgLegendRect = svgLegend.append("rect")
+    .attr("width", gridSize)
+    .attr("transform", "translate("+ (- gridSize) + ", 0)")
+    .style("fill", "url(#linear-gradient)");
 
   // Create HUD element that displays information about currently selected data
   tooltip = d3.select(".columns")
@@ -276,17 +287,13 @@ function update(data) {
 
   d3.selectAll(".oracle").attr("transform", "translate(0, -10)");
 
-  var svgLegend = g.append('g')
-    .attr("class", "legend")
-    .attr("transform", "translate("+ (d3.max(track_scale.range()) + track_scale.bandwidth() + gridSize) + ", 0)");
+  var legend = svg.select('g.legend');
 
-  var svgLegendRect = svgLegend.append("rect")
-      .attr("width", gridSize)
-      .attr("transform", "translate("+ (- gridSize) + ", 0)")
-      // .attr("x", d3.extent(track_scale.range())[1] + track_scale.bandwidth())
-      .attr("y", d3.extent(method_scale.range())[0] - 10)
-      .attr("height", d3.extent(method_scale.range())[1] + 10)
-      .style("fill", "url(#linear-gradient)");
+  var legendRect = legend.select('rect');
+
+  legendRect
+    .attr("y", d3.extent(method_scale.range())[0] - 10)
+    .attr("height", d3.extent(method_scale.range())[1] + 10);
 
   var yScale = d3.scaleLinear()
   	 .range([parseInt(svgLegendRect.attr('height')) - 10, parseInt(svgLegendRect.attr('y'))])
@@ -298,7 +305,7 @@ function update(data) {
   	  .scale(yScale);
 
   //Set up X axis
-  svgLegend
+  legend
     .call(yAxis);
 }
 

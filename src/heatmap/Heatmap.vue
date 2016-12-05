@@ -2,44 +2,70 @@
   <div id="d3container">
     <map-menu></map-menu>
     <svg id='heatmap' width="900" height="300"></svg>
-    <child></child>
+    <player v-if="this.$route.name == 'player'" :urls="tracklist"></player>
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3'
 import MapMenu from './Menu.vue'
-import Child from './Child.vue'
+import Player from './Player.vue'
 import plot from './render.js'
 import store from '../store.js'
+import headers from './headers.js'
 
 export default {
   components: {
-    'map-menu': MapMenu,
-    'child': Child
+    MapMenu, Player
   },
   data: function() {
-    return { data: {} }
+    return { data: [] }
   },
   mounted: function() {
+    plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
     plot.init();
-    // d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
-    store.getData("/data/data.csv").then(function(data) {this.data = data}.bind(this));
+    d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
   },
   methods: {
     update: function() {
-      plot.update(this.data.filter(function(d) {
+      plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
+      plot.update(this.subset);
+    }
+  },
+  computed: {
+    subset: function() {
+      return this.data.filter(function(d) {
         return (
           d.target_id == this.$route.params.target_id &&
           d.metric_id == this.$route.params.metric_id &&
-          d.is_dev == this.$route.params.is_dev
+          d.is_train == this.$route.params.is_train
         );
-      }.bind(this)));
+      }.bind(this));
+    },
+    tracklist: function() {
+      var subset = this.data.filter(function(d) {
+        return (
+          d.track_id == this.$route.params.track_id &&
+          d.method_id == headers.methods.indexOf(this.$route.params.method) &&
+          d.metric_id == this.$route.params.metric_id
+        );
+      }.bind(this));
+      var tracklist = []
+      for (let track of subset) {
+        tracklist.push(
+          [
+            track.track_id,
+            headers.methods[track.method_id],
+            headers.targets[track.target_id]
+          ].join("_") + '.wav'
+        );
+      }
+      return tracklist;
     }
   },
   watch: {
     'data': 'update',
-    '$route.params.is_dev': 'update',
+    '$route.params.is_train': 'update',
     '$route.params.target_id': 'update',
     '$route.params.metric_id': 'update',
   }

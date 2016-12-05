@@ -1,5 +1,5 @@
 import * as WaveformPlaylist from 'waveform-playlist'
-import headers from './heatmap/headers.js'
+import headers from './headers.js'
 
 var playlist
 
@@ -22,7 +22,7 @@ function init() {
   });
 }
 
-function loadTargets(trackid, method) {
+function loadTargets(trackurls) {
 
   // Route to wav files:
   // "{track_id}_Reference_{target_name}.wav"
@@ -30,17 +30,18 @@ function loadTargets(trackid, method) {
   playlist.getEventEmitter().emit('stop')
   playlist.tracks = []
   var tracksToLoad = []
-  for (let target of headers.targets) {
+  for (let url of trackurls) {
     tracksToLoad.push(
       {
-        "src": "/media/" + trackid + '_' + method + '_' + target + '.wav',
-        "name": target, // should be {target_name}
+        "src": '/media/SISEC/' + url,
+        "name": "Wurst",
         "muted": false,
         "soloed": false,
       }
     );
   }
   playlist.load(tracksToLoad);
+
 }
 
 export { init, loadTargets, playlist }

@@ -20,6 +20,16 @@ var w
 var svgLegend
 var svgLegendRect
 
+var current_target_id
+var current_metric_id
+var current_is_train
+
+function setRoute(is_train, target_id, metric_id) {
+  current_is_train = is_train;
+  current_target_id = target_id;
+  current_metric_id = metric_id;
+};
+
 function init() {
   margin = {top: 50, right: 100, bottom: 30, left: 50},
     width = parseInt(d3.select("#d3container").style("width")) - margin.left - margin.right;
@@ -98,7 +108,7 @@ function init() {
 function rect(data) {
 
   // Bind data to rectangles
-  var heatmap = d3.select(this).selectAll("rect")
+  var heatmap = d3.select(this).selectAll("rect_group")
     .data(data.value.payload, function(d) { return d.method_id; });
 
   // Draw rectangles here
@@ -108,7 +118,14 @@ function rect(data) {
     .attr("height", function(d) { return method_scale.bandwidth(); })
     .attr("y", function(d) { return method_scale(headers.methods[d.method_id]); });
 
-  heatmap.enter().append("rect")
+  heatmap.enter()
+    .append("g")
+      .attr("class", "rect_group")
+    .append("svg:a")
+      .attr("xlink:href", function(d){
+        return "/#/heatmap/" + current_is_train + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.track_id + '/' + headers.methods[d.method_id];
+      })
+    .append("rect")
     .classed("oracle", function(d) { return d.method_id == headers.methods.indexOf("IBM"); })
     .attr("width", function(d) { return track_scale.bandwidth(); })
     .attr("height", function(d) { return method_scale.bandwidth(); })
@@ -154,7 +171,7 @@ function update(data) {
   var tracks = d3.nest()
     .key(function(d) { return d.track_id; })
     .rollup(function(v) { return {
-        meanScoreByTrack: d3.median(v, function(d) { return d.score; }),
+        meanScoreByTrack: d3.mean(v, function(d) { return d.score; }),
         payload: v
       };
     })
@@ -166,7 +183,7 @@ function update(data) {
   var methods = d3.nest()
     .key(function(d) { return d.method_id; })
     .rollup(function(v) { return {
-        meanScoreByMethod: d3.median(v, function(d) { return d.score; }),
+        meanScoreByMethod: d3.mean(v, function(d) { return d.score; }),
         isOracle: v[0].method_id == headers.methods.indexOf("IBM"),
         payload: v
       };
@@ -175,14 +192,13 @@ function update(data) {
 
   // sort alphabetically
   methods.sort(function(a, b) {
-    return d3.ascending(headers.methods[a.key], headers.methods[b.key]);
-  }).sort(function(a, b) {
-    return d3.descending(+a.value.isOracle, +b.value.isOracle);
+    return d3.descending(+a.value.isOracle, +b.value.isOracle) || d3.ascending(headers.methods[a.key], headers.methods[b.key]);
   });
-  // // sort by mean
+
   // methods.sort(function(a, b) {
-  //   return d3.ascending(a.value.meanScoreByMethod, b.value.meanScoreByMethod);
+  //   return d3.descending(a.value.meanScoreByMethod, b.value.meanScoreByMethod);
   // });
+
 
   height = gridSize * methods.length;   // height is defined by maximum number of methods
 
@@ -249,9 +265,9 @@ function update(data) {
   track_column_enter
     .on("click", function(dclick) {
       // render new site that displays more detailed track information
-      update(data.filter(function(d) {
-        return d.track_id == dclick.key;
-      }));
+      // update(data.filter(function(d) {
+      //   return d.track_id == dclick.key;
+      // }));
     })
     .on("mouseover", function(dclick) {
       d3.selectAll(".grid .track_label").
@@ -296,7 +312,7 @@ function update(data) {
     .style("text-anchor", "start")
     .style("font-size", .66 * gridSize + "px")
     .style("cursor", "pointer")
-    .attr("y", - (.66 * gridSize))
+    .attr("y", - 0.5 * (.66 * gridSize))
     .attr("x", 4)
     .text(function(d) { return d.key });
 
@@ -306,18 +322,18 @@ function update(data) {
     // .attr("transform", function(d, i) { return "translate(0, 1000)"; })
     .remove();
 
-  d3.selectAll(".oracle").attr("transform", "translate(0, -10)");
+  d3.selectAll(".oracle").attr("transform", "translate(0, 0)");
 
   var legend = svg.select('g.legend');
 
   var legendRect = legend.select('rect');
 
   legendRect
-    .attr("y", d3.extent(method_scale.range())[0] - 10)
-    .attr("height", d3.extent(method_scale.range())[1] + 10);
+    .attr("y", d3.extent(method_scale.range())[0])
+    .attr("height", d3.extent(method_scale.range())[1]);
 
   var yScale = d3.scaleLinear()
-  	 .range([parseInt(svgLegendRect.attr('height')) - 10, parseInt(svgLegendRect.attr('y'))])
+  	 .range([parseInt(svgLegendRect.attr('height')), parseInt(svgLegendRect.attr('y'))])
   	 .domain(colorScale.domain());
 
   //Define x-axis
@@ -330,4 +346,4 @@ function update(data) {
     .call(yAxis);
 }
 
-export default { init, update }
+export default { init, update, setRoute }

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1 class="title">Playback {{ this.$route.params.method }} Track {{ this.$route.params.trackid }}</h1>
-    <div class="control has-addons">
+    <h1 class="title">Playback Method <em>{{ this.$route.params.method }}</em>, Track {{ this.$route.params.track_id }}</h1>.
+    <span class="control has-addons">
       <a class="button is-success"
         v-bind:class="{ 'is-active': isPlaying }"
         v-on:click='playpause'><icon v-bind:name="isPlaying ? 'pause' : 'play' "></icon>
       </a>
       <a class="button is-light" v-on:click='stop'><icon name="stop"></icon></a>
-    </div>
+    </span>
     <div id="playlist"></div>
     <div class="sound-status"></div>
     <div class="loading-data"></div>
@@ -26,9 +26,12 @@ export default {
   components: {
     Icon
   },
+  props: {
+    urls: Array
+  },
   mounted: function() {
     player.init();
-    player.loadTargets(this.$route.params.trackid, this.$route.params.method);
+    player.loadTargets(this.urls);
     player.playlist.getEventEmitter().on('finished', this.stop )
   },
   data: function () {
@@ -38,7 +41,7 @@ export default {
   },
   methods: {
     update: function() {
-      player.loadTargets(this.$route.params.trackid, this.$route.params.method);
+      player.loadTargets(this.urls);
     },
     playpause: function() {
       if (this.isPlaying) {
@@ -55,8 +58,7 @@ export default {
     }
   },
   watch: {
-    '$route.params.trackid': 'update',
-    '$route.params.method': 'update',
+    'urls': 'update'
   }
 }
 </script>

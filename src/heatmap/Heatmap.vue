@@ -53,11 +53,13 @@ export default {
       var tracklist = []
       for (let track of subset) {
         tracklist.push(
-          [
-            track.track_id,
-            headers.methods[track.method_id],
-            headers.targets[track.target_id]
-          ].join("_") + '.wav'
+          { 'name': headers.targets[track.target_id],
+            'file': [
+              track.track_id,
+              headers.methods[track.method_id],
+              headers.targets[track.target_id]
+            ].join("_") + '.wav'
+          }
         );
       }
       return tracklist;

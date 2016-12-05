@@ -30,11 +30,12 @@ function loadTargets(trackurls) {
   playlist.getEventEmitter().emit('stop')
   playlist.tracks = []
   var tracksToLoad = []
-  for (let url of trackurls) {
+
+  for (let track of trackurls) {
     tracksToLoad.push(
       {
-        "src": '/media/SISEC/' + url,
-        "name": "Wurst",
+        "src": '/media/SISEC/' + track.file,
+        "name": track.name,
         "muted": false,
         "soloed": false,
       }

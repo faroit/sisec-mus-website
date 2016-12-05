@@ -29,6 +29,7 @@ export default {
   mounted: function() {
     player.init();
     player.loadTargets(this.$route.params.trackid, this.$route.params.method);
+    player.playlist.getEventEmitter().on('finished', this.stop )
   },
   data: function () {
     return {

@@ -10,8 +10,13 @@
   "dependencies": {
     "bulma": "^0.2.3",
     "d3": "^4.3.0",
+    "dsv-loader": "^1.1.0",
+    "es6-promise": "^4.0.5",
     "vue": "^2.0.1",
-    "vue-router": "^2.0.1"
+    "vue-awesome": "^2.0.3",
+    "vue-resource": "^1.0.3",
+    "vue-router": "^2.0.1",
+    "waveform-playlist": "^2.4.2"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -24,9 +29,7 @@
     "json-loader": "^0.5.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "vue-awesome": "^2.0.3",
     "vue-loader": "^9.7.0",
-    "waveform-playlist": "^2.4.2",
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.1.0-beta.0"
   }

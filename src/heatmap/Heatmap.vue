@@ -2,22 +2,29 @@
   <div id="d3container">
     <map-menu></map-menu>
     <svg id='heatmap' width="900" height="300"></svg>
+    <child></child>
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3'
 import MapMenu from './Menu.vue'
+import Child from './Child.vue'
 import plot from './render.js'
+import store from '../store.js'
 
 export default {
-  components: { MapMenu },
+  components: {
+    'map-menu': MapMenu,
+    'child': Child
+  },
   data: function() {
     return { data: {} }
   },
   mounted: function() {
     plot.init();
-    d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
+    // d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
+    store.getData("/data/data.csv").then(function(data) {this.data = data}.bind(this));
   },
   methods: {
     update: function() {
@@ -38,6 +45,7 @@ export default {
   }
 }
 </script>
+
 <style>
 div.tooltip {
   position: relative;

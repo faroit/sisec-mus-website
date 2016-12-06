@@ -15,21 +15,7 @@
       </div>
       <div class="column is-narrow">
         <span class="control">
-          <a class="button is-primary" v-on:click="requestReferences">Show References</a>
-        </span>
-      </div>
-      <div class="column is-narrow">
-        <span class="select">
-          <select>
-            <option>{{ this.$route.params.method }}</option>
-            <option>more</option>
-          </select>
-        </span>
-        <span class="select">
-          <select>
-            <option>{{ this.$route.params.track_id }}</option>
-            <option>more</option>
-          </select>
+          <a class="button is-primary" v-on:click="addReferences">Compare {{ this.headers.targets[this.$route.params.track_id] }}</a>
         </span>
       </div>
     </div>
@@ -42,11 +28,12 @@
 <script>
 import bulma from 'bulma/css/bulma.css';
 import fontawesome from 'font-awesome/css/font-awesome.min.css';
+import headers from './headers.js'
 
 import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
-
+import EventEmitter from 'event-emitter';
 // this.isLoading = this.player.playlist.getEventEmitter().on("loadprogress", function(percent, src) {
 
 export default {
@@ -60,8 +47,12 @@ export default {
     return {
       isPlaying: false,
       isLoading: true,
-      player: Object
+      player: Object,
+      headers: Array
     }
+  },
+  beforeMount: function() {
+    this.headers = headers;
   },
   mounted: function() {
     console.log("mounted")
@@ -77,6 +68,7 @@ export default {
   },
   methods: {
     update: function() {
+      // this.player = new player();
       this.player.loadTargets(this.urls);
     },
     playpause: function() {
@@ -92,8 +84,8 @@ export default {
       this.player.playlist.getEventEmitter().emit('stop')
       this.isPlaying = false
     },
-    requestReferences: function () {
-      this.$emit('requestReferences')
+    addReferences: function () {
+      this.$emit('addReferences')
     },
   },
   watch: {
@@ -148,11 +140,11 @@ export default {
       overflow: hidden;
       color: white;
       background-color: #00d1b2;
-      margin-bottom: 1em;
+      margin-bottom: 0.5em;
       height: 20px; }
     .playlist .controls label {
-      margin: 1em auto;
-      width: 100%;
+      margin: 0.5em auto;
+      width: 80%;
       display: inline-block;
       font: normal normal normal 14px/1 FontAwesome;
       font-size: inherit;
@@ -163,13 +155,13 @@ export default {
     .playlist .controls label:before {
       content: "\f027";
       color: black;
-      font-size: 18px;
+      font-size: 13px;
       padding-right: 5px;
       -moz-osx-font-smoothing: grayscale; }
     .playlist .controls label:after {
       content: "\f028";
       color: black;
-      font-size: 18px;
+      font-size: 13px;
       padding-left: 5px; }
     .playlist .controls input[type=range] {
       -webkit-appearance: none;

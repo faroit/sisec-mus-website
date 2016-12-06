@@ -19,8 +19,8 @@
     </div>
     <div class="column">
       <div class="control has-addons">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_train: '1', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Training</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_train: '0', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Test</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_train: '0', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Training</router-link>
+        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_train: '1', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Test</router-link>
       </div>
     </div>
   </div>

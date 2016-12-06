@@ -61,6 +61,7 @@ function init() {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
 
+
   //Append a defs (for definition) element to your SVG
   defs = svg.append("defs");
 

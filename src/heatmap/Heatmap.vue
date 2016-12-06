@@ -8,8 +8,8 @@
       <div v-if="tracklist.length > 0">
         <div class="hero-body">
           <div class="container">
-            <!-- <player :urls="tracklist" v-on:requestReferences="addReferences"></player> -->
-            <player :urls="tracklist"></player>
+            <player :urls="tracklist" v-on:addReferences="addReferences"></player>
+            <!-- <player :urls="tracklist"></player> -->
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@ export default {
       plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
       plot.update(this.subset);
     },
-    addReferrences: function () {
+    addReferences: function () {
         console.log("references added")
     }
   },
@@ -58,7 +58,6 @@ export default {
       }.bind(this));
     },
     tracklist: function() {
-      console.log("loadtracks")
 
       var subset = this.data.filter(function(d) {
         return (
@@ -73,7 +72,6 @@ export default {
 
       var trackstoload = []
 
-      console.log(subset.length)
       trackstoload.push(
         { 'name': 'Mixture',
           "muted": false,

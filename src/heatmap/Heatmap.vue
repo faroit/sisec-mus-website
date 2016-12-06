@@ -4,6 +4,12 @@
         <map-menu></map-menu>
         <svg id='heatmap' width="900" height="300"></svg>
       </div>
+      <span>
+        <a class="button is-danger"
+          v-on:click='toggleMode'
+          v-bind:class="{ 'is-active': decompose }"><span>{{ decompose ? 'Decompose Tracks' : 'Compare Methods' }}</span>
+        </a>
+      </span>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
         <div class="hero-body">
@@ -31,7 +37,10 @@ export default {
     MapMenu, Player
   },
   data: function() {
-    return { data: [] }
+    return {
+      decompose: true,
+      data: []
+    }
   },
   mounted: function() {
     plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
@@ -45,6 +54,9 @@ export default {
     },
     addReferences: function () {
         console.log("references added")
+    },
+    toggleMode: function() {
+      this.decompose = ! this.decompose
     }
   },
   computed: {
@@ -59,51 +71,81 @@ export default {
     },
     tracklist: function() {
 
-      var subset = this.data.filter(function(d) {
-        return (
-          d.track_id == this.$route.params.track_id &&
-          d.method_id == headers.methods.indexOf(this.$route.params.method) &&
-          d.metric_id == this.$route.params.metric_id
-        );
-      }.bind(this));
-      if(this.$route.params.track_id == null || !subset.length) {
-        return [];
-      }
-
       var trackstoload = []
 
-      trackstoload.push(
-        { 'name': 'Mixture',
-          "muted": false,
-          'file': [
-            this.$route.params.track_id,
-            'MIX'
-          ].join("_") + '.wav'
-        }
-      );
+      if ( this.decompose ) {
+        var filtered_data = this.data.filter(function(d) {
+          return (
+            d.track_id == this.$route.params.track_id &&
+            d.method_id == headers.methods.indexOf(this.$route.params.method) &&
+            d.metric_id == this.$route.params.metric_id
+          );
+        }.bind(this));
 
-      for (let track of subset) {
         trackstoload.push(
-          { 'name': headers.targets[track.target_id],
-            "muted": true,
+          { 'name': 'Mixture',
+            "muted": false,
             'file': [
-              track.track_id,
-              headers.methods[track.method_id],
-              headers.targets[track.target_id]
+              this.$route.params.track_id,
+              'MIX'
             ].join("_") + '.wav'
           }
         );
-        // trackstoload.push(
-        //   { 'name': 'REF ' + headers.targets[track.target_id],
-        //     "muted": true,
-        //     'file': [
-        //       track.track_id,
-        //       'REF',
-        //       headers.targets[track.target_id]
-        //     ].join("_") + '.wav'
-        //   }
-        // );
+
+        for (let track of filtered_data) {
+          trackstoload.push(
+            { 'name': headers.targets[track.target_id],
+              "muted": true,
+              'file': [
+                track.track_id,
+                headers.methods[track.method_id],
+                headers.targets[track.target_id]
+              ].join("_") + '.wav'
+            }
+          );
+        }
+        if(this.$route.params.track_id == null || !filtered_data.length) {
+          return [];
+        }
       }
+      else {
+        var filtered_data = this.data.filter(function(d) {
+          return (
+            d.track_id == this.$route.params.track_id &&
+            d.target_id == this.$route.params.target_id &&
+            d.metric_id == this.$route.params.metric_id
+          );
+        }.bind(this));
+        console.log(headers.targets[filtered_data[0].target_id])
+        trackstoload.push(
+          { 'name': 'Reference',
+            "muted": false,
+            'file': [
+              this.$route.params.track_id,
+              'REF',
+              headers.targets[filtered_data[0].target_id]
+            ].join("_") + '.wav'
+          }
+        );
+
+        for (let track of filtered_data) {
+          trackstoload.push(
+            { 'name': headers.methods[track.method_id],
+              "muted": true,
+              'file': [
+                track.track_id,
+                headers.methods[track.method_id],
+                headers.targets[track.target_id]
+              ].join("_") + '.wav'
+            }
+          );
+        }
+        if(this.$route.params.track_id == null || !filtered_data.length) {
+          return [];
+        }
+
+      };
+
       return trackstoload;
     }
   },

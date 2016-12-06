@@ -19,6 +19,7 @@ var h
 var w
 var svgLegend
 var svgLegendRect
+var svgLegendText
 
 var current_target_id
 var current_metric_id
@@ -91,6 +92,9 @@ function init() {
   svgLegend = g.append('g')
     .attr("class", "legend")
     .attr("transform", "translate("+ (d3.max(track_scale.range()) + gridSize + gridSize) + ", 0)");
+
+  svgLegendText = svgLegend.append("text")
+      .style("fill", "black");
 
   svgLegendRect = svgLegend.append("rect")
     .attr("width", gridSize)
@@ -344,6 +348,14 @@ function update(data) {
   //Set up X axis
   legend
     .call(yAxis);
+
+  svgLegendText
+    .attr("width", gridSize)
+    .style("fill", "black")
+    .attr("x", -1.5 * gridSize)
+    .attr("y", -0.5 * gridSize)
+    .text(function(d) { return headers.metrics[data[0].metric_id] + " in dB"; });
+
 }
 
 export default { init, update, setRoute }

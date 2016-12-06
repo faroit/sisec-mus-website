@@ -1,34 +1,28 @@
 import * as WaveformPlaylist from 'waveform-playlist'
 import headers from './headers.js'
 
-var playlist
-
-function init() {
-  playlist = WaveformPlaylist.init({
-    samplesPerPixel: 1360,
+var Player = function() {
+  this.playlist = WaveformPlaylist.init({
+    samplesPerPixel: 1260,
     waveHeight: 100,
     container: document.getElementById("playlist"),
     timescale: true,
     mono: true,
     state: 'cursor',
     colors: {
-      waveOutlineColor: '#E0EFF1'
+      waveOutlineColor: '#F0F0F0'
     },
     controls: {
       show: true, //whether or not to include the track controls
-      width: 140 //width of controls in pixels
+      width: 160 //width of controls in pixels
     },
-    zoomLevels: [1360]
+    zoomLevels: [1260]
   });
 }
 
-function loadTargets(trackurls) {
-
-  // Route to wav files:
-  // "{track_id}_Reference_{target_name}.wav"
-
-  playlist.getEventEmitter().emit('stop')
-  playlist.tracks = []
+Player.prototype.loadTargets = function(trackurls) {
+  this.playlist.getEventEmitter().emit('stop')
+  this.playlist.tracks = []
   var tracksToLoad = []
 
   for (let track of trackurls) {
@@ -36,13 +30,12 @@ function loadTargets(trackurls) {
       {
         "src": '/media/SISEC/' + track.file,
         "name": track.name,
-        "muted": false,
+        "muted": track.name == 'accompaniment',
         "soloed": false,
       }
     );
   }
-  playlist.load(tracksToLoad);
-
+  this.playlist.load(tracksToLoad);
 }
 
-export { init, loadTargets, playlist }
+export default Player

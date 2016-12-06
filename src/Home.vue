@@ -9,7 +9,7 @@
           </div>
           <div class="column is-6 is-offset-1">
             <h1 class="title is-2">
-                Separating Professionally-Produced Music
+                Separating Professionally Produced Music
             </h1>
             <h2 class="subtitle is-4">
                 This website presents the state-of-the-art algorithms in audio source separation. The data set consists of a total of 100 full-track songs of different styles and includes the synthesized mixtures and the original sources.

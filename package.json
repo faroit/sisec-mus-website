@@ -12,10 +12,13 @@
     "d3": "^4.3.0",
     "dsv-loader": "^1.1.0",
     "es6-promise": "^4.0.5",
+    "font-awesome": "^4.7.0",
+    "fontawesome": "^4.7.0",
     "vue": "^2.0.1",
     "vue-awesome": "^2.0.3",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
+    "vue-spinner": "^1.0.2",
     "waveform-playlist": "^2.4.2"
   },
   "devDependencies": {

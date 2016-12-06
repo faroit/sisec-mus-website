@@ -24,8 +24,8 @@ module.exports = {
         exclude: /node_modules(?![\\/]vue-awesome[\\/])|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'url?limit=100000',
+        test: /\.(png|jpg|gif)$/,
+        loader: 'url-loader?limit=100000',
         options: {
           name: '[name].[ext]?[hash]'
         }
@@ -39,27 +39,27 @@ module.exports = {
       },
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/font-woff"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
       },
       {
         test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/font-woff"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/octet-stream"
+        loader: "url-loader?limit=10000&mimetype=application/octet-stream"
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file"
+        loader: "file-loader"
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=image/svg+xml"
+        loader: "url-loader?limit=10000&mimetype=image/svg+xml"
       },
       {
         test: /\.json$/,
-        loader: 'json'
+        loader: 'json-loader'
       },
     ]
   },

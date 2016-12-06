@@ -1,9 +1,20 @@
 <template>
-  <div id="d3container">
-    <map-menu></map-menu>
-    <svg id='heatmap' width="900" height="300"></svg>
-    <player v-if="this.$route.name == 'player'" :urls="tracklist"></player>
-  </div>
+  <section class='hero'>
+      <div id="d3container">
+        <map-menu></map-menu>
+        <svg id='heatmap' width="900" height="300"></svg>
+      </div>
+    <transition name="slide-fade">
+      <div v-if="tracklist.length > 0">
+        <div class="hero-body">
+          <div class="container">
+            <player :urls="tracklist"></player>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </section>
+
 </template>
 
 <script>
@@ -43,6 +54,9 @@ export default {
       }.bind(this));
     },
     tracklist: function() {
+      if(this.$route.params.track_id == null) {
+        return [];
+      }
       var subset = this.data.filter(function(d) {
         return (
           d.track_id == this.$route.params.track_id &&
@@ -99,6 +113,16 @@ text.method_label.active {
 .grid .track_label_group rect.active {
   fill: blue;
   fill-opacity: 1;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-active {
+  opacity: 0;
 }
 
 </style>

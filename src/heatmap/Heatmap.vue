@@ -82,7 +82,7 @@ export default {
             'file': [
               this.$route.params.track_id,
               'MIX'
-            ].join("_") + '.wav'
+            ].join("_") + '.m4a'
           }
         );
 
@@ -94,7 +94,7 @@ export default {
                 track.track_id,
                 headers.methods[track.method_id],
                 headers.targets[track.target_id]
-              ].join("_") + '.wav'
+              ].join("_") + '.m4a'
             }
           );
         }
@@ -118,7 +118,7 @@ export default {
               this.$route.params.track_id,
               'REF',
               headers.targets[filtered_data[0].target_id]
-            ].join("_") + '.wav'
+            ].join("_") + '.m4a'
           }
         );
 
@@ -130,7 +130,7 @@ export default {
                 track.track_id,
                 headers.methods[track.method_id],
                 headers.targets[track.target_id]
-              ].join("_") + '.wav'
+              ].join("_") + '.m4a'
             }
           );
         }

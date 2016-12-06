@@ -15,7 +15,7 @@
       </div>
       <div class="column is-narrow">
         <span class="control">
-          <a class="button is-primary" v-on:click="addReferences">Compare {{ this.headers.targets[this.$route.params.track_id] }}</a>
+          <a class="button is-primary" v-on:click="toggleMode" v-bind:class="{ 'is-active': decompose }"><span>{{ decompose ? 'Decompose Tracks' : 'Compare Methods' }}</span></a>
         </span>
       </div>
     </div>
@@ -34,14 +34,14 @@ import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import EventEmitter from 'event-emitter';
-// this.isLoading = this.player.playlist.getEventEmitter().on("loadprogress", function(percent, src) {
 
 export default {
   components: {
     PulseLoader
   },
   props: {
-    urls: Array
+    urls: Array,
+    decompose: Boolean
   },
   data: function () {
     return {
@@ -63,7 +63,6 @@ export default {
   beforeDestroy: function() {
     console.log("beforeDestroy")
     this.stop();
-    // this.player.playlist.getEventEmitter().removeListener('finished', this.stop);
     delete this.player;
   },
   methods: {
@@ -84,8 +83,8 @@ export default {
       this.player.playlist.getEventEmitter().emit('stop')
       this.isPlaying = false
     },
-    addReferences: function () {
-      this.$emit('addReferences')
+    toggleMode: function () {
+      this.$emit('toggleMode', "foo")
     },
   },
   watch: {

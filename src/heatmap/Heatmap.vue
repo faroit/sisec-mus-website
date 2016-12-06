@@ -4,18 +4,11 @@
         <map-menu></map-menu>
         <svg id='heatmap' width="900" height="300"></svg>
       </div>
-      <span>
-        <a class="button is-danger"
-          v-on:click='toggleMode'
-          v-bind:class="{ 'is-active': decompose }"><span>{{ decompose ? 'Decompose Tracks' : 'Compare Methods' }}</span>
-        </a>
-      </span>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
         <div class="hero-body">
           <div class="container">
-            <player :urls="tracklist" v-on:addReferences="addReferences"></player>
-            <!-- <player :urls="tracklist"></player> -->
+            <player :urls="tracklist" :decompose='decompose' v-on:toggleMode="toggleMode"></player>
           </div>
         </div>
       </div>
@@ -55,7 +48,8 @@ export default {
     addReferences: function () {
         console.log("references added")
     },
-    toggleMode: function() {
+    toggleMode: function(d) {
+      console.log(d)
       this.decompose = ! this.decompose
     }
   },

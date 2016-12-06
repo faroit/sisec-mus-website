@@ -24,13 +24,12 @@ Player.prototype.loadTargets = function(trackurls) {
   this.playlist.getEventEmitter().emit('stop')
   this.playlist.tracks = []
   var tracksToLoad = []
-
   for (let track of trackurls) {
     tracksToLoad.push(
       {
         "src": '/media/SISEC/' + track.file,
         "name": track.name,
-        "muted": track.name == 'accompaniment',
+        "muted": track.muted,
         "soloed": false,
       }
     );

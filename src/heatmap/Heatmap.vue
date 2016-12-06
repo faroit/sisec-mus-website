@@ -8,6 +8,7 @@
       <div v-if="tracklist.length > 0">
         <div class="hero-body">
           <div class="container">
+            <!-- <player :urls="tracklist" v-on:requestReferences="addReferences"></player> -->
             <player :urls="tracklist"></player>
           </div>
         </div>
@@ -41,6 +42,9 @@ export default {
     update: function() {
       plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
       plot.update(this.subset);
+    },
+    addReferrences: function () {
+        console.log("references added")
     }
   },
   computed: {
@@ -54,9 +58,8 @@ export default {
       }.bind(this));
     },
     tracklist: function() {
-      if(this.$route.params.track_id == null) {
-        return [];
-      }
+      console.log("loadtracks")
+
       var subset = this.data.filter(function(d) {
         return (
           d.track_id == this.$route.params.track_id &&
@@ -64,10 +67,27 @@ export default {
           d.metric_id == this.$route.params.metric_id
         );
       }.bind(this));
-      var tracklist = []
+      if(this.$route.params.track_id == null || !subset.length) {
+        return [];
+      }
+
+      var trackstoload = []
+
+      console.log(subset.length)
+      trackstoload.push(
+        { 'name': 'Mixture',
+          "muted": false,
+          'file': [
+            this.$route.params.track_id,
+            'MIX'
+          ].join("_") + '.wav'
+        }
+      );
+
       for (let track of subset) {
-        tracklist.push(
+        trackstoload.push(
           { 'name': headers.targets[track.target_id],
+            "muted": true,
             'file': [
               track.track_id,
               headers.methods[track.method_id],
@@ -75,8 +95,18 @@ export default {
             ].join("_") + '.wav'
           }
         );
+        // trackstoload.push(
+        //   { 'name': 'REF ' + headers.targets[track.target_id],
+        //     "muted": true,
+        //     'file': [
+        //       track.track_id,
+        //       'REF',
+        //       headers.targets[track.target_id]
+        //     ].join("_") + '.wav'
+        //   }
+        // );
       }
-      return tracklist;
+      return trackstoload;
     }
   },
   watch: {

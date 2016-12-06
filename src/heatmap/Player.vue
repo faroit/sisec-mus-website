@@ -15,7 +15,7 @@
       </div>
       <div class="column is-narrow">
         <span class="control">
-          <a class="button is-primary">Show References</a>
+          <a class="button is-primary" v-on:click="requestReferences">Show References</a>
         </span>
       </div>
       <div class="column is-narrow">
@@ -41,8 +41,6 @@
 
 <script>
 import bulma from 'bulma/css/bulma.css';
-// import Icon from 'vue-awesome/components/Icon.vue'
-// import 'vue-awesome/icons'
 import fontawesome from 'font-awesome/css/font-awesome.min.css';
 
 import * as WaveformPlaylist from 'waveform-playlist'
@@ -93,7 +91,10 @@ export default {
     stop: function() {
       this.player.playlist.getEventEmitter().emit('stop')
       this.isPlaying = false
-    }
+    },
+    requestReferences: function () {
+      this.$emit('requestReferences')
+    },
   },
   watch: {
     'urls': 'update'

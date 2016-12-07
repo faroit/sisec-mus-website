@@ -31,14 +31,13 @@
    <div class="container">
      <div class="content has-text-centered">
        <p>
+         <span><img src="./assets/logo_INRIA.png" alt="Inria" width="100px"></span>
+         <span><img src="./assets/alabs_logo.svg" alt="audiolab" width="100px"></span>
+       </p>
+       <p>
          The source code of this website is licensed
          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
          is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
-       </p>
-       <p>
-         <!--
-         TODO: Add Logos here
-         <img src="https://www.inria.fr/extension/site_inria/design/site_inria/images/logos/logo_INRIA.png" alt="Inria"> -->
        </p>
      </div>
    </div>

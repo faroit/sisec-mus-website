@@ -25,7 +25,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'url-loader?limit=100000',
+        loader: 'url-loader',
         options: {
           name: '[name].[ext]?[hash]'
         }

@@ -280,38 +280,28 @@ function update(data) {
     })
     .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     // .style("fill-opacity", 1e-6)
-    // .transition(t)
-    // // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
+    .transition(t)
+    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     // .style("fill-opacity", 1)
     .each(rect)
 
   var track_column_enter_label = track_column_enter
     .append("g")
-    .attr("class", "track_label_group")
-    .on("mouseover", function(dclick) {
-        d3.selectAll(".grid .track_label_group").
-          classed("active", function(d) { return d.key == dclick.key; });
-    });
+    .attr("class", "track_label_group");
 
   track_column_enter_label
     .append('rect')
     .attr("class", "track_label_rect")
     .attr("y", -31)
     .attr("height", gridSize)
-    .style("fill-opacity", 1e-6)
-    .style("fill", "red")
-    .style("cursor", "pointer")
     .attr("width", gridSize)
-    .on("mouseover", function(dclick) {
-        d3.select(this)
-          .style("fill-opacity", 0.5);
-    })
-    .on("mouseout", function(dclick) {
-        d3.select(this)
-          .style("fill-opacity", 0);
-    });
+    .style("fill-opacity", 1e-6);
 
   track_column_enter_label
+    .append("svg:a")
+    .attr("xlink:href", function(d){
+      return "/#/heatmap/" + current_is_train + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.key + '/' + 'REF';
+    })
     .append('text')
     .attr("class", "track_label")
     .style("text-anchor", "start")
@@ -319,7 +309,16 @@ function update(data) {
     .style("cursor", "pointer")
     .attr("y", - 0.5 * (.66 * gridSize))
     .attr("x", 4)
-    .text(function(d) { return d.key });
+    .text(function(d) { return d.key })
+    .on("mouseover", function(dclick) {
+        d3.select(this)
+          .text(function(d) { return '\u25B6' });
+    })
+    .on("mouseout", function(dclick) {
+        d3.select(this)
+          .text(function(d) { return d.key });
+    });
+
 
   track_column.exit()
     .transition(t)

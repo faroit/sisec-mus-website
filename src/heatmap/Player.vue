@@ -23,8 +23,8 @@
       </div>
       <div class="column is-narrow">
         <span class="select">
-          <select>
-          <!-- <select v-model="availableMethods"> -->
+          <select> <!-- <select v-model="availableMethods"> -->
+            <option value='-1'>Compare to</option>
             <option v-for="method in availableMethods" v-bind:value="method.id">
               {{ method.name }}
             </option>

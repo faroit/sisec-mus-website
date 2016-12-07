@@ -1,9 +1,9 @@
 <template>
-  <section class='hero'>
+  <section>
       <div id="d3container">
-        <map-menu></map-menu>
         <svg id='heatmap' width="900" height="300"></svg>
       </div>
+      <map-menu></map-menu>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
         <div class="hero-body">
@@ -72,6 +72,34 @@ export default {
     },
     tracklist: function() {
 
+      var trackstoload = []
+
+      if (this.$route.params.method == 'REF') {
+        trackstoload.push(
+          { 'name': 'Mixture',
+            "muted": false,
+            'file': [
+              this.$route.params.track_id,
+              'MIX'
+            ].join("_") + '.m4a'
+          }
+        );
+
+        for (let target of headers.targets) {
+          trackstoload.push(
+            { 'name': target,
+              "muted": true,
+              'file': [
+                this.$route.params.track_id,
+                'REF',
+                target
+              ].join("_") + '.m4a'
+            }
+          );
+        }
+        return trackstoload;
+      }
+
       var filterByMethod = this.data.filter(function(d) {
         return (
           d.track_id == this.$route.params.track_id &&
@@ -101,8 +129,6 @@ export default {
           }
         );
       }
-
-      var trackstoload = []
 
       if ( this.decompose ) {
         trackstoload.push(
@@ -167,6 +193,10 @@ export default {
 </script>
 
 <style>
+#d3container {
+  margin-top: -3em;
+}
+
 div.tooltip {
   position: relative;
   text-align: right;
@@ -186,11 +216,6 @@ text.method_label.active {
 
 .grid text.track_label.active {
   fill: red;
-}
-
-.grid .track_label_group rect.active {
-  fill: blue;
-  fill-opacity: 1;
 }
 
 .slide-fade-enter-active {

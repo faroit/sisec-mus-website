@@ -15,7 +15,7 @@
       </div>
       <div class="column is-narrow">
         <span class="control">
-          <a class="button is-primary" v-on:click="toggleMode" v-bind:class="{ 'is-active': decompose }"><span>{{ decompose ? 'Decompose Tracks' : 'Compare Methods' }}</span></a>
+          <a class="button" v-on:click="toggleMode" v-bind:class="{ 'is-primary': !decompose }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
         </span>
       </div>
     </div>

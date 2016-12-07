@@ -8,7 +8,13 @@
       <div v-if="tracklist.length > 0">
         <div class="hero-body">
           <div class="container">
-            <player :urls="tracklist" :decompose='decompose' v-on:toggleMode="toggleMode"></player>
+            <player
+              :urls="tracklist"
+              :availableMethods="availableMethods"
+              :decompose='decompose'
+              v-on:toggleMode="toggleMode"
+            >
+            </player>
           </div>
         </div>
       </div>
@@ -32,7 +38,8 @@ export default {
   data: function() {
     return {
       decompose: true,
-      data: []
+      data: [],
+      availableMethods: []
     }
   },
   mounted: function() {
@@ -65,17 +72,39 @@ export default {
     },
     tracklist: function() {
 
+      var filterByMethod = this.data.filter(function(d) {
+        return (
+          d.track_id == this.$route.params.track_id &&
+          d.method_id == headers.methods.indexOf(this.$route.params.method) &&
+          d.metric_id == this.$route.params.metric_id
+        );
+      }.bind(this));
+
+      var filterByTarget = this.data.filter(function(d) {
+        return (
+          d.track_id == this.$route.params.track_id &&
+          d.target_id == this.$route.params.target_id &&
+          d.metric_id == this.$route.params.metric_id
+        );
+      }.bind(this));
+
+      if(this.$route.params.track_id == null || !filterByMethod.length) {
+        return [];
+      }
+
+      this.availableMethods = []
+      for (let track of filterByTarget) {
+        this.availableMethods.push(
+          {
+            'name': headers.methods[track.method_id],
+            'id': track.method_id
+          }
+        );
+      }
+
       var trackstoload = []
 
       if ( this.decompose ) {
-        var filtered_data = this.data.filter(function(d) {
-          return (
-            d.track_id == this.$route.params.track_id &&
-            d.method_id == headers.methods.indexOf(this.$route.params.method) &&
-            d.metric_id == this.$route.params.metric_id
-          );
-        }.bind(this));
-
         trackstoload.push(
           { 'name': 'Mixture',
             "muted": false,
@@ -86,7 +115,7 @@ export default {
           }
         );
 
-        for (let track of filtered_data) {
+        for (let track of filterByMethod) {
           trackstoload.push(
             { 'name': headers.targets[track.target_id],
               "muted": true,
@@ -98,31 +127,21 @@ export default {
             }
           );
         }
-        if(this.$route.params.track_id == null || !filtered_data.length) {
-          return [];
-        }
       }
       else {
-        var filtered_data = this.data.filter(function(d) {
-          return (
-            d.track_id == this.$route.params.track_id &&
-            d.target_id == this.$route.params.target_id &&
-            d.metric_id == this.$route.params.metric_id
-          );
-        }.bind(this));
-        console.log(headers.targets[filtered_data[0].target_id])
+        console.log(headers.targets[filterByTarget[0].target_id])
         trackstoload.push(
           { 'name': 'Reference',
             "muted": false,
             'file': [
               this.$route.params.track_id,
               'REF',
-              headers.targets[filtered_data[0].target_id]
+              headers.targets[filterByTarget[0].target_id]
             ].join("_") + '.m4a'
           }
         );
 
-        for (let track of filtered_data) {
+        for (let track of filterByTarget) {
           trackstoload.push(
             { 'name': headers.methods[track.method_id],
               "muted": true,
@@ -134,12 +153,7 @@ export default {
             }
           );
         }
-        if(this.$route.params.track_id == null || !filtered_data.length) {
-          return [];
-        }
-
       };
-
       return trackstoload;
     }
   },

@@ -5,6 +5,9 @@
         <h2 class="title">Playback Method <em>{{ this.$route.params.method }}</em>, Track {{ this.$route.params.track_id }}</h2>
       </div>
       <div class="column is-narrow">
+        <span><clip-loader :loading="isLoading" :color="loaderColor" :size="loaderHeight"></clip-loader></span>
+      </div>
+      <div class="column is-narrow">
         <span class="control has-addons">
           <a class="button is-primary"
             v-bind:class="{ 'is-active': isPlaying }"
@@ -18,10 +21,18 @@
           <a class="button" v-on:click="toggleMode" v-bind:class="{ 'is-primary': !decompose }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
         </span>
       </div>
+      <div class="column is-narrow">
+        <span class="select">
+          <select>
+          <!-- <select v-model="availableMethods"> -->
+            <option v-for="method in availableMethods" v-bind:value="method.id">
+              {{ method.name }}
+            </option>
+          </select>
+        </span>
+      </div>
     </div>
     <div id="playlist"></div>
-    <div class="sound-status"></div>
-    <div class="loading-data"><pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader></div>
   </div>
 </template>
 
@@ -32,23 +43,26 @@ import headers from './headers.js'
 
 import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 import EventEmitter from 'event-emitter';
 
 export default {
   components: {
-    PulseLoader
+    ClipLoader
   },
   props: {
     urls: Array,
-    decompose: Boolean
+    decompose: Boolean,
+    availableMethods: Array,
   },
   data: function () {
     return {
       isPlaying: false,
-      isLoading: true,
+      isLoading: false,
       player: Object,
-      headers: Array
+      headers: Array,
+      loaderColor: 'red',
+      loaderHeight: '24px',
     }
   },
   beforeMount: function() {
@@ -58,7 +72,7 @@ export default {
     console.log("mounted")
     this.player = new player();
     this.player.loadTargets(this.urls);
-    this.player.playlist.getEventEmitter().on('finished', this.stop)
+    this.player.playlist.getEventEmitter().on('loadprogress', this.toggleLoading)
   },
   beforeDestroy: function() {
     console.log("beforeDestroy")
@@ -85,6 +99,10 @@ export default {
     },
     toggleMode: function () {
       this.$emit('toggleMode', "foo")
+    },
+    toggleLoading: function (d, t) {
+      if (d < 100) { this.isLoading = true; }
+      else { this.isLoading = false; }
     },
   },
   watch: {

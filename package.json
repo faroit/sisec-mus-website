@@ -10,6 +10,7 @@
   "dependencies": {
     "bulma": "^0.2.3",
     "d3": "^4.3.0",
+    "d3-dsv": "^1.0.3",
     "dsv-loader": "^1.1.0",
     "es6-promise": "^4.0.5",
     "font-awesome": "^4.7.0",

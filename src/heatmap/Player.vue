@@ -44,7 +44,6 @@ import headers from './headers.js'
 import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
-import EventEmitter from 'event-emitter';
 
 export default {
   components: {

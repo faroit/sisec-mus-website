@@ -141,6 +141,7 @@ function rect(data) {
     .style("cursor", "pointer")
     // render tooltip data
     .on("mouseover", function(d) {
+        d3.select(this).style("stroke", "white").style("stroke-width", "2px");
        tooltip.transition()
          .duration(200)
          .style("opacity", .9);
@@ -152,6 +153,7 @@ function rect(data) {
        d3.selectAll(".method_label").classed("active", function(x) { return d.method_id == x.key; });
       })
      .on("mouseout", function(d) {
+        d3.select(this).style("stroke", "white").style("stroke-width", "0");
          tooltip.transition()
            .duration(200)
            .style("opacity", 0);

@@ -13,6 +13,8 @@ var defs
 var linearGradient
 var g
 var tooltip
+var tracktip
+var methodtip
 var width
 var height
 var h
@@ -24,11 +26,21 @@ var svgLegendText
 var current_target_id
 var current_metric_id
 var current_is_train
+var current_play_track_id
+var current_play_method
 
-function setRoute(is_train, target_id, metric_id) {
+function setRoute(
+    is_train,
+    target_id,
+    metric_id,
+    play_track_id = undefined,
+    play_method = undefined
+) {
   current_is_train = is_train;
   current_target_id = target_id;
   current_metric_id = metric_id;
+  current_play_track_id = play_track_id;
+  current_play_method = play_method;
 };
 
 function init() {
@@ -107,6 +119,13 @@ function init() {
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
+  tracktip = d3.select("#tracktip")
+    .style("opacity", 1);
+
+  methodtip = d3.select("#methodtip")
+    .style("opacity", 1);
+
 }
 
 // plot the actual score rectangles row-wise for each track column
@@ -135,28 +154,47 @@ function rect(data) {
     .attr("width", function(d) { return track_scale.bandwidth(); })
     .attr("height", function(d) { return method_scale.bandwidth(); })
     // shift them for numbers of rows available
-    .attr("y", function(d) { return method_scale(headers.methods[d.method_id]); })
+    .attr("y", function(d, i) { return method_scale(headers.methods[d.method_id]); })
     // fill with defined colorscale
     .style("fill", function(d) { return colorScale(d.score); })
     .style("cursor", "pointer")
     // render tooltip data
     .on("mouseover", function(d) {
-        d3.select(this).style("stroke", "white").style("stroke-width", "2px");
+      // methodtip.transition()
+      //  .duration(200)
+      //  .style("opacity", .9);
+      // methodtip
+      //    .style("width", (width + 'px'))
+      //    .style("left", '50px')
+      //    .style("height", method_scale.bandwidth() + 'px')
+      //    .style("top",  method_scale(headers.methods[d.method_id]) + 50 + "px");
+      //  tracktip.transition()
+      //   .duration(200)
+      //   .style("opacity", .9);
+      //  tracktip
+      //     .style("height", ( height + 'px'))
+      //     .style("left", (track_scale(d.track_id)) + 50 + "px")
+      //     .style("width", (track_scale.bandwidth()) + "px")
+      //     .style("top",  50 + "px");
        tooltip.transition()
          .duration(200)
          .style("opacity", .9);
        tooltip.html(
-         "Track: "  + d.track_id +
-         "<br/>Method: " + headers.methods[d.method_id] +
-         "<br/>" + headers.metrics[d.metric_id] + ': ' + d.score
+         headers.metrics[d.metric_id] + ': ' + d.score
        )
        d3.selectAll(".method_label").classed("active", function(x) { return d.method_id == x.key; });
       })
      .on("mouseout", function(d) {
-        d3.select(this).style("stroke", "white").style("stroke-width", "0");
          tooltip.transition()
            .duration(200)
            .style("opacity", 0);
+          // tracktip.transition()
+          // .duration(200)
+          // .style("opacity", 0);
+          // methodtip.transition()
+          // .duration(200)
+          // .style("opacity", 0);
+
       });
 
     // delete rectangles
@@ -264,6 +302,33 @@ function update(data) {
     // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .each(rect);
 
+    if (typeof current_play_method !== 'undefined') {
+      console.log(current_play_method)
+      methodtip
+        .style("opacity", 1);
+      tracktip
+        .style("opacity", 1);
+
+      methodtip
+        .style("width", (width + 'px'))
+        .style("left", '50px')
+        .style("height", method_scale.bandwidth() + 'px')
+        .style("top",  method_scale(current_play_method) + 50 + "px");
+
+      tracktip
+        .style("height", ( height + 'px'))
+        .style("left", (track_scale(current_play_track_id)) + 50 + "px")
+        .style("width", (track_scale.bandwidth()) + "px")
+        .style("top",  50 + "px");
+    } else {
+      methodtip.transition()
+        .duration(200)
+        .style("opacity", 0);
+      tracktip.transition()
+        .duration(200)
+        .style("opacity", 0);
+    }
+
   // render actual column data (=tracks) into group elements
   var track_column_enter = track_column.enter()
     .append("g")
@@ -357,7 +422,6 @@ function update(data) {
     .attr("x", -1.5 * gridSize)
     .attr("y", -0.5 * gridSize)
     .text(function(d) { return headers.metrics[data[0].metric_id] + " in dB"; });
-
 }
 
 export default { init, update, setRoute }

@@ -10,17 +10,21 @@
       <div class="column is-narrow">
         <span class="control has-addons">
           <a class="button is-primary"
-            v-bind:class="{ 'is-active': isPlaying }"
+            v-bind:class="{ 'is-active': isPlaying, 'is-disabled': isLoading }"
             v-on:click='playpause'><span v-bind:class="isPlaying ? 'fa fa-pause' : 'fa fa-play' "></span>
           </a>
-          <a class="button is-light" v-on:click='stop'><span class="fa fa-stop"></span></a>
+          <a class="button is-light"
+            v-bind:class="{ 'is-disabled': isLoading }"
+            v-on:click='stop'><span class="fa fa-stop"></span></a>
         </span>
       </div>
-      <div class="column is-narrow">
+      <!-- <div class="column is-narrow">
         <span class="control">
-          <a class="button" v-on:click="toggleMode" v-bind:class="{ 'is-primary': !decompose }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
+          <a class="button"
+            v-on:click="toggleMode"
+            v-bind:class="{ 'is-primary': !decompose, 'is-disabled': isLoading }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
         </span>
-      </div>
+      </div> -->
       <div class="column is-narrow">
         <span class="select">
           <select> <!-- <select v-model="availableMethods"> -->
@@ -32,7 +36,9 @@
         </span>
       </div>
     </div>
-    <div id="playlist"></div>
+    <div id="playlist"
+      v-bind:class="{ 'hide': isLoading }"
+    ></div>
   </div>
 </template>
 
@@ -60,8 +66,8 @@ export default {
       isLoading: false,
       player: Object,
       headers: Array,
-      loaderColor: 'red',
-      loaderHeight: '24px',
+      loaderColor: 'gray',
+      loaderHeight: '28px',
     }
   },
   beforeMount: function() {
@@ -116,6 +122,10 @@ export default {
   margin-top: 10px;
   border-top: 1px solid lightgray;
 
+}
+
+#playlist.hide{
+  display: none;
 }
 
 .playlist {

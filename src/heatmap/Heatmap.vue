@@ -2,6 +2,8 @@
   <section>
       <div id="d3container">
         <svg id='heatmap' width="900" height="300"></svg>
+        <div id='tracktip'></div>
+        <div id='methodtip'></div>
       </div>
       <map-menu></map-menu>
     <transition name="slide-fade">
@@ -43,13 +45,25 @@ export default {
     }
   },
   mounted: function() {
-    plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
+    plot.setRoute(
+        this.$route.params.is_train,
+        this.$route.params.target_id,
+        this.$route.params.metric_id,
+        this.$route.params.track_id,
+        this.$route.params.method
+    );
     plot.init();
     d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
   },
   methods: {
     update: function() {
-      plot.setRoute(this.$route.params.is_train, this.$route.params.target_id, this.$route.params.metric_id);
+      plot.setRoute(
+          this.$route.params.is_train,
+          this.$route.params.target_id,
+          this.$route.params.metric_id,
+          this.$route.params.track_id,
+          this.$route.params.method
+      );
       plot.update(this.subset);
     },
     addReferences: function () {
@@ -180,6 +194,7 @@ export default {
           );
         }
       };
+
       return trackstoload;
     }
   },
@@ -188,6 +203,8 @@ export default {
     '$route.params.is_train': 'update',
     '$route.params.target_id': 'update',
     '$route.params.metric_id': 'update',
+    '$route.params.method' : 'update',
+    '$route.params.track_id' : 'update'
   }
 }
 </script>
@@ -195,6 +212,32 @@ export default {
 <style>
 #d3container {
   margin-top: -3em;
+}
+
+#tracktip {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background-color: transparent;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    pointer-events: none;
+}
+
+#methodtip {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    background-color: transparent;
+    font: 12px sans-serif;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    pointer-events: none;
 }
 
 div.tooltip {

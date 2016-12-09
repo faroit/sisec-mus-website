@@ -22,12 +22,16 @@ var w
 var svgLegend
 var svgLegendRect
 var svgLegendText
+var lgstop1
+var lgstop2
 
 var current_target_id
 var current_metric_id
 var current_is_train
 var current_play_track_id
 var current_play_method
+
+var basecolor
 
 function setRoute(
     is_train,
@@ -62,11 +66,6 @@ function init() {
       .round(1)
       .range([0, width]);
 
-  // Set color scale
-  colorLow = '#FFFFDD', colorHigh = '#1F2F86';
-
-  colorScale = d3.scaleLinear()
-    .range([colorLow, colorHigh]);
 
   // Create svg element
   svg = d3.select("#d3container #heatmap")
@@ -89,14 +88,12 @@ function init() {
       .attr("y2", "0%");
 
   //Set the color for the start (0%)
-  linearGradient.append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", colorLow);
+  lgstop1 = linearGradient.append("stop")
+        .attr("offset", "0%");
 
-  //Set the color for the end (100%)
-  linearGradient.append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", colorHigh);
+    //Set the color for the end (100%)
+  lgstop2 = linearGradient.append("stop")
+        .attr("offset", "100%");
 
   g = svg.append("g")
       .attr("class", "grid")
@@ -111,8 +108,7 @@ function init() {
 
   svgLegendRect = svgLegend.append("rect")
     .attr("width", gridSize)
-    .attr("transform", "translate("+ (- gridSize) + ", 0)")
-    .style("fill", "url(#linear-gradient)");
+    .attr("transform", "translate("+ (- gridSize) + ", 0)");
 
   // Create HUD element that displays information about currently selected data
   tooltip = d3.select(".columns")
@@ -203,6 +199,14 @@ function rect(data) {
 }
 
 function update(data) {
+
+  // Set color scale
+  basecolor = 350 - (current_target_id * 350 / 5)
+  colorLow = d3.cubehelix(basecolor, 1, 0), colorHigh = d3.cubehelix(basecolor, 1, 0.8);
+
+  colorScale = d3.scaleLinear()
+    .range([colorLow, colorHigh]);
+
   var t = d3.transition()
     .duration(500);
   // read https://bost.ocks.org/mike/join/ to understand the concept of update and enter
@@ -303,12 +307,16 @@ function update(data) {
     .each(rect);
 
     if (typeof current_play_method !== 'undefined') {
-      console.log(current_play_method)
-      methodtip
-        .style("opacity", 1);
       tracktip
         .style("opacity", 1);
 
+      if (current_play_method == 'REF') {
+        methodtip
+          .style("opacity", 0);
+      } else {
+        methodtip
+          .style("opacity", 1);
+      }
       methodtip
         .style("width", (width + 'px'))
         .style("left", '50px')
@@ -398,6 +406,15 @@ function update(data) {
   var legend = svg.select('g.legend');
 
   var legendRect = legend.select('rect');
+
+  //Set the color for the start (0%)
+  lgstop1.attr("stop-color", colorLow);
+
+    //Set the color for the end (100%)
+  lgstop2.attr("stop-color", colorHigh);
+
+  console.log(colorScale.range()[1].toString())
+  svgLegendRect.style("fill", "url(#linear-gradient)");
 
   legendRect
     .attr("y", d3.extent(method_scale.range())[0])

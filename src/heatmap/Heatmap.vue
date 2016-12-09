@@ -214,6 +214,26 @@ export default {
   margin-top: -3em;
 }
 
+.button.is-vocals {
+    background-color: rgb(197, 222, 125);
+}
+
+.button.is-acc {
+    background-color: rgb(255, 173, 176);
+}
+
+.button.is-drums {
+    background-color: rgb(197, 222, 125);
+}
+
+.button.is-bass {
+    background-color: rgb(197, 222, 125);
+}
+
+.button.is-other {
+    background-color: rgb(197, 222, 125);
+}
+
 #tracktip {
     position: absolute;
     text-align: center;

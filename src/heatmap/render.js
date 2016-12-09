@@ -202,7 +202,7 @@ function update(data) {
 
   // Set color scale
   basecolor = 350 - (current_target_id * 350 / 5)
-  colorLow = d3.cubehelix(basecolor, 1, 0), colorHigh = d3.cubehelix(basecolor, 1, 0.8);
+  colorLow = d3.cubehelix(basecolor, 1, 0), colorHigh = d3.cubehelix(basecolor, 1, 0.9);
 
   colorScale = d3.scaleLinear()
     .range([colorLow, colorHigh]);

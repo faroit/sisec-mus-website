@@ -77,7 +77,7 @@ export default {
     console.log("mounted")
     this.player = new player();
     this.player.loadTargets(this.urls);
-    this.player.playlist.getEventEmitter().on('loadprogress', this.toggleLoading)
+    this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.toggleLoading)
   },
   beforeDestroy: function() {
     console.log("beforeDestroy")
@@ -105,9 +105,8 @@ export default {
     toggleMode: function () {
       this.$emit('toggleMode', "foo")
     },
-    toggleLoading: function (d, t) {
-      if (d < 100) { this.isLoading = true; }
-      else { this.isLoading = false; }
+    toggleLoading: function (d) {
+      this.isLoading = ! this.isLoading
     },
   },
   watch: {

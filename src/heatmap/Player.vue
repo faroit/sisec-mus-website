@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     update: function() {
-      this.player.clear();
+      this.player.playlist.clear();
       this.isLoading = true;
       this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
       this.player.loadTargets(this.urls);

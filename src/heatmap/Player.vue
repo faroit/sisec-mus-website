@@ -128,6 +128,22 @@ export default {
   display: none;
 }
 
+.playlist .channel-wrapper .controls label {
+    display: none !important;
+}
+
+.playlist .channel-wrapper .controls .btn {
+    margin-left: 4px;
+}
+
+.playlist .channel-wrapper .controls .btn-solo.active {
+    background-color: orange!important;
+}
+
+/*.playlist .channel-wrapper .controls .btn-mute {
+    display: none !important;
+}*/
+
 .playlist {
   margin: 0em 0;
   width: 100%;
@@ -248,7 +264,7 @@ export default {
         padding: 6px 12px;
         font-size: 14px;
         line-height: 1.42857143;
-        border-radius: 4px;
+        border-radius: 0px;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -273,8 +289,6 @@ export default {
       .btn.active {
         outline: 0;
         background-image: none;
-        -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
       }
       .btn.disabled,
       .btn[disabled],

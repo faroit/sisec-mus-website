@@ -1,7 +1,7 @@
 {
   "name": "sisec-website",
-  "description": "SISEC Website",
-  "author": "Nils Werner <nils.werner@audiolabs-erlangen.de>",
+  "description": "SISEC MUS 2017 Website",
+  "author": "Fabian-Robert Stoeter <nils.werner@audiolabs-erlangen.de>, Nils Werner <nils.werner@audiolabs-erlangen.de>",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
@@ -21,7 +21,7 @@
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
     "vue-spinner": "^1.0.2",
-    "waveform-playlist": "^2.4.2"
+    "waveform-playlist": "^2.6.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -33,7 +33,6 @@
     "file-loader": "^0.9.0",
     "json-loader": "^0.5.4",
     "style-loader": "^0.13.1",
-    "url-loader": "^0.5.7",
     "vue-loader": "^9.7.0",
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.1.0-beta.0"

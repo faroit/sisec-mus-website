@@ -4,10 +4,11 @@ import headers from './headers.js'
 var Player = function() {
   this.playlist = WaveformPlaylist.init({
     samplesPerPixel: 1260,
-    waveHeight: 80,
+    waveHeight: 60,
     container: document.getElementById("playlist"),
     timescale: true,
     mono: true,
+    exclSolo: true,
     state: 'cursor',
     colors: {
       waveOutlineColor: '#F0F0F0'
@@ -29,8 +30,9 @@ Player.prototype.loadTargets = function(trackurls) {
       {
         "src": '/media/SISEC/' + track.file,
         "name": track.name,
-        "muted": track.muted,
-        "soloed": false,
+        "muted": false,
+        "id": track.id,
+        "soloed": track.solo,
       }
     );
   }

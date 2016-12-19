@@ -4,6 +4,8 @@
         <svg id='heatmap' width="900" height="300"></svg>
         <div id='tracktip'></div>
         <div id='methodtip'></div>
+        <div id='tracktiph'></div>
+        <div id='methodtiph'></div>
       </div>
       <map-menu></map-menu>
     <transition name="slide-fade">
@@ -65,9 +67,6 @@ export default {
           this.$route.params.method
       );
       plot.update(this.subset);
-    },
-    addReferences: function () {
-        console.log("references added")
     },
     toggleMode: function(d) {
       console.log(d)
@@ -200,7 +199,6 @@ export default {
           );
         }
       };
-
       return trackstoload;
     }
   },
@@ -240,6 +238,34 @@ export default {
     background-color: rgb(197, 222, 125);
 }
 
+#tracktiph {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    opacity: 0;
+    font: 12px sans-serif;
+    background-color: transparent;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    pointer-events: none;
+}
+
+#methodtiph {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    opacity: 0;
+    background-color: transparent;
+    font: 12px sans-serif;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    pointer-events: none;
+}
+
 #tracktip {
     position: absolute;
     text-align: center;
@@ -248,8 +274,8 @@ export default {
     padding: 2px;
     font: 12px sans-serif;
     background-color: transparent;
-    border-left: 1px solid white;
-    border-right: 1px solid white;
+    border-left: 2px solid #00d1b2;
+    border-right: 2px solid #00d1b2;
     pointer-events: none;
 }
 
@@ -261,8 +287,8 @@ export default {
     padding: 2px;
     background-color: transparent;
     font: 12px sans-serif;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
+    border-top: 2px solid #00d1b2;
+    border-bottom: 2px solid #00d1b2;
     pointer-events: none;
 }
 

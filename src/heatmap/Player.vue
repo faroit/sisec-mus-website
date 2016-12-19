@@ -1,11 +1,9 @@
 <template>
   <div class='hero' id='player'>
-    <div class="columns">
+    <span><scale-loader :loading="isLoading" :color="loaderColor" :size="loaderHeight"></scale-loader></span>
+    <div class="columns" v-bind:class="{ 'hide': isLoading }">
       <div class="column">
         <h2 class="title">Playback Method <em>{{ this.$route.params.method }}</em>, Track {{ this.$route.params.track_id }}</h2>
-      </div>
-      <div class="column is-narrow">
-        <span><clip-loader :loading="isLoading" :color="loaderColor" :size="loaderHeight"></clip-loader></span>
       </div>
       <div class="column is-narrow">
         <span class="control has-addons">
@@ -36,9 +34,11 @@
         </span>
       </div>
     </div>
-    <div id="playlist"
-      v-bind:class="{ 'hide': isLoading }"
-    ></div>
+    <transition name="slide-fade">
+      <div id="playlist"
+        v-bind:class="{ 'hide': isLoading }"
+      ></div>
+    </transition>
   </div>
 </template>
 
@@ -49,11 +49,11 @@ import headers from './headers.js'
 
 import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'
-import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
 
 export default {
   components: {
-    ClipLoader
+    ScaleLoader
   },
   props: {
     urls: Array,
@@ -66,25 +66,26 @@ export default {
       isLoading: false,
       player: Object,
       headers: Array,
-      loaderColor: 'gray',
-      loaderHeight: '28px',
+      loaderColor: 'orange',
+      loaderHeight: '26px',
     }
   },
   beforeMount: function() {
     this.headers = headers;
   },
   mounted: function() {
-    console.log("mounted")
     this.player = new player();
+    this.isLoading = true;
+    this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
     this.player.loadTargets(this.urls);
   },
   beforeDestroy: function() {
-    console.log("beforeDestroy")
     this.stop();
     delete this.player;
   },
   methods: {
     update: function() {
+      this.stop();
       this.player.playlist.clear();
       this.isLoading = true;
       this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
@@ -122,6 +123,10 @@ export default {
   margin-top: 10px;
   border-top: 1px solid lightgray;
 
+}
+
+#player .columns.hide{
+  display: none;
 }
 
 #playlist.hide{

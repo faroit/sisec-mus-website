@@ -15,6 +15,8 @@ var g
 var tooltip
 var tracktip
 var methodtip
+var tracktiph
+var methodtiph
 var width
 var height
 var h
@@ -122,6 +124,12 @@ function init() {
   methodtip = d3.select("#methodtip")
     .style("opacity", 1);
 
+  tracktiph = d3.select("#tracktiph")
+    .style("opacity", 0);
+
+  methodtiph = d3.select("#methodtiph")
+    .style("opacity", 0);
+
 }
 
 // plot the actual score rectangles row-wise for each track column
@@ -156,22 +164,22 @@ function rect(data) {
     .style("cursor", "pointer")
     // render tooltip data
     .on("mouseover", function(d) {
-      // methodtip.transition()
-      //  .duration(200)
-      //  .style("opacity", .9);
-      // methodtip
-      //    .style("width", (width + 'px'))
-      //    .style("left", '50px')
-      //    .style("height", method_scale.bandwidth() + 'px')
-      //    .style("top",  method_scale(headers.methods[d.method_id]) + 50 + "px");
-      //  tracktip.transition()
-      //   .duration(200)
-      //   .style("opacity", .9);
-      //  tracktip
-      //     .style("height", ( height + 'px'))
-      //     .style("left", (track_scale(d.track_id)) + 50 + "px")
-      //     .style("width", (track_scale.bandwidth()) + "px")
-      //     .style("top",  50 + "px");
+      methodtiph.transition()
+       .duration(200)
+       .style("opacity", .9);
+      methodtiph
+         .style("width", (width + 'px'))
+         .style("left", '50px')
+         .style("height", method_scale.bandwidth() + 'px')
+         .style("top",  method_scale(headers.methods[d.method_id]) + 50 + "px");
+       tracktiph.transition()
+        .duration(200)
+        .style("opacity", .9);
+       tracktiph
+          .style("height", ( height + 'px'))
+          .style("left", (track_scale(d.track_id)) + 50 + "px")
+          .style("width", (track_scale.bandwidth()) + "px")
+          .style("top",  50 + "px");
        tooltip.transition()
          .duration(200)
          .style("opacity", .9);
@@ -184,12 +192,12 @@ function rect(data) {
          tooltip.transition()
            .duration(200)
            .style("opacity", 0);
-          // tracktip.transition()
-          // .duration(200)
-          // .style("opacity", 0);
-          // methodtip.transition()
-          // .duration(200)
-          // .style("opacity", 0);
+          tracktiph.transition()
+          .duration(200)
+          .style("opacity", 0);
+          methodtiph.transition()
+          .duration(200)
+          .style("opacity", 0);
 
       });
 
@@ -199,7 +207,6 @@ function rect(data) {
 }
 
 function update(data) {
-  console.log(data);
   // Set color scale
   basecolor = 350 - (current_target_id * 350 / 5)
   colorLow = d3.cubehelix(basecolor, 1, 0), colorHigh = d3.cubehelix(basecolor, 1, 0.9);
@@ -306,6 +313,18 @@ function update(data) {
     // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
     .each(rect);
 
+    methodtiph
+      .style("width", (width + 'px'))
+      .style("left", '50px')
+      .style("height", method_scale.bandwidth() + 'px')
+      .style("top",  method_scale(current_play_method) + 50 + "px");
+
+    tracktiph
+      .style("height", ( height + 'px'))
+      .style("left", (track_scale(current_play_track_id)) + 50 + "px")
+      .style("width", (track_scale.bandwidth()) + "px")
+      .style("top",  50 + "px");
+
     if (typeof current_play_method !== 'undefined') {
       tracktip
         .style("opacity", 1);
@@ -317,6 +336,7 @@ function update(data) {
         methodtip
           .style("opacity", 1);
       }
+
       methodtip
         .style("width", (width + 'px'))
         .style("left", '50px')

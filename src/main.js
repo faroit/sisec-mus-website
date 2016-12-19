@@ -20,9 +20,9 @@ const router = new VueRouter({
     { path: '/', component: App,
       children: [
         { path: '', component: Home },
-        { path: 'heatmap', redirect: { name: 'heatmap', params: { is_train: '1', target_id: '4', metric_id: '2' } } },
-        { path: 'heatmap/:is_train/:target_id/:metric_id', name: 'heatmap', component: Heatmap },
-        { path: 'heatmap/:is_train/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Heatmap },
+        { path: 'heatmap', redirect: { name: 'heatmap', params: { is_dev: '1', target_id: '4', metric_id: '2' } } },
+        { path: 'heatmap/:is_dev/:target_id/:metric_id', name: 'heatmap', component: Heatmap },
+        { path: 'heatmap/:is_dev/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Heatmap },
         { path: 'about', component: About },
         { path: 'play/:track_id/:method', component: Player },
         { path: 'methods', component: Methods },

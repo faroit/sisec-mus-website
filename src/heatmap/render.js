@@ -27,20 +27,20 @@ var lgstop2
 
 var current_target_id
 var current_metric_id
-var current_is_train
+var current_is_dev
 var current_play_track_id
 var current_play_method
 
 var basecolor
 
 function setRoute(
-    is_train,
+    is_dev,
     target_id,
     metric_id,
     play_track_id = undefined,
     play_method = undefined
 ) {
-  current_is_train = is_train;
+  current_is_dev = is_dev;
   current_target_id = target_id;
   current_metric_id = metric_id;
   current_play_track_id = play_track_id;
@@ -143,7 +143,7 @@ function rect(data) {
       .attr("class", "rect_group")
     .append("svg:a")
       .attr("xlink:href", function(d){
-        return "/#/heatmap/" + current_is_train + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.track_id + '/' + headers.methods[d.method_id];
+        return "/#/heatmap/" + current_is_dev + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.track_id + '/' + headers.methods[d.method_id];
       })
     .append("rect")
     .classed("oracle", function(d) { return d.method_id == headers.methods.indexOf("IBM"); })
@@ -199,7 +199,7 @@ function rect(data) {
 }
 
 function update(data) {
-
+  console.log(data);
   // Set color scale
   basecolor = 350 - (current_target_id * 350 / 5)
   colorLow = d3.cubehelix(basecolor, 1, 0), colorHigh = d3.cubehelix(basecolor, 1, 0.9);
@@ -375,7 +375,7 @@ function update(data) {
   track_column_enter_label
     .append("svg:a")
     .attr("xlink:href", function(d){
-      return "/#/heatmap/" + current_is_train + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.key + '/' + 'REF';
+      return "/#/heatmap/" + current_is_dev + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.key + '/' + 'REF';
     })
     .append('text')
     .attr("class", "track_label")

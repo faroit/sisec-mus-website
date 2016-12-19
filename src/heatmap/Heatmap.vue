@@ -46,7 +46,7 @@ export default {
   },
   mounted: function() {
     plot.setRoute(
-        this.$route.params.is_train,
+        this.$route.params.is_dev,
         this.$route.params.target_id,
         this.$route.params.metric_id,
         this.$route.params.track_id,
@@ -58,7 +58,7 @@ export default {
   methods: {
     update: function() {
       plot.setRoute(
-          this.$route.params.is_train,
+          this.$route.params.is_dev,
           this.$route.params.target_id,
           this.$route.params.metric_id,
           this.$route.params.track_id,
@@ -80,7 +80,7 @@ export default {
         return (
           d.target_id == this.$route.params.target_id &&
           d.metric_id == this.$route.params.metric_id &&
-          d.is_train == this.$route.params.is_train
+          d.is_dev == this.$route.params.is_dev
         );
       }.bind(this));
     },
@@ -206,7 +206,7 @@ export default {
   },
   watch: {
     'data': 'update',
-    '$route.params.is_train': 'update',
+    '$route.params.is_dev': 'update',
     '$route.params.target_id': 'update',
     '$route.params.metric_id': 'update',
     '$route.params.method' : 'update',

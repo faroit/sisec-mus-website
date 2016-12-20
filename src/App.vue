@@ -10,10 +10,7 @@
                  <h1 class="title is-4">SiSEC MUS 2017</h1>
                </a>
              </div>
-             <span class="nav-toggle">
-
-             </span>
-             <div class="nav-right nav-menu">
+             <div class="nav-right">
                <main-menu></main-menu>
              </div>
            </div>
@@ -55,4 +52,7 @@ export default {
 </script>
 
 <style>
+.nav-left {
+  padding-left: 1em;
+}
 </style>

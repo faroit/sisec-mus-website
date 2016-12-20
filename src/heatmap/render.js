@@ -33,6 +33,7 @@ var current_is_dev
 var current_play_track_id
 var current_play_method
 
+var colors
 var basecolor
 
 function setRoute(
@@ -50,6 +51,14 @@ function setRoute(
 };
 
 function init() {
+  colors = {
+    vocals: '#56B4E9',
+    drums: '#009E73',
+    bass: '#D55E00',
+    other: '#CC79A7',
+    accompaniment: '#818181'
+  };
+
   margin = {top: 50, right: 100, bottom: 30, left: 50},
     width = parseInt(d3.select("#d3container").style("width")) - margin.left - margin.right;
 
@@ -119,10 +128,10 @@ function init() {
     .style("opacity", 0);
 
   tracktip = d3.select("#tracktip")
-    .style("opacity", 1);
+    .style("opacity", 0);
 
   methodtip = d3.select("#methodtip")
-    .style("opacity", 1);
+    .style("opacity", 0);
 
   tracktiph = d3.select("#tracktiph")
     .style("opacity", 0);
@@ -208,8 +217,7 @@ function rect(data) {
 
 function update(data) {
   // Set color scale
-  basecolor = 350 - (current_target_id * 350 / 5)
-  colorLow = d3.cubehelix(basecolor, 1, 0), colorHigh = d3.cubehelix(basecolor, 1, 0.9);
+  colorLow = 'black', colorHigh = colors[headers.targets[current_target_id]];
 
   colorScale = d3.scaleLinear()
     .range([colorLow, colorHigh]);

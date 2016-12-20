@@ -16,6 +16,7 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 
 const router = new VueRouter({
+  linkActiveClass: 'is-active',
   routes: [
     { path: '/', component: App,
       children: [

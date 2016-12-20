@@ -23,16 +23,16 @@
             v-bind:class="{ 'is-primary': !decompose, 'is-disabled': isLoading }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
         </span>
       </div> -->
-      <div class="column is-narrow">
+      <!-- <div class="column is-narrow">
         <span class="select">
-          <select> <!-- <select v-model="availableMethods"> -->
+          <select v-model="selectedMethod">
             <option value='-1'>Compare to</option>
             <option v-for="method in availableMethods" v-bind:value="method.id">
               {{ method.name }}
             </option>
           </select>
         </span>
-      </div>
+      </div> -->
     </div>
     <transition name="slide-fade">
       <div id="playlist"
@@ -59,6 +59,7 @@ export default {
     urls: Array,
     decompose: Boolean,
     availableMethods: Array,
+    selectedMethod: Number,
   },
   data: function () {
     return {
@@ -75,9 +76,8 @@ export default {
   },
   mounted: function() {
     this.player = new player();
-    this.isLoading = true;
     this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
-    this.player.loadTargets(this.urls);
+    this.update();
   },
   beforeDestroy: function() {
     this.stop();
@@ -85,11 +85,12 @@ export default {
   },
   methods: {
     update: function() {
-      this.stop();
-      this.player.playlist.clear();
-      this.isLoading = true;
-      this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
-      this.player.loadTargets(this.urls);
+      if(this.isLoading != true) {
+        this.stop();
+        this.player.playlist.clear();
+        this.isLoading = true;
+        this.player.loadTargets(this.urls);
+      }
     },
     playpause: function() {
       if (this.isPlaying) {

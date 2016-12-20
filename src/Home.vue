@@ -4,7 +4,7 @@
         <div class="columns is-vcentered">
           <div class="column is-5">
             <figure class="image is-4by3">
-              <img src="http://placehold.it/800x600" alt="Description">
+              <img src="./assets/hero.svg" alt="Description">
             </figure>
           </div>
           <div class="column is-6 is-offset-1">

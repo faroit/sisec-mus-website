@@ -31,7 +31,7 @@ Player.prototype.loadTargets = function(trackurls) {
         "src": '/media/SISEC/' + track.file,
         "name": track.name,
         "muted": false,
-        "id": track.id,
+        "customClass": track.customClass,
         "soloed": track.solo,
       }
     );

@@ -134,6 +134,40 @@ export default {
   display: none;
 }
 
+#playlist .playlist-tracks .mix header {
+  background-color: white;
+  border-left: 1px solid gray;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  color: black;
+}
+
+#playlist .playlist-tracks .vocals header {
+  color: white;
+  background-color: #56B4E9;
+}
+
+#playlist .playlist-tracks .accompaniment header {
+  color: white;
+  background-color: #818181;
+}
+
+#playlist .playlist-tracks .drums header {
+  color: white;
+  background-color: #009E73;
+}
+
+#playlist .playlist-tracks .bass header {
+  color: white;
+  background-color: #D55E00;
+}
+
+#playlist .playlist-tracks .other header {
+  color: white;
+  background-color: #CC79A7;
+}
+
+
 .playlist .channel-wrapper .controls label {
     display: none !important;
 }

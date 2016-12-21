@@ -90,7 +90,7 @@ export default {
       if (this.$route.params.method == 'REF') {
         trackstoload.push(
           { 'name': 'Mixture',
-            'id': 'mix',
+            'customClass': 'mix',
             'solo': true,
             'file': [
               this.$route.params.track_id,
@@ -102,7 +102,7 @@ export default {
         for (let target of headers.targets) {
           trackstoload.push(
             { 'name': target,
-              'id': target,
+              'customClass': target,
               'solo': false,
               'file': [
                 this.$route.params.track_id,
@@ -140,7 +140,7 @@ export default {
         this.availableMethods.push(
           {
             'name': headers.methods[track.method_id],
-            'id': track.method_id
+            'customClass': track.method_id
           }
         );
       }
@@ -148,7 +148,7 @@ export default {
       if ( this.decompose ) {
         trackstoload.push(
           { 'name': 'Mixture',
-            'id': 'mix',
+            'customClass': 'mix',
             'solo': true,
             'file': [
               this.$route.params.track_id,
@@ -160,7 +160,7 @@ export default {
         for (let track of filterByMethod) {
           trackstoload.push(
             { 'name': headers.targets[track.target_id],
-              'id': headers.targets[track.target_id],
+              'customClass': headers.targets[track.target_id],
               'solo': false,
               'file': [
                 track.track_id,
@@ -175,7 +175,7 @@ export default {
         console.log(headers.targets[filterByTarget[0].target_id])
         trackstoload.push(
           { 'name': 'Reference',
-            'id': 'ref',
+            'customClass': 'ref',
             'solo': true,
             'file': [
               this.$route.params.track_id,
@@ -188,7 +188,7 @@ export default {
         for (let track of filterByTarget) {
           trackstoload.push(
             { 'name': headers.methods[track.method_id],
-              'id': headers.targets[track.target_id],
+              'customClass': headers.targets[track.target_id],
               'solo': false,
               'file': [
                 track.track_id,

@@ -10,20 +10,7 @@
 The data set consists of a total of 100 full-track songs of different
 styles and includes the mixtures and four original sources: </br>
 
-<nav class="level">
-  <div class="level-item has-text-centered">
-    <p class="title is-5">Vocals</p>
-  </div>
-  <div class="level-item has-text-centered">
-    <p class="title is-5">Drums</p>
-  </div>
-  <div class="level-item has-text-centered">
-    <p class="title is-5">Bass</p>
-  </div>
-  <div class="level-item has-text-centered">
-    <p class="title is-5">Other</p>
-  </div>
-</nav>
+<p><img src="./assets/hero.svg" alt="Description"></p>
 
 The dataset is evenly split divided between a development subset and a test subset.
 

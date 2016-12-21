@@ -215,7 +215,7 @@ export default {
 
 <style>
 #d3container {
-  margin-top: -3em;
+  margin-top: 0em;
 }
 
 #tracktiph {
@@ -252,6 +252,7 @@ export default {
     width: 0px;
     height: 100px;
     padding: 2px;
+    opacity: 0;
     font: 12px sans-serif;
     background-color: transparent;
     border-left: 2px solid #00d1b2;
@@ -264,6 +265,7 @@ export default {
     text-align: center;
     width: 0px;
     height: 100px;
+    opacity: 0;
     padding: 2px;
     background-color: transparent;
     font: 12px sans-serif;

@@ -110,6 +110,12 @@ function init() {
       .attr("class", "grid")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  g.append("text")
+    .attr("class", "xlabel")
+    .attr("transform", "translate(" + width / 2 + ", -34)")
+    .attr("style", "font-size: 18")
+    .text('Audio Track ID');
+
   svgLegend = g.append('g')
     .attr("class", "legend")
     .attr("transform", "translate("+ (d3.max(track_scale.range()) + gridSize + gridSize) + ", 0)");

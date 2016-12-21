@@ -46,7 +46,7 @@
 import bulma from 'bulma/css/bulma.css';
 import fontawesome from 'font-awesome/css/font-awesome.min.css';
 import headers from './headers.js'
-
+import Mousetrap from 'mousetrap'
 import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'
 import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
@@ -75,11 +75,13 @@ export default {
     this.headers = headers;
   },
   mounted: function() {
+    Mousetrap.bind('space', this.playpause )
     this.player = new player();
     this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
     this.update();
   },
   beforeDestroy: function() {
+    Mousetrap.unbind('space');
     this.stop();
     delete this.player;
   },
@@ -92,7 +94,7 @@ export default {
         this.player.loadTargets(this.urls);
       }
     },
-    playpause: function() {
+    playpause: function(event) {
       if (this.isPlaying) {
         this.player.playlist.getEventEmitter().emit('pause')
       }
@@ -100,9 +102,11 @@ export default {
         this.player.playlist.getEventEmitter().emit('play')
       }
       this.isPlaying = ! this.isPlaying
+      event.stopPropagation();
+      return false;
     },
     stop: function() {
-      this.player.playlist.getEventEmitter().emit('stop')
+      console.log(this.player.playlist.getEventEmitter().emit('stop'))
       this.isPlaying = false
     },
     toggleMode: function () {

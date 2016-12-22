@@ -14,6 +14,11 @@
           <div class="container">
             <player
               :urls="tracklist"
+              :dev="dev"
+              :target="target"
+              :metric="metric"
+              :track="track"
+              :method="method"
               :availableMethods="availableMethods"
               :decompose='decompose'
               v-on:toggleMode="toggleMode"
@@ -42,173 +47,169 @@ export default {
   data: function() {
     return {
       decompose: true,
-      data: [],
-      availableMethods: []
+      d3data: [],
+      availableMethods: [],
     }
   },
   mounted: function() {
     plot.setRoute(
-        this.$route.params.is_dev,
-        this.$route.params.target_id,
-        this.$route.params.metric_id,
-        this.$route.params.track_id,
-        this.$route.params.method
+        this.dev,
+        this.target.id,
+        this.metric.id,
+        this.track.id,
+        this.method.name
     );
     plot.init();
-    d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
+    d3.csv("/data/data.csv", function(d3data) {this.d3data = d3data}.bind(this));
   },
   methods: {
     update: function() {
       plot.setRoute(
-          this.$route.params.is_dev,
-          this.$route.params.target_id,
-          this.$route.params.metric_id,
-          this.$route.params.track_id,
-          this.$route.params.method
+          this.dev,
+          this.target.id,
+          this.metric.id,
+          this.track.id,
+          this.method.name
       );
       plot.update(this.subset);
     },
     toggleMode: function(d) {
-      console.log(d)
       this.decompose = ! this.decompose
     }
   },
   computed: {
+    method: function() {
+      return {
+        'name': this.$route.params.method,
+        'id': headers.methods.indexOf(this.$route.params.method)
+      };
+    },
+    target: function() {
+      return {
+        'id': this.$route.params.target_id
+      };
+    },
+    metric: function() {
+      return {
+        'id': this.$route.params.metric_id
+      };
+    },
+    track: function() {
+      return {
+        'id': this.$route.params.track_id
+      };
+    },
+    dev: function() {
+      return this.$route.params.is_dev === '1'
+    },
+    compoundProperty: function() {
+        // `.join()` because we don't care about the return value.
+        return [this.method.id, this.target.id, this.metric.id, this.track.id, this.dev].join()
+    },
     subset: function() {
-      return this.data.filter(function(d) {
+      return this.d3data.filter(function(d) {
         return (
-          d.target_id == this.$route.params.target_id &&
-          d.metric_id == this.$route.params.metric_id &&
-          d.is_dev == this.$route.params.is_dev
+          d.target_id == this.target.id &&
+          d.metric_id == this.metric.id &&
+          d.is_dev == this.dev
         );
       }.bind(this));
     },
     tracklist: function() {
+      var out = []
 
-      var trackstoload = []
-
-      if (this.$route.params.method == 'REF') {
-        trackstoload.push(
+      if (this.method.name == 'REF') {
+        out.push(
           { 'name': 'Mixture',
             'customClass': 'mix',
             'solo': true,
             'file': [
-              this.$route.params.track_id,
+              this.track.id,
               'MIX'
             ].join("_") + '.m4a'
           }
         );
 
         for (let target of headers.targets) {
-          trackstoload.push(
+          out.push(
             { 'name': target,
               'customClass': target,
               'solo': false,
               'file': [
-                this.$route.params.track_id,
+                this.track.id,
                 'REF',
                 target
               ].join("_") + '.m4a'
             }
           );
         }
-        return trackstoload;
+        return out;
       }
 
-      var filterByMethod = this.data.filter(function(d) {
+      var filterByMethod = this.d3data.filter(function(d) {
         return (
-          d.track_id == this.$route.params.track_id &&
-          d.method_id == headers.methods.indexOf(this.$route.params.method) &&
-          d.metric_id == this.$route.params.metric_id
+          d.track_id == this.track.id &&
+          d.method_id == this.method.id &&
+          d.metric_id == this.metric.id
         );
       }.bind(this));
 
-      var filterByTarget = this.data.filter(function(d) {
-        return (
-          d.track_id == this.$route.params.track_id &&
-          d.target_id == this.$route.params.target_id &&
-          d.metric_id == this.$route.params.metric_id
-        );
-      }.bind(this));
-
-      if(this.$route.params.track_id == null || !filterByMethod.length) {
+      if(this.track.id == null || !filterByMethod.length) {
         return [];
       }
 
-      this.availableMethods = []
+      out.push(
+        { 'name': 'Mixture',
+          'customClass': 'mix',
+          'solo': true,
+          'file': [
+            this.track.id,
+            'MIX'
+          ].join("_") + '.m4a'
+        }
+      );
+
+      for (let track of filterByMethod) {
+        out.push(
+          { 'name': headers.targets[track.target_id],
+            'customClass': headers.targets[track.target_id],
+            'solo': false,
+            'file': [
+              track.track_id,
+              headers.methods[track.method_id],
+              headers.targets[track.target_id]
+            ].join("_") + '.m4a'
+          }
+        );
+      }
+
+      return out;
+    },
+
+    availableMethods: function() {
+      var filterByTarget = this.d3data.filter(function(d) {
+        return (
+          d.track_id == this.track.id &&
+          d.target_id == this.target.id &&
+          d.metric_id == this.metric.id
+        );
+      }.bind(this));
+
+      var out = []
       for (let track of filterByTarget) {
-        this.availableMethods.push(
+        out.push(
           {
             'name': headers.methods[track.method_id],
             'customClass': track.method_id
           }
         );
       }
-
-      if ( this.decompose ) {
-        trackstoload.push(
-          { 'name': 'Mixture',
-            'customClass': 'mix',
-            'solo': true,
-            'file': [
-              this.$route.params.track_id,
-              'MIX'
-            ].join("_") + '.m4a'
-          }
-        );
-
-        for (let track of filterByMethod) {
-          trackstoload.push(
-            { 'name': headers.targets[track.target_id],
-              'customClass': headers.targets[track.target_id],
-              'solo': false,
-              'file': [
-                track.track_id,
-                headers.methods[track.method_id],
-                headers.targets[track.target_id]
-              ].join("_") + '.m4a'
-            }
-          );
-        }
-      }
-      else {
-        console.log(headers.targets[filterByTarget[0].target_id])
-        trackstoload.push(
-          { 'name': 'Reference',
-            'customClass': 'ref',
-            'solo': true,
-            'file': [
-              this.$route.params.track_id,
-              'REF',
-              headers.targets[filterByTarget[0].target_id]
-            ].join("_") + '.m4a'
-          }
-        );
-
-        for (let track of filterByTarget) {
-          trackstoload.push(
-            { 'name': headers.methods[track.method_id],
-              'customClass': headers.targets[track.target_id],
-              'solo': false,
-              'file': [
-                track.track_id,
-                headers.methods[track.method_id],
-                headers.targets[track.target_id]
-              ].join("_") + '.m4a'
-            }
-          );
-        }
-      };
-      return trackstoload;
+      return out;
     }
   },
   watch: {
-    'data': 'update',
-    '$route.params.is_dev': 'update',
-    '$route.params.target_id': 'update',
-    '$route.params.metric_id': 'update',
-    '$route.params.method' : 'update',
-    '$route.params.track_id' : 'update'
+    'd3data': 'update',
+    'compoundProperty': 'update',
   }
 }
 </script>

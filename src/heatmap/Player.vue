@@ -3,7 +3,7 @@
     <span><scale-loader :loading="isLoading" :color="loaderColor" :size="loaderHeight"></scale-loader></span>
     <div class="columns" v-bind:class="{ 'hide': isLoading }">
       <div class="column">
-        <h2 class="title">Playback Method <em>{{ this.$route.params.method }}</em>, Track {{ this.$route.params.track_id }}</h2>
+        <h2 class="title">{{ target }} Playback Method <em>{{ method.name }}</em>, Track {{ track.id }}</h2>
       </div>
       <div class="column is-narrow">
         <span class="control has-addons">
@@ -25,7 +25,7 @@
       </div> -->
       <!-- <div class="column is-narrow">
         <span class="select">
-          <select v-model="selectedMethod">
+          <select v-model="method.id">
             <option value='-1'>Compare to</option>
             <option v-for="method in availableMethods" v-bind:value="method.id">
               {{ method.name }}
@@ -59,7 +59,11 @@ export default {
     urls: Array,
     decompose: Boolean,
     availableMethods: Array,
-    selectedMethod: Number,
+    dev: Boolean,
+    target: Object,
+    metric: Object,
+    track: Object,
+    method: Object,
   },
   data: function () {
     return {
@@ -78,7 +82,7 @@ export default {
     Mousetrap.bind('space', this.playpause )
     this.player = new player();
     this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
-    this.update();
+    this.update_tracks();
   },
   beforeDestroy: function() {
     Mousetrap.unbind('space');
@@ -86,12 +90,17 @@ export default {
     delete this.player;
   },
   methods: {
-    update: function() {
-      if(this.isLoading != true) {
+    update_tracks: function(oldval, newval) {
+      if(JSON.stringify(oldval) !== JSON.stringify(newval) && this.isLoading != true) {
         this.stop();
         this.player.playlist.clear();
         this.isLoading = true;
         this.player.loadTargets(this.urls);
+      }
+    },
+    update_target: function(oldval, newval) {
+      if (JSON.stringify(oldval) !== JSON.stringify(newval)) {
+        this.player.playlist.getEventEmitter().emit('solo', this.player.playlist.tracks[this.target.id])
       }
     },
     playpause: function(event) {
@@ -106,7 +115,7 @@ export default {
       return false;
     },
     stop: function() {
-      console.log(this.player.playlist.getEventEmitter().emit('stop'))
+      this.player.playlist.getEventEmitter().emit('stop')
       this.isPlaying = false
     },
     toggleMode: function () {
@@ -117,7 +126,14 @@ export default {
     },
   },
   watch: {
-    'urls': 'update'
+    urls: {
+      handler: 'update_tracks',
+      deep: true
+    },
+    'target': {
+      handler: 'update_target',
+      deep: true
+    }
   }
 }
 </script>

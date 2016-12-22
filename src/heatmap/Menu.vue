@@ -4,25 +4,25 @@
     </div>
     <div class="column is-narrow">
       <div class="control has-addons">
-        <router-link class="button is-vocals" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '4', metric_id: $route.params.metric_id }}">Vocals</router-link>
-        <router-link class="button is-acc" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '0', metric_id: $route.params.metric_id }}">Accompaniment</router-link>
-        <router-link class="button is-drums" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '2', metric_id: $route.params.metric_id }}">Drums</router-link>
-        <router-link class="button is-bass" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '1', metric_id: $route.params.metric_id }}">Bass</router-link>
-        <router-link class="button is-other" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '3', metric_id: $route.params.metric_id }}">Other</router-link>
+        <router-link class="button is-vocals" active-class="is-primary"   :to="{ name: $route.name, params: Object.assign({}, $route.params, { target_id: '4' })}">Vocals</router-link>
+        <router-link class="button is-acc" active-class="is-primary"      :to="{ name: $route.name, params: Object.assign({}, $route.params, { target_id: '0' })}">Accompaniment</router-link>
+        <router-link class="button is-drums" active-class="is-primary"    :to="{ name: $route.name, params: Object.assign({}, $route.params, { target_id: '2' })}">Drums</router-link>
+        <router-link class="button is-bass" active-class="is-primary"     :to="{ name: $route.name, params: Object.assign({}, $route.params, { target_id: '1' })}">Bass</router-link>
+        <router-link class="button is-other" active-class="is-primary"    :to="{ name: $route.name, params: Object.assign({}, $route.params, { target_id: '3' })}">Other</router-link>
       </div>
     </div>
     <div class="column is-narrow">
       <div class="control has-addons">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '2' }}">SDR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '0' }}">ISR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '3' }}">SIR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '1' }}">SAR</router-link>
+        <router-link class="button" active-class="is-primary"             :to="{ name: $route.name, params: Object.assign({}, $route.params, { metric_id: '2' })}">SDR</router-link>
+        <router-link class="button" active-class="is-primary"             :to="{ name: $route.name, params: Object.assign({}, $route.params, { metric_id: '0' })}">ISR</router-link>
+        <router-link class="button" active-class="is-primary"             :to="{ name: $route.name, params: Object.assign({}, $route.params, { metric_id: '3' })}">SIR</router-link>
+        <router-link class="button" active-class="is-primary"             :to="{ name: $route.name, params: Object.assign({}, $route.params, { metric_id: '1' })}">SAR</router-link>
       </div>
     </div>
     <div class="column is-narrow">
       <div class="control has-addons">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: '0', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Training</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: '1', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Test</router-link>
+        <router-link class="button" active-class="is-primary"             :to="{ name: $route.name, params: Object.assign({}, $route.params, { is_dev: '0' })}">Training</router-link>
+        <router-link class="button" active-class="is-primary"             :to="{ name: $route.name, params: Object.assign({}, $route.params, { is_dev: '1' })}">Test</router-link>
       </div>
     </div>
   </div>

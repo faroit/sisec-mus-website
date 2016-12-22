@@ -28,6 +28,15 @@
         The 2016 Signal Separation Evaluation Campaign (SiSEC2016),
         in Proc. Int. Workshop on Machine Learning for Signal Processing, 2017.
       </section>
+      <footer class="modal-card-foot">
+        <a class="button">
+          <span class="icon">
+             <i class="fa fa-book"></i>
+          </span>
+          <span>Bibtex</span>
+        </a>
+        <a class="button is-primary">SiSEC Website</a>
+      </footer>
     </div>
   </div>
     </div>

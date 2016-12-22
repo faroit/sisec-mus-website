@@ -7,7 +7,7 @@
            <div class="container">
              <div class="nav-left">
                <a class="nav-item" href="/">
-                 <h1 class="title is-4">SiSEC MUS 2017</h1>
+                 <h1 class="title is-4">SiSEC MUS</h1>
                </a>
              </div>
              <div class="nav-right">

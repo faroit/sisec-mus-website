@@ -33,7 +33,7 @@
           <span class="icon">
              <i class="fa fa-book"></i>
           </span>
-          <span>Bibtex</span>
+          <span>BibTex</span>
         </a>
         <a class="button is-primary">SiSEC Website</a>
       </footer>

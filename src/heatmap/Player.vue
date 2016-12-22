@@ -106,7 +106,7 @@ export default {
       return false;
     },
     stop: function() {
-      console.log(this.player.playlist.getEventEmitter().emit('stop'))
+      this.player.playlist.getEventEmitter().emit('stop')
       this.isPlaying = false
     },
     toggleMode: function () {

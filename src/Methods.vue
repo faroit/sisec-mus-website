@@ -3,69 +3,41 @@
     <table class="table">
   <thead>
     <tr>
-      <th>Method</th>
+      <th>Method Shortname</th>
       <th>Authors</th>
-      <th></th>
-      <th></th>
+      <th>Affiliation</th>
+      <th>Supervised Method</th>
+      <th>Uses Data-Augmentation</th>
+      <th>Code</th>
+      <th>More</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Misty Abbott</td>
-      <td>Bass Guitar</td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-instagram"></i>
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td>John Smith</td>
-      <td>Rhythm Guitar</td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-instagram"></i>
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td>Robert Mikels</td>
-      <td>Lead Guitar</td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-instagram"></i>
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td>Karyn Holmberg</td>
-      <td>Drums</td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </td>
-      <td class="is-icon">
-        <a href="#">
-          <i class="fa fa-instagram"></i>
-        </a>
-      </td>
-    </tr>
+  <tr v-for="record in json">
+    <td>{{record.short}}</td>
+    <td>{{record.authors}}</td>
+    <td>{{record.affiliation}}</td>
+    <td class="is-icon">
+      <span v-if="record.is_supervised">
+        <i class="fa fa-check"></i>
+      </span>
+    </td>
+    <td class="is-icon">
+      <span v-if="record.uses_augmentation">
+        <i class="fa fa-check"></i>
+      </span>
+    </td>
+    <td class="is-icon">
+      <a v-if="record.code" :href="record.code">
+        <i class="fa fa-code"></i>
+      </a>
+    </td>
+    <td class="is-icon">
+      <a v-if="record.references" :href="record.code">
+        <i class="fa fa-eye"></i>
+      </a>
+    </td>
+  </tr>
   </tbody>
 </table>
   </div>
@@ -75,6 +47,31 @@
 import bulma from 'bulma/css/bulma.css';
 
 export default {
+  data: function() {
+    return {
+      json: null
+    }
+  },
+  filters: {
+    truncate: function(string, value) {
+      	return string.substring(0, value) + '...';
+    }
+  },
+  created: function () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData: function () {
+      var xhr = new XMLHttpRequest()
+      var self = this
+      xhr.open('GET', '/data/metadata.json')
+      xhr.onload = function () {
+        self.json = JSON.parse(xhr.responseText)
+        console.log(self.json[0])
+      }
+      xhr.send()
+    }
+  }
 }
 </script>
 

@@ -8,6 +8,7 @@ import Player from './heatmap/Player.vue'
 import Results from './Results.vue'
 import About from './About.vue'
 import Methods from './Methods.vue'
+import Method from './Method.vue'
 import Dataset from './Dataset.vue'
 import Home from './Home.vue'
 
@@ -27,6 +28,7 @@ const router = new VueRouter({
         { path: 'heatmap/:is_dev/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Heatmap },
         { path: 'about', component: About },
         { path: 'methods', component: Methods },
+        { path: 'methods/:short', name: 'method', component: Method },
         { path: 'results', component: Results },
         { path: 'dataset', component: Dataset },
       ]

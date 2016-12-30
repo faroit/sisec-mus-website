@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import VueLazyload from 'vue-lazyload'
 
 import App from './App.vue'
 import Heatmap from './heatmap/Heatmap.vue'
@@ -16,6 +17,8 @@ import Icon from 'vue-awesome/components/Icon.vue'
 
 Vue.use(VueResource);
 Vue.use(VueRouter);
+
+Vue.use(VueLazyload)
 
 const router = new VueRouter({
   linkActiveClass: 'is-active',

@@ -1,6 +1,6 @@
 <template>
   <section>
-      <div id="d3container" data-balloon="Click on the track " data-balloon-pos="top" >
+      <div id="d3container" data-balloon="Click on any square to start playback" data-balloon-pos="top" >
         <svg id='heatmap'width="900" height="300"></svg>
         <div id='tracktip'></div>
         <div id='methodtip'></div>

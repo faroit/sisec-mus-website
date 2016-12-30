@@ -112,9 +112,9 @@ function init() {
 
   g.append("text")
     .attr("class", "xlabel")
-    .attr("transform", "translate(" + width / 2 + ", -34)")
+    .attr("transform", "translate(" + ((width / 2) - 20) + ", -34)")
     .attr("style", "font-size: 18")
-    .text('Audio Track ID');
+    .text('Audio Track');
 
   svgLegend = g.append('g')
     .attr("class", "legend")

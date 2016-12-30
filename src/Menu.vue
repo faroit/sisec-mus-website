@@ -2,20 +2,26 @@
   <div class="nav-right nav-menu">
       <router-link class="nav-item is-tab" :to="{ path: '/dataset' }">Task/Dataset</router-link>
       <router-link class="nav-item is-tab" :to="{ path: '/methods' }">Methods</router-link>
-      <router-link class="nav-item is-tab" :to="{ path: '/heatmap' }">Results</router-link>
+      <router-link class="nav-item is-tab" :to="{ path: '/results' }">Results</router-link>
+      <router-link class="nav-item is-tab" :to="{ path: '/heatmap' }">
+        <span class="icon">
+           <i class="fa fa-volume-up"></i>
+        </span>
+        <span>Listen</span>
+      </router-link>
       <router-link class="nav-item is-tab" :to="{ path: '/about' }">About</router-link>
       <span class="nav-item">
-     <a
-      class="button is-primary"
-      v-on:click="toggleCite"
-      href="#"
-    >
-      <span class="icon">
-         <i class="fa fa-quote-left"></i>
+        <a
+        class="button is-primary"
+        v-on:click="toggleCite"
+        href="#"
+        >
+          <span class="icon">
+            <i class="fa fa-quote-left"></i>
+          </span>
+          <span>Cite</span>
+        </a>
       </span>
-      <span>Cite</span>
-     </a>
-   </span>
    <div class="modal" v-bind:class="{ 'is-active': showCite }">
     <div class="modal-background"></div>
     <div class="modal-card">

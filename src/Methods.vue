@@ -3,17 +3,17 @@
     <table class="table">
   <thead>
     <tr>
-      <th>Method Shortname</th>
+      <th>Method</th>
       <th>Authors</th>
       <th>Affiliation</th>
-      <th>Supervised Method</th>
+      <th>Is Supervised?</th>
       <th>Uses Data-Augmentation</th>
       <th>Code</th>
       <th>More</th>
     </tr>
   </thead>
-  <tbody>
-  <tr v-for="record in json">
+  <tbody v-for="record in json">
+  <tr>
     <td>{{record.short}}</td>
     <td>{{record.authors}}</td>
     <td>{{record.affiliation}}</td>
@@ -29,7 +29,7 @@
     </td>
     <td class="is-icon">
       <a v-if="record.code" :href="record.code">
-        <i class="fa fa-code"></i>
+        <i v-bind:class="gh(record.code) ? 'fa fa-github' : 'fa fa-code' "></i>
       </a>
     </td>
     <td class="is-icon">
@@ -54,13 +54,20 @@ export default {
   },
   filters: {
     truncate: function(string, value) {
-      	return string.substring(0, value) + '...';
-    }
+        if( string ) {
+          return string.substring(0, value) + '...';
+        } else {
+          return ''
+        }
+    },
   },
   created: function () {
     this.fetchData()
   },
   methods: {
+    gh: function(string) {
+        return string.includes('github.com')
+    },
     fetchData: function () {
       var xhr = new XMLHttpRequest()
       var self = this

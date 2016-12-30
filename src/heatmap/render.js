@@ -261,13 +261,13 @@ function update(data) {
     .entries(data);
 
   // sort alphabetically
-  methods.sort(function(a, b) {
-    return d3.descending(+a.value.isOracle, +b.value.isOracle) || d3.ascending(headers.methods[a.key], headers.methods[b.key]);
-  });
-
   // methods.sort(function(a, b) {
-  //   return d3.descending(a.value.meanScoreByMethod, b.value.meanScoreByMethod);
+  //   return d3.descending(+a.value.isOracle, +b.value.isOracle) || d3.ascending(headers.methods[a.key], headers.methods[b.key]);
   // });
+
+  methods.sort(function(a, b) {
+    return d3.descending(a.value.meanScoreByMethod, b.value.meanScoreByMethod);
+  });
 
 
   height = gridSize * methods.length;   // height is defined by maximum number of methods
@@ -397,14 +397,6 @@ function update(data) {
   var track_column_enter_label = track_column_enter
     .append("g")
     .attr("class", "track_label_group");
-
-  track_column_enter_label
-    .append('rect')
-    .attr("class", "track_label_rect")
-    .attr("y", -31)
-    .attr("height", gridSize)
-    .attr("width", gridSize)
-    .style("fill-opacity", 1e-6);
 
   track_column_enter_label
     .append("svg:a")

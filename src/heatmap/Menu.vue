@@ -3,7 +3,7 @@
     <div class="column">
     </div>
     <div class="column is-narrow">
-      <div class="control has-addons">
+      <div class="control has-addons" data-balloon="Select the Target Source" data-balloon-pos="up">
         <router-link class="button is-vocals" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '4', metric_id: $route.params.metric_id }}">Vocals</router-link>
         <router-link class="button is-acc" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '0', metric_id: $route.params.metric_id }}">Accompaniment</router-link>
         <router-link class="button is-drums" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: '2', metric_id: $route.params.metric_id }}">Drums</router-link>
@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="column is-narrow">
-      <div class="control has-addons">
+      <div class="control has-addons" data-balloon="Select the Evaluation Metric" data-balloon-pos="up">
         <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '2' }}">SDR</router-link>
         <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '0' }}">ISR</router-link>
         <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '3' }}">SIR</router-link>
@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="column is-narrow">
-      <div class="control has-addons">
+      <div class="control has-addons" data-balloon="Show Training (51-100) or Test (1-50) tracks" data-balloon-pos="up">
         <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: '0', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Training</router-link>
         <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: '1', target_id: $route.params.target_id, metric_id: $route.params.metric_id }}">Test</router-link>
       </div>
@@ -31,6 +31,7 @@
 <script>
 import bulma from 'bulma/css/bulma.css';
 import headers from './headers.js'
+import balloon from 'balloon-css/balloon.css';
 
 export default {
 }

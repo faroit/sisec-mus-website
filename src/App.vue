@@ -10,7 +10,7 @@
                  <h1 class="title is-4">SiSEC MUS</h1>
                </a>
              </div>
-             <div class="nav-right">
+             <div class="nav-right is-brand">
                <main-menu></main-menu>
              </div>
            </div>

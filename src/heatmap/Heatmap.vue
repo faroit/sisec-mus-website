@@ -1,7 +1,7 @@
 <template>
   <section>
-      <div id="d3container">
-        <svg id='heatmap' width="900" height="300"></svg>
+      <div id="d3container" data-balloon="Click on the track " data-balloon-pos="top" >
+        <svg id='heatmap'width="900" height="300"></svg>
         <div id='tracktip'></div>
         <div id='methodtip'></div>
         <div id='tracktiph'></div>
@@ -34,7 +34,7 @@ import Player from './Player.vue'
 import plot from './render.js'
 import store from '../store.js'
 import headers from './headers.js'
-
+import balloon from 'balloon-css/balloon.css';
 export default {
   components: {
     MapMenu, Player
@@ -92,6 +92,7 @@ export default {
           { 'name': 'Mixture',
             'customClass': 'mix',
             'solo': true,
+            'mute': true,
             'file': [
               this.$route.params.track_id,
               'MIX'
@@ -104,6 +105,7 @@ export default {
             { 'name': target,
               'customClass': target,
               'solo': false,
+              'mute': false,
               'file': [
                 this.$route.params.track_id,
                 'REF',
@@ -150,6 +152,7 @@ export default {
           { 'name': 'Mixture',
             'customClass': 'mix',
             'solo': true,
+            'mute': true,
             'file': [
               this.$route.params.track_id,
               'MIX'
@@ -162,6 +165,7 @@ export default {
             { 'name': headers.targets[track.target_id],
               'customClass': headers.targets[track.target_id],
               'solo': false,
+              'mute': false,
               'file': [
                 track.track_id,
                 headers.methods[track.method_id],
@@ -177,6 +181,7 @@ export default {
           { 'name': 'Reference',
             'customClass': 'ref',
             'solo': true,
+            'mute': false,
             'file': [
               this.$route.params.track_id,
               'REF',
@@ -190,6 +195,7 @@ export default {
             { 'name': headers.methods[track.method_id],
               'customClass': headers.targets[track.target_id],
               'solo': false,
+              'mute': false,
               'file': [
                 track.track_id,
                 headers.methods[track.method_id],
@@ -214,6 +220,10 @@ export default {
 </script>
 
 <style>
+
+#d3container [data-balloon]:before {
+  margin-top: 10em;
+}
 #d3container {
   margin-top: 0em;
 }

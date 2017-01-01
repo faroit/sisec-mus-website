@@ -55,7 +55,7 @@ export default {
         this.$route.params.method
     );
     plot.init();
-    d3.csv("/data/data.csv", function(data) {this.data = data}.bind(this));
+    d3.csv("/data/sisec_mus_2017.csv", function(data) {this.data = data}.bind(this));
   },
   methods: {
     update: function() {

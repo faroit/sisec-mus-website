@@ -6,8 +6,8 @@
          <nav class="nav has-shadow">
            <div class="container">
              <div class="nav-left">
-               <a class="nav-item" href="/">
-                 <h1 class="title is-4">SiSEC MUS</h1>
+               <a class="nav-item is-brand" href="/">
+                <img src="/favicon.png" alt="SISEC"><h1 class="title is-4">SiSEC MUS</h1>
                </a>
              </div>
              <div class="nav-right is-brand">
@@ -52,6 +52,9 @@ export default {
 </script>
 
 <style>
+.nav-left img {
+  margin-right: 1em;
+}
 .nav-left {
   padding-left: 1em;
 }

@@ -21,6 +21,7 @@ rsync \
   -a \
   -p \
   index.html \
+  favicon.png \
   dist \
   data \
   media \

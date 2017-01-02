@@ -74,7 +74,8 @@ module.exports = {
     new FaviconsWebpackPlugin('./favicon.png'),
     new HtmlWebpackPlugin({
       template: 'index.template.ejs',
-      filename: '../index.html'
+      filename: '../index.html',
+      mobile: true,
     }),
   ],
   resolve: {

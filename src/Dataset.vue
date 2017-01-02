@@ -45,7 +45,7 @@ results, and send us back the performance results
   <th></th>
 </tr>
 </thead>
-<tbody v-for="record in json">
+<tbody v-for="record in tracklist">
 <tr>
   <td>{{record.id}}</td>
   <td>{{record.name}}</td>
@@ -54,6 +54,7 @@ results, and send us back the performance results
     <router-link :to="{ name: 'player', params: { is_dev: record.id > 50 ? 0 : 1, target_id: 0, track_id: record.id, metric_id: '2', method: 'REF' }}">
       <i class="fa fa-play"></i>
     </router-link>
+    <button type="button" name="button" v-on:click="play(record.id)">Preview</button>
   </td>
 </tr>
 </tbody>
@@ -67,23 +68,52 @@ results, and send us back the performance results
 
 <script>
 import bulma from 'bulma/css/bulma.css';
+import * as Howler from 'howler'
 
 export default {
   data: function() {
     return {
-      json: null
+      tracklist: null,
+      howlerlist: null,
+      howler: Object,
     }
   },
+  mounted: function() {
+    var sprites = {};
+
+    for (track in this.howlerlist) {
+      sprites[String(track)] = track.pos;
+    }
+    console.log(this.howlerlist)
+    this.howler = new Howler.Howl({
+        preload: false,
+        src: ['/data/howler.m4a'],
+        sprite: sprites
+      });
+  },
   created: function () {
-    this.fetchData()
+    this.fetchHowler();
+    this.fetchTracklist();
   },
   methods: {
-    fetchData: function () {
+    play: function(id) {
+      this.howler.load().stop().play(String(id))
+    },
+    fetchTracklist: function () {
       var xhr = new XMLHttpRequest()
       var self = this
       xhr.open('GET', '/data/tracklist.json')
       xhr.onload = function () {
-        self.json = JSON.parse(xhr.responseText)
+        self.tracklist = JSON.parse(xhr.responseText)
+      }
+      xhr.send()
+    },
+    fetchHowler: function () {
+      var xhr = new XMLHttpRequest()
+      var self = this
+      xhr.open('GET', '/data/howler.json')
+      xhr.onload = function () {
+        self.howlerlist = JSON.parse(xhr.responseText)
       }
       xhr.send()
     }

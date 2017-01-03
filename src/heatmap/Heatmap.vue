@@ -1,6 +1,7 @@
 <template>
   <section>
-      <div id="d3container" data-balloon="Click on any square to start playback" data-balloon-pos="top" >
+      <span><scale-loader :color="loaderColor" :size="loaderHeight" :loading="isLoading"></scale-loader></span>
+      <div id="d3container" v-bind:class="{ 'hide': isLoading }" data-balloon="Click on any square to start playback" data-balloon-pos="top" >
         <svg id='heatmap'width="900" height="300"></svg>
         <div id='tracktip'></div>
         <div id='methodtip'></div>
@@ -10,7 +11,6 @@
       <map-menu></map-menu>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
-        <div class="hero-body">
           <div class="container">
             <player
               :urls="tracklist"
@@ -19,7 +19,6 @@
               v-on:toggleMode="toggleMode"
             >
             </player>
-          </div>
         </div>
       </div>
     </transition>
@@ -35,16 +34,28 @@ import plot from './render.js'
 import store from '../store.js'
 import headers from './headers.js'
 import balloon from 'balloon-css/balloon.css';
+
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
+
 export default {
   components: {
-    MapMenu, Player
+    MapMenu, Player, ScaleLoader
   },
   data: function() {
     return {
       decompose: true,
       data: [],
-      availableMethods: []
+      availableMethods: [],
+      isLoading: true,
+      loaderColor: 'orange',
+      loaderHeight: '26px',
     }
+  },
+  created: function() {
+    this.isLoading = true;
+  },
+  updated: function() {
+    this.isLoading = false;
   },
   mounted: function() {
     plot.setRoute(
@@ -221,11 +232,12 @@ export default {
 
 <style>
 
-#d3container [data-balloon]:before {
-  margin-top: 10em;
-}
 #d3container {
-  margin-top: 0em;
+  margin-top: -1em;
+}
+
+.hide {
+  opacity: 0;
 }
 
 #tracktiph {

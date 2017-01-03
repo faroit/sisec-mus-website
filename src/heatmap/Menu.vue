@@ -12,11 +12,11 @@
       </div>
     </div>
     <div class="column is-narrow">
-      <div class="control has-addons" data-balloon="Select the Evaluation Metric" data-balloon-pos="up">
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '2' }}">SDR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '0' }}">ISR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '3' }}">SIR</router-link>
-        <router-link class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '1' }}">SAR</router-link>
+      <div class="control has-addons">
+        <router-link data-balloon="Signal to Distortion Ratio" data-balloon-pos="up" class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '2' }}">SDR</router-link>
+        <router-link data-balloon="Image to Spatial distortion Ratio" data-balloon-pos="up" class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '0' }}">ISR</router-link>
+        <router-link data-balloon="Source to Interference Ratio" data-balloon-pos="up" class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '3' }}">SIR</router-link>
+        <router-link data-balloon="Sources to Artifacts Ratio" data-balloon-pos="up" class="button" active-class="is-primary" :to="{ name: 'heatmap', params: { is_dev: $route.params.is_dev, target_id: $route.params.target_id, metric_id: '1' }}">SAR</router-link>
       </div>
     </div>
     <div class="column is-narrow">

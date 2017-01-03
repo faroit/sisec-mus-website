@@ -67,21 +67,12 @@ export default {
         }
     },
   },
-  created: function () {
-    this.fetchData()
+  mounted: function () {
+    this.$http.get('/data/metadata.json').then((response) => { return response.json(); }).then((json) => { this.json = json; });
   },
   methods: {
     gh: function(string) {
         return string.includes('github.com')
-    },
-    fetchData: function () {
-      var xhr = new XMLHttpRequest()
-      var self = this
-      xhr.open('GET', '/data/metadata.json')
-      xhr.onload = function () {
-        self.json = JSON.parse(xhr.responseText)
-      }
-      xhr.send()
     }
   }
 }

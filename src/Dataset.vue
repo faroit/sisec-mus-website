@@ -52,9 +52,8 @@ results, and send us back the performance results
   <td>{{record.genre}}</td>
   <td class="is-icon">
     <router-link :to="{ name: 'player', params: { is_dev: record.id > 50 ? 0 : 1, target_id: 0, track_id: record.id, metric_id: '2', method: 'REF' }}">
-      <i class="fa fa-play"></i>
+      <i class="fa fa-play" v-on:mouseover="play(record.id.toString())"></i>
     </router-link>
-    <button type="button" name="button" v-on:click="play(record.id)">Preview</button>
   </td>
 </tr>
 </tbody>
@@ -79,43 +78,31 @@ export default {
     }
   },
   mounted: function() {
-    var sprites = {};
-
-    for (track in this.howlerlist) {
-      sprites[String(track)] = track.pos;
-    }
-    console.log(this.howlerlist)
-    this.howler = new Howler.Howl({
-        preload: false,
-        src: ['/data/howler.m4a'],
-        sprite: sprites
-      });
-  },
-  created: function () {
-    this.fetchHowler();
-    this.fetchTracklist();
+    this.$http.get('/data/tracklist.json').then((response) => { return response.json(); }).then((json) => { this.tracklist = json; });
+    this.$http.get('/data/howler.json').then((response) => { return response.json(); }).then((json) => { this.howlerlist = json; });
   },
   methods: {
     play: function(id) {
-      this.howler.load().stop().play(String(id))
-    },
-    fetchTracklist: function () {
-      var xhr = new XMLHttpRequest()
-      var self = this
-      xhr.open('GET', '/data/tracklist.json')
-      xhr.onload = function () {
-        self.tracklist = JSON.parse(xhr.responseText)
+      this.howler.stop().play(id)
+    }
+  },
+  computed: {
+    sprites: function() {
+      var tmp = {};
+      for (let i in this.howlerlist) {
+        let track = this.howlerlist[i];
+        tmp[track.id.toString()] = track.pos;
       }
-      xhr.send()
-    },
-    fetchHowler: function () {
-      var xhr = new XMLHttpRequest()
-      var self = this
-      xhr.open('GET', '/data/howler.json')
-      xhr.onload = function () {
-        self.howlerlist = JSON.parse(xhr.responseText)
-      }
-      xhr.send()
+      return tmp
+    }
+  },
+  watch: {
+    'sprites': function() {
+      this.howler = new Howler.Howl({
+        preload: true,
+        src: ['/data/howler.m4a'],
+        sprite: this.sprites
+      });
     }
   }
 }

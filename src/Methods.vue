@@ -14,7 +14,7 @@
   </thead>
   <tbody v-for="record in json">
   <tr>
-    <td data-balloon-length='large' data-balloon-pos="right" :data-balloon="record.description">
+    <td>
       <router-link
         active-class="is-primary"
         :to="{ name: 'method', params: { short: record.short}}"

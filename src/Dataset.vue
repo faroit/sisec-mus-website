@@ -45,16 +45,13 @@
               </tr>
               </thead>
               <tbody v-for="record in tracklist">
-                <tr>
+                <tr v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
                   <td>{{record.id}}</td>
                   <td>{{record.name}}</td>
                   <td>{{record.genre}}</td>
                   <td class="is-icon">
-                    <router-link :to="{ name: 'player', params: { is_dev: record.id > 50 ? 0 : 1, target_id: 0, track_id: record.id, metric_id: '2', method: 'REF' }}">
-                      <i class="fa fa-play"
-                        v-on:mouseover="play(record.id.toString())"
-                        v-on:mouseout="stop()"
-                      ></i>
+                    <router-link class='button is-active' :to="{ name: 'player', params: { is_dev: record.id > 50 ? 0 : 1, target_id: 0, track_id: record.id, metric_id: '2', method: 'REF' }}">
+                      Separate
                     </router-link>
                   </td>
                 </tr>

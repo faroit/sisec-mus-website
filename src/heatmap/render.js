@@ -410,7 +410,13 @@ function update(data) {
     .style("cursor", "pointer")
     .attr("y", - 0.5 * (.66 * gridSize))
     .attr("x", 4)
-    .text(function(d) { return d.key })
+    .text(function(d) {
+        if (current_play_method == 'REF') {
+          return '\u25B6';
+        } else {
+          return d.key;
+        }
+    })
     .on("mouseover", function(dclick) {
         d3.select(this)
           .text(function(d) { return '\u25B6' });

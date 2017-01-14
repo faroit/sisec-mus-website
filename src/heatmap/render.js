@@ -411,7 +411,7 @@ function update(data) {
     .attr("y", - 0.5 * (.66 * gridSize))
     .attr("x", 4)
     .text(function(d) {
-        if (current_play_method == 'REF') {
+        if (d.key == current_play_track_id && current_play_method == 'REF') {
           return '\u25B6';
         } else {
           return d.key;

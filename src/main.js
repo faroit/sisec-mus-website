@@ -5,6 +5,7 @@ import VueLazyload from 'vue-lazyload'
 
 import App from './App.vue'
 import Heatmap from './heatmap/Heatmap.vue'
+import Standalone from './heatmap/Standalone.vue'
 import Player from './heatmap/Player.vue'
 import Results from './Results.vue'
 import About from './About.vue'
@@ -26,6 +27,7 @@ const router = new VueRouter({
     { path: '/', component: App,
       children: [
         { path: '', component: Home },
+        { path: 'player/:track_id/:method', name: 'standalone', component: Standalone },
         { path: 'heatmap', redirect: { name: 'heatmap', params: { is_dev: '1', target_id: '4', metric_id: '2' } } },
         { path: 'heatmap/:is_dev/:target_id/:metric_id', name: 'heatmap', component: Heatmap },
         { path: 'heatmap/:is_dev/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Heatmap },

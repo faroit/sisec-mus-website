@@ -1,0 +1,292 @@
+<template>
+  <section>
+    <transition name="slide-fade">
+      <div v-if="tracklist.length > 0">
+          <div class="container">
+            <player
+              :urls="tracklist"
+              :availableMethods="availableMethods"
+              :decompose='decompose'
+              v-on:toggleMode="toggleMode"
+            >
+            </player>
+        </div>
+      </div>
+    </transition>
+  </section>
+
+</template>
+
+<script>
+import * as d3 from 'd3'
+import MapMenu from './Menu.vue'
+import Player from './Player.vue'
+import plot from './render.js'
+import store from '../store.js'
+import headers from './headers.js'
+import balloon from 'balloon-css/balloon.css';
+
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
+
+export default {
+  components: {
+    MapMenu, Player, ScaleLoader
+  },
+  data: function() {
+    return {
+      decompose: true,
+      data: [],
+      availableMethods: [],
+      isLoading: true,
+      loaderColor: 'orange',
+      loaderHeight: '26px',
+    }
+  },
+  created: function() {
+    this.isLoading = true;
+  },
+  updated: function() {
+    this.isLoading = false;
+  },
+  mounted: function() {
+    d3.csv("/data/sisec_mus_2017.csv", function(data) {this.data = data}.bind(this));
+  },
+  methods: {
+    update: function() {
+    },
+    toggleMode: function(d) {
+      this.decompose = ! this.decompose
+    }
+  },
+  computed: {
+    tracklist: function() {
+
+      var trackstoload = []
+
+      if (this.$route.params.method == 'REF') {
+        trackstoload.push(
+          { 'name': 'Mixture',
+            'customClass': 'mix',
+            'solo': true,
+            'mute': true,
+            'file': [
+              this.$route.params.track_id,
+              'MIX'
+            ].join("_") + '.m4a'
+          }
+        );
+
+        for (let target of headers.targets) {
+          trackstoload.push(
+            { 'name': target,
+              'customClass': target,
+              'solo': false,
+              'mute': false,
+              'file': [
+                this.$route.params.track_id,
+                'REF',
+                target
+              ].join("_") + '.m4a'
+            }
+          );
+        }
+        return trackstoload;
+      }
+
+      var filterByMethod = this.data.filter(function(d) {
+        return (
+          d.track_id == this.$route.params.track_id &&
+          d.method_id == headers.methods.indexOf(this.$route.params.method) &&
+          d.metric_id == 2
+        );
+      }.bind(this));
+
+      var filterByTarget = this.data.filter(function(d) {
+        return (
+          d.track_id == this.$route.params.track_id &&
+          d.target_id == this.$route.params.target_id &&
+          d.metric_id == 2
+        );
+      }.bind(this));
+
+      if(this.$route.params.track_id == null || !filterByMethod.length) {
+        return [];
+      }
+
+      this.availableMethods = []
+      for (let track of filterByTarget) {
+        this.availableMethods.push(
+          {
+            'name': headers.methods[track.method_id],
+            'customClass': track.method_id
+          }
+        );
+      }
+
+      if ( this.decompose ) {
+        trackstoload.push(
+          { 'name': 'Mixture',
+            'customClass': 'mix',
+            'solo': true,
+            'mute': true,
+            'file': [
+              this.$route.params.track_id,
+              'MIX'
+            ].join("_") + '.m4a'
+          }
+        );
+
+        for (let track of filterByMethod) {
+          trackstoload.push(
+            { 'name': headers.targets[track.target_id],
+              'customClass': headers.targets[track.target_id],
+              'solo': false,
+              'mute': false,
+              'file': [
+                track.track_id,
+                headers.methods[track.method_id],
+                headers.targets[track.target_id]
+              ].join("_") + '.m4a'
+            }
+          );
+        }
+      }
+      else {
+        console.log(headers.targets[filterByTarget[0].target_id])
+        trackstoload.push(
+          { 'name': 'Reference',
+            'customClass': 'ref',
+            'solo': true,
+            'mute': false,
+            'file': [
+              this.$route.params.track_id,
+              'REF',
+              headers.targets[filterByTarget[0].target_id]
+            ].join("_") + '.m4a'
+          }
+        );
+
+        for (let track of filterByTarget) {
+          trackstoload.push(
+            { 'name': headers.methods[track.method_id],
+              'customClass': headers.targets[track.target_id],
+              'solo': false,
+              'mute': false,
+              'file': [
+                track.track_id,
+                headers.methods[track.method_id],
+                headers.targets[track.target_id]
+              ].join("_") + '.m4a'
+            }
+          );
+        }
+      };
+      return trackstoload;
+    }
+  },
+  watch: {
+    'data': 'update',
+    '$route.params.method' : 'update',
+    '$route.params.track_id' : 'update'
+  }
+}
+</script>
+
+<style>
+
+#d3container {
+  margin-top: -1em;
+}
+
+.hide {
+  opacity: 0;
+}
+
+#tracktiph {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    opacity: 0;
+    font: 12px sans-serif;
+    background-color: transparent;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    pointer-events: none;
+}
+
+#methodtiph {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    opacity: 0;
+    background-color: transparent;
+    font: 12px sans-serif;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    pointer-events: none;
+}
+
+#tracktip {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    padding: 2px;
+    opacity: 0;
+    font: 12px sans-serif;
+    background-color: transparent;
+    border-left: 2px solid #00d1b2;
+    border-right: 2px solid #00d1b2;
+    pointer-events: none;
+}
+
+#methodtip {
+    position: absolute;
+    text-align: center;
+    width: 0px;
+    height: 100px;
+    opacity: 0;
+    padding: 2px;
+    background-color: transparent;
+    font: 12px sans-serif;
+    border-top: 2px solid #00d1b2;
+    border-bottom: 2px solid #00d1b2;
+    pointer-events: none;
+}
+
+div.tooltip {
+  position: relative;
+  text-align: right;
+  width: 300px;
+  height: 30px;
+  padding: 0px;
+  margin-top: 0px;
+  margin-right: 50px;
+  font: 12px sans-serif;
+  border: 0px;
+  color: black;
+}
+
+text.method_label.active {
+  fill: orange;
+}
+
+.grid text.track_label.active {
+  fill: red;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-active {
+  opacity: 0;
+}
+
+</style>

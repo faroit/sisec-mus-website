@@ -3,7 +3,7 @@
       <div class="container has-text-centered">
         <div class="column is-mobile">
           <h1 class="title is-2">
-            Separating Professionally Produced Music
+            Demixing Professionally Produced Music
           </h1>
           <figure class="image">
             <img src="./assets/hero_header.svg" alt="Description">

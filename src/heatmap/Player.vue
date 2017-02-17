@@ -78,7 +78,7 @@ export default {
     Mousetrap.bind('space', this.playpause )
     this.player = new player();
     this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
-    this.update();
+    this.update_tracks();
   },
   beforeDestroy: function() {
     Mousetrap.unbind('space');
@@ -86,8 +86,8 @@ export default {
     delete this.player;
   },
   methods: {
-    update: function() {
-      if(this.isLoading != true) {
+    update_tracks: function(oldval, newval) {
+      if(JSON.stringify(oldval) !== JSON.stringify(newval) && this.isLoading != true) {
         this.stop();
         this.player.playlist.clear();
         this.isLoading = true;
@@ -117,7 +117,10 @@ export default {
     },
   },
   watch: {
-    'urls': 'update'
+    urls: {
+      handler: 'update_tracks',
+      deep: true
+    },
   }
 }
 </script>

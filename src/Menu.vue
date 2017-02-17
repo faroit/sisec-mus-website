@@ -61,7 +61,7 @@
         </a>
         <a class="button" href="mailto:antoine.liutkus@inria.fr">
           <span class="icon">
-             <i class="fa fa-mail"></i>
+             <i class="fa fa-envelope"></i>
           </span>
           <span>Contact</span>
         </a>

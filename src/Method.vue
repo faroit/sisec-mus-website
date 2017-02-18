@@ -1,8 +1,8 @@
 <template>
-  <div class="hero-body">
+  <div>
     <section class="section" v-for="record in json">
        <div>
-         <h1 class="title is-1">
+         <h1 class="title is-2">
            <span>{{record.short}}</span>
            <span class="tag is-dark" v-if="record.is_supervised">
               Is Supervised</i>
@@ -53,8 +53,11 @@ import bulma from 'bulma/css/bulma.css';
 export default {
   data: function() {
     return {
-      json: null
+      json: null,
     }
+  },
+  props: {
+    short: String
   },
   filters: {
     truncate: function(string, value) {
@@ -66,18 +69,18 @@ export default {
     },
   },
   created: function () {
-    this.fetchData()
+    this.fetchData(this.short)
   },
   methods: {
     gh: function(string) {
         return string.includes('github.com')
     },
-    fetchData: function () {
+    fetchData: function (v) {
       var xhr = new XMLHttpRequest()
       var self = this
       xhr.open('GET', '/data/metadata.json')
       xhr.onload = function () {
-        self.json = JSON.parse(xhr.responseText).filter(function (d) { return d.short === self.$route.params.short ;})
+        self.json = JSON.parse(xhr.responseText).filter(function (d) { return d.short === v ;})
       }
       xhr.send()
     }

@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     update_tracks: function(oldval, newval) {
-      if(JSON.stringify(oldval) !== JSON.stringify(newval) && this.isLoading != true) {
+      if(this.isLoading != true) {
         this.stop();
         this.player.playlist.clear();
         this.isLoading = true;

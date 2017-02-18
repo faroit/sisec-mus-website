@@ -6,7 +6,7 @@
             <label id='track-label' class="label">Selected Track</label>
           </div>
           <p class="control has-addons has-addons-centered">
-            <a  v-on:click="selectedID = parseInt(selectedID) - 1" class="button">
+            <a  v-on:click="changeTrack(-1)" class="button">
               <span class="fa fa-minus"></span>
             </a>
             <span class="select">
@@ -16,7 +16,7 @@
                 </option>
               </select>
             </span>
-        <a v-on:click="selectedID = parseInt(selectedID) + 1" class="button">
+        <a v-on:click="changeTrack(1)" class="button">
           <span class="fa fa-plus"></span>
         </a>
       </p>
@@ -43,13 +43,14 @@
         </div>
       </div>
     </transition>
+    <method :short='selectedMethod'></method>
   </section>
-
 </template>
 
 <script>
 import * as d3 from 'd3'
 import Player from './Player.vue'
+import Method from '../Method.vue'
 import plot from './render.js'
 import store from '../store.js'
 import headers from './headers.js'
@@ -59,7 +60,7 @@ import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
 
 export default {
   components: {
-    Selection, Player, ScaleLoader
+    Selection, Player, ScaleLoader, Method
   },
   data: function() {
     return {
@@ -107,6 +108,14 @@ export default {
     });
   },
   methods: {
+    changeTrack: function(add) {
+      for (let track of this.availableIDs) {
+        if (track.id == parseInt(this.selectedID) + add) {
+          this.selectedID = parseInt(this.selectedID) + add
+          return true
+        }
+      }
+    },
     updateMethod: function() {
       this.selectedMethod = this.$route.params.method
     },
@@ -140,7 +149,6 @@ export default {
     },
     tracklist: function() {
       var trackstoload = []
-
       if (this.$route.params.method == 'REF') {
         trackstoload.push(
           { 'name': 'Mixture',
@@ -168,42 +176,46 @@ export default {
             }
           );
         }
-        return trackstoload;
       }
-      console.log(trackstoload)
-      var filterByMethod = this.data.filter(function(d) {
-        return (
-          d.track_id == this.$route.params.track_id &&
-          d.method_id == headers.methods.indexOf(this.selectedMethod) &&
-          d.metric_id == 2
-        );
-      }.bind(this));
+      else {
+        var filterByMethod = this.data.filter(function(d) {
+          return (
+            d.track_id == this.$route.params.track_id &&
+            d.method_id == headers.methods.indexOf(this.selectedMethod) &&
+            d.metric_id == 2
+          );
+        }.bind(this));
 
-      trackstoload.push(
-        { 'name': 'Mixture',
-          'customClass': 'mix',
-          'solo': true,
-          'mute': true,
-          'file': [
-            this.$route.params.track_id,
-            'MIX'
-          ].join("_") + '.m4a'
+        if(!filterByMethod.length) {
+          return [];
         }
-      );
 
-      for (let track of filterByMethod) {
         trackstoload.push(
-          { 'name': headers.targets[track.target_id],
-            'customClass': headers.targets[track.target_id],
-            'solo': false,
-            'mute': false,
+          { 'name': 'Mixture',
+            'customClass': 'mix',
+            'solo': true,
+            'mute': true,
             'file': [
-              track.track_id,
-              headers.methods[track.method_id],
-              headers.targets[track.target_id]
+              this.$route.params.track_id,
+              'MIX'
             ].join("_") + '.m4a'
           }
         );
+
+        for (let track of filterByMethod) {
+          trackstoload.push(
+            { 'name': headers.targets[track.target_id],
+              'customClass': headers.targets[track.target_id],
+              'solo': false,
+              'mute': false,
+              'file': [
+                track.track_id,
+                headers.methods[track.method_id],
+                headers.targets[track.target_id]
+              ].join("_") + '.m4a'
+            }
+          );
+        }
       }
       return trackstoload;
     }

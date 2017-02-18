@@ -41,6 +41,7 @@ export default {
       isLoading: true,
       loaderColor: 'orange',
       loaderHeight: '26px',
+      availableIDs: [],
     }
   },
   created: function() {
@@ -59,6 +60,16 @@ export default {
     );
     plot.init();
     d3.csv("/data/sisec_mus_2017.csv", function(data) {this.data = data}.bind(this));
+    this.$http.get('/data/tracklist.json').then((response) => { return response.json(); }).then((json) => {
+      for (let track of json) {
+        this.availableIDs.push(
+          {
+            'id': track.id,
+            'title': track.name
+          }
+        );
+      };
+    });
   },
   methods: {
     update: function() {
@@ -74,7 +85,11 @@ export default {
   },
   computed: {
     title: function() {
-      return this.$route.params.track_id
+      for (let track of this.availableIDs) {
+        if (track.id == this.$route.params.track_id) {
+          return track.title;
+        }
+      }
     },
     method: function() {
       return this.$route.params.method

@@ -33,7 +33,7 @@ const router = new VueRouter({
         { path: 'heatmap/:is_dev/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Heatmap },
         { path: 'about', component: About },
         { path: 'methods', component: Methods },
-        { path: 'methods/:short', name: 'method', component: Method },
+        { path: 'methods/:short', name: 'method', component: Method, props: true},
         { path: 'results', component: Results },
         { path: 'dataset', component: Dataset },
       ]

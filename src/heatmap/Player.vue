@@ -4,7 +4,6 @@
     <div class="columns" v-bind:class="{ 'hide': isLoading }">
       <div class="column">
         <h2 class="title"><em>{{ title }}</em></h2>
-        <h3 class="title is-5"> Decomposed using <em><a :href="'/#/methods/' + method">{{ method }}</a></em></h3>
       </div>
       <div class="column is-narrow">
         <span class="control has-addons">

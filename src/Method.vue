@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <section class="section" v-for="record in json">
+  <div id='method'>
+    <section v-for="record in json">
        <div>
-         <h1 class="title is-2">
-           <span>{{record.short}}</span>
+         <h1 class="title is-3">
+           <span>Method: {{record.short}}</span>
            <span class="tag is-dark" v-if="record.is_supervised">
               Is Supervised</i>
             </span>
@@ -86,10 +86,13 @@ export default {
     }
   },
   watch: {
-    '$route.params.short': 'fetchData',
+    'short': 'fetchData',
   }
 }
 </script>
 
 <style media="screen">
+#method {
+  margin-top: 2em;
+}
 </style>

@@ -7,7 +7,7 @@
           </div>
           <p class="control has-addons has-addons-centered">
             <a  v-on:click="selectedID = parseInt(selectedID) - 1" class="button">
-              -
+              <span class="fa fa-minus"></span>
             </a>
             <span class="select">
               <select v-model="selectedID">
@@ -17,7 +17,7 @@
               </select>
             </span>
         <a v-on:click="selectedID = parseInt(selectedID) + 1" class="button">
-          +
+          <span class="fa fa-plus"></span>
         </a>
       </p>
         </div>
@@ -39,13 +39,7 @@
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
           <div class="container">
-            <player
-              :urls="tracklist"
-              :availableMethods="availableMethods"
-              :decompose='decompose'
-              v-on:toggleMode="toggleMode"
-            >
-            </player>
+            <player :urls="tracklist"></player>
         </div>
       </div>
     </transition>
@@ -55,7 +49,6 @@
 
 <script>
 import * as d3 from 'd3'
-import Selection from './PlayerSelect.vue'
 import Player from './Player.vue'
 import plot from './render.js'
 import store from '../store.js'
@@ -70,7 +63,6 @@ export default {
   },
   data: function() {
     return {
-      decompose: true,
       data: [],
       availableMethods: [],
       selectedMethod: '-1',
@@ -83,6 +75,11 @@ export default {
   },
   created: function() {
     this.isLoading = true;
+    this.availableMethods.push(
+      {
+        'name': 'REF'
+      }
+    );
     for (let method of headers.methods) {
       this.availableMethods.push(
         {
@@ -166,33 +163,31 @@ export default {
         );
       }.bind(this));
 
-      if ( this.decompose ) {
+      trackstoload.push(
+        { 'name': 'Mixture',
+          'customClass': 'mix',
+          'solo': true,
+          'mute': true,
+          'file': [
+            this.$route.params.track_id,
+            'MIX'
+          ].join("_") + '.m4a'
+        }
+      );
+
+      for (let track of filterByMethod) {
         trackstoload.push(
-          { 'name': 'Mixture',
-            'customClass': 'mix',
-            'solo': true,
-            'mute': true,
+          { 'name': headers.targets[track.target_id],
+            'customClass': headers.targets[track.target_id],
+            'solo': false,
+            'mute': false,
             'file': [
-              this.$route.params.track_id,
-              'MIX'
+              track.track_id,
+              headers.methods[track.method_id],
+              headers.targets[track.target_id]
             ].join("_") + '.m4a'
           }
         );
-
-        for (let track of filterByMethod) {
-          trackstoload.push(
-            { 'name': headers.targets[track.target_id],
-              'customClass': headers.targets[track.target_id],
-              'solo': false,
-              'mute': false,
-              'file': [
-                track.track_id,
-                headers.methods[track.method_id],
-                headers.targets[track.target_id]
-              ].join("_") + '.m4a'
-            }
-          );
-        }
       }
       return trackstoload;
     }

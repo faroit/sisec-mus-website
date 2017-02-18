@@ -16,23 +16,6 @@
             v-on:click='stop'><span class="fa fa-stop"></span></a>
         </span>
       </div>
-      <!-- <div class="column is-narrow">
-        <span class="control">
-          <a class="button"
-            v-on:click="toggleMode"
-            v-bind:class="{ 'is-primary': !decompose, 'is-disabled': isLoading }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
-        </span>
-      </div> -->
-      <!-- <div class="column is-narrow">
-        <span class="select">
-          <select v-model="selectedMethod">
-            <option value='-1'>Compare to</option>
-            <option v-for="method in availableMethods" v-bind:value="method.id">
-              {{ method.name }}
-            </option>
-          </select>
-        </span>
-      </div> -->
     </div>
     <transition name="slide-fade">
       <div id="playlist"
@@ -57,9 +40,6 @@ export default {
   },
   props: {
     urls: Array,
-    decompose: Boolean,
-    availableMethods: Array,
-    selectedMethod: Number,
   },
   data: function () {
     return {

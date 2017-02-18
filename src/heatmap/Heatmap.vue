@@ -12,12 +12,7 @@
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
           <div class="container">
-            <player
-              :urls="tracklist"
-              :availableMethods="availableMethods"
-              :decompose='decompose'
-              v-on:toggleMode="toggleMode"
-            >
+            <player :urls="tracklist">
             </player>
         </div>
       </div>
@@ -43,9 +38,7 @@ export default {
   },
   data: function() {
     return {
-      decompose: true,
       data: [],
-      availableMethods: [],
       isLoading: true,
       loaderColor: 'orange',
       loaderHeight: '26px',
@@ -79,10 +72,6 @@ export default {
       );
       plot.update(this.subset);
     },
-    toggleMode: function(d) {
-      console.log(d)
-      this.decompose = ! this.decompose
-    }
   },
   computed: {
     subset: function() {
@@ -158,7 +147,6 @@ export default {
         );
       }
 
-      if ( this.decompose ) {
         trackstoload.push(
           { 'name': 'Mixture',
             'customClass': 'mix',
@@ -185,37 +173,6 @@ export default {
             }
           );
         }
-      }
-      else {
-        console.log(headers.targets[filterByTarget[0].target_id])
-        trackstoload.push(
-          { 'name': 'Reference',
-            'customClass': 'ref',
-            'solo': true,
-            'mute': false,
-            'file': [
-              this.$route.params.track_id,
-              'REF',
-              headers.targets[filterByTarget[0].target_id]
-            ].join("_") + '.m4a'
-          }
-        );
-
-        for (let track of filterByTarget) {
-          trackstoload.push(
-            { 'name': headers.methods[track.method_id],
-              'customClass': headers.targets[track.target_id],
-              'solo': false,
-              'mute': false,
-              'file': [
-                track.track_id,
-                headers.methods[track.method_id],
-                headers.targets[track.target_id]
-              ].join("_") + '.m4a'
-            }
-          );
-        }
-      };
       return trackstoload;
     }
   },

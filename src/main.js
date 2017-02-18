@@ -18,7 +18,6 @@ import Icon from 'vue-awesome/components/Icon.vue'
 
 Vue.use(VueResource);
 Vue.use(VueRouter);
-
 Vue.use(VueLazyload)
 
 const router = new VueRouter({

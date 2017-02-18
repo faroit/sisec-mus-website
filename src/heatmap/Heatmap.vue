@@ -1,5 +1,18 @@
 <template>
   <section>
+    <h1 class="title is-2">Objective Evaluation Results</h1>
+    <div class="content">
+      The participants were asked to provide estimates for the separated targets
+      for all mixtures. The quality of these estimates was then evaluated by
+      comparison with the true source images using four objective
+      performance criteria. For more information about the evaluation metrics see <a href='http://bass-db.gforge.inria.fr/bss_eval/'>BSSeval</a>.
+    </div>
+    <div class="notification subtitle">
+      The <b>heatmap</b> below shows the result for each audio track and each submitted method.
+      You can use the selections below the heatmap to filter the results by <b>target source</b>, <b>metric</b> or if the track belongs to the <b>test or train data</b>.
+      </p></p>
+        You can click on each rectangle to open the multitrack player. For details about the selected method, click on the red button below the player.
+    </div>
       <span><scale-loader :color="loaderColor" :size="loaderHeight" :loading="isLoading"></scale-loader></span>
       <div id="d3container" v-bind:class="{ 'hide': isLoading }" data-balloon="Click on any square to start playback" data-balloon-pos="top" >
         <svg id='heatmap'width="900" height="300"></svg>
@@ -16,11 +29,13 @@
           </div>
           <div class='column has-text-right'>
             <router-link class='button is-danger' :to="{ name: 'standalone', params: { track_id: this.$route.params.track_id, method: this.$route.params.method }}">
-              Compare to other methods
+              Show details
             </router-link>
           </div>
       </div>
     </transition>
+  </div>
+
   </section>
 
 </template>
@@ -215,7 +230,7 @@ export default {
 <style>
 
 #d3container {
-  margin-top: -1em;
+  margin-top: 0em;
 }
 
 .hide {

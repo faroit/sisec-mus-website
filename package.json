@@ -24,7 +24,7 @@
     "vue-lazyload": "^1.0.0-rc7",
     "vue-loader": "^10.0.2",
     "vue-resource": "^1.0.3",
-    "vue-router": "^2.1.1",
+    "vue-router": "^2.2.1",
     "vue-spinner": "^1.0.2",
     "vue-template-compiler": "^2.1.6",
     "waveform-playlist": "^2.7.0"

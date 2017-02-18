@@ -23,7 +23,7 @@
         </div>
         <div class="column is-narrow">
           <div class="control-label">
-            <label class="label">Selected Method</label>
+            <label class="label">Method</label>
           </div>
           <div class="control">
             <span class="select">
@@ -39,7 +39,7 @@
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
           <div class="container">
-            <player :urls="tracklist"></player>
+            <player :urls="tracklist" :title="title" :method='method'></player>
         </div>
       </div>
     </transition>
@@ -87,22 +87,24 @@ export default {
         }
       );
     };
-
-    for (var i = 1; i < 100; i++) {
-      this.availableIDs.push(
-        {
-          'id': i
-        }
-      );
-    }
+    this.selectedMethod = this.$route.params.method
+    this.selectedID = this.$route.params.track_id
   },
   updated: function() {
     this.isLoading = false;
   },
   mounted: function() {
     d3.csv("/data/sisec_mus_2017.csv", function(data) {this.data = data}.bind(this));
-    this.selectedMethod = this.$route.params.method
-    this.selectedID = this.$route.params.track_id
+    this.$http.get('/data/tracklist.json').then((response) => { return response.json(); }).then((json) => {
+      for (let track of json) {
+        this.availableIDs.push(
+          {
+            'id': track.id,
+            'title': track.name
+          }
+        );
+      };
+    });
   },
   methods: {
     updateMethod: function() {
@@ -118,10 +120,24 @@ export default {
       this.$router.push({ params: { track_id: this.selectedID }})
     },
     toggleMode: function(d) {
-      this.decompose = ! this.decompose
+      this.decompose =! this.decompose
     }
   },
   computed: {
+    title: function() {
+      for (let track of this.availableIDs) {
+        if (track.id == this.selectedID) {
+          return track.title;
+        }
+      }
+    },
+    method: function() {
+      for (let method of this.availableMethods) {
+        if (method.name == this.selectedMethod) {
+          return method.name;
+        }
+      }
+    },
     tracklist: function() {
       var trackstoload = []
 

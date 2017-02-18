@@ -12,8 +12,7 @@
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
           <div class="container">
-            <player :urls="tracklist">
-            </player>
+            <player :urls="tracklist" :title="title" :method='method'></player>
         </div>
       </div>
     </transition>
@@ -74,6 +73,12 @@ export default {
     },
   },
   computed: {
+    title: function() {
+      return this.$route.params.track_id
+    },
+    method: function() {
+      return this.$route.params.method
+    },
     subset: function() {
       return this.data.filter(function(d) {
         return (

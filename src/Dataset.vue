@@ -50,7 +50,7 @@
                   <td>{{record.name}}</td>
                   <td>{{record.genre}}</td>
                   <td class="is-icon" v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
-                    <router-link class='button is-active' :to="{ name: 'standalone', params: { track_id: record.id, method: 'REF' }}">
+                    <router-link class='button is-active' :to="{ name: 'standalone', params: { track_id: record.id.toString(), method: 'REF' }}">
                       Decompose
                     </router-link>
                   </td>

@@ -44,44 +44,6 @@
            </div>
    </div>
  </section>
-  <!-- <tbody >
-  <tr>
-    <td>
-      <a v-if="record.description" :data-balloon="record.description" data-balloon-length='large' data-balloon-pos="right" >
-        {{record.short}}
-      </a>
-      <span v-else>{{record.short}}</span>
-    </td>
-    <td>{{record.authors}}</td>
-    <td>{{record.affiliation}}</td>
-    <td class="is-icon">
-      <a v-if="record.email" :href="'mailto:' + record.email">
-        <i class="fa fa-envelope-o"></i>
-      </a>
-    </td>
-    <td class="is-icon">
-      <span v-if="record.is_supervised">
-        <i class="fa fa-check"></i>
-      </span>
-    </td>
-    <td class="is-icon">
-      <span v-if="record.uses_augmentation">
-        <i class="fa fa-check"></i>
-      </span>
-    </td>
-    <td class="is-icon">
-      <a v-if="record.code" :href="record.code">
-        <i v-bind:class="gh(record.code) ? 'fa fa-github' : 'fa fa-code' "></i>
-      </a>
-    </td>
-    <td class="is-icon">
-      <a v-if="record.references" :href="record.code">
-        <i class="fa fa-quote-left"></i>
-      </a>
-    </td>
-  </tr>
-  </tbody>
-</table> -->
   </div>
 </template>
 

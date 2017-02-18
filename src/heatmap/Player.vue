@@ -3,7 +3,8 @@
     <span><scale-loader :loading="isLoading" :color="loaderColor" :size="loaderHeight"></scale-loader></span>
     <div class="columns" v-bind:class="{ 'hide': isLoading }">
       <div class="column">
-        <h2 class="title">Playing <em><a :href="'/#/methods/' + this.$route.params.method">{{ this.$route.params.method }}</a></em>, Track {{ this.$route.params.track_id }}</h2>
+        <h2 class="title"><em>{{ title }}</em></h2>
+        <h3 class="title is-5"> Decomposed using <em><a :href="'/#/methods/' + method">{{ method }}</a></em></h3>
       </div>
       <div class="column is-narrow">
         <span class="control has-addons">
@@ -16,23 +17,6 @@
             v-on:click='stop'><span class="fa fa-stop"></span></a>
         </span>
       </div>
-      <!-- <div class="column is-narrow">
-        <span class="control">
-          <a class="button"
-            v-on:click="toggleMode"
-            v-bind:class="{ 'is-primary': !decompose, 'is-disabled': isLoading }"><span>{{ decompose ? 'Switch to Method-Mode' : 'Switch to Target-Mode' }}</span></a>
-        </span>
-      </div> -->
-      <!-- <div class="column is-narrow">
-        <span class="select">
-          <select v-model="selectedMethod">
-            <option value='-1'>Compare to</option>
-            <option v-for="method in availableMethods" v-bind:value="method.id">
-              {{ method.name }}
-            </option>
-          </select>
-        </span>
-      </div> -->
     </div>
     <transition name="slide-fade">
       <div id="playlist"
@@ -57,9 +41,8 @@ export default {
   },
   props: {
     urls: Array,
-    decompose: Boolean,
-    availableMethods: Array,
-    selectedMethod: Number,
+    title: '',
+    method: ''
   },
   data: function () {
     return {
@@ -78,7 +61,7 @@ export default {
     Mousetrap.bind('space', this.playpause )
     this.player = new player();
     this.player.playlist.getEventEmitter().on('audiosourcesloaded', this.audioLoaded);
-    this.update();
+    this.update_tracks();
   },
   beforeDestroy: function() {
     Mousetrap.unbind('space');
@@ -86,7 +69,7 @@ export default {
     delete this.player;
   },
   methods: {
-    update: function() {
+    update_tracks: function(oldval, newval) {
       if(this.isLoading != true) {
         this.stop();
         this.player.playlist.clear();
@@ -117,7 +100,10 @@ export default {
     },
   },
   watch: {
-    'urls': 'update'
+    urls: {
+      handler: 'update_tracks',
+      deep: true
+    },
   }
 }
 </script>

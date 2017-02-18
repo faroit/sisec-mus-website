@@ -1,14 +1,41 @@
 <template>
   <section>
-      <span><scale-loader :color="loaderColor" :size="loaderHeight" :loading="isLoading"></scale-loader></span>
-      <div id="d3container" v-bind:class="{ 'hide': isLoading }" data-balloon="Click on any square to start playback" data-balloon-pos="top" >
-        <svg id='heatmap'width="900" height="300"></svg>
-        <div id='tracktip'></div>
-        <div id='methodtip'></div>
-        <div id='tracktiph'></div>
-        <div id='methodtiph'></div>
-      </div>
-      <map-menu></map-menu>
+      <div class="columns">
+        <div class="column is-narrow">
+          <div class="control-label">
+            <label id='track-label' class="label">Selected Track</label>
+          </div>
+          <p class="control has-addons has-addons-centered">
+            <a  v-on:click="changeTrack(-1)" class="button">
+              <span class="fa fa-minus"></span>
+            </a>
+            <span class="select">
+              <select v-model="selectedID">
+                <option v-for="track in availableIDs" v-bind:value="track.id">
+                  {{ track.id }}
+                </option>
+              </select>
+            </span>
+        <a v-on:click="changeTrack(1)" class="button">
+          <span class="fa fa-plus"></span>
+        </a>
+      </p>
+        </div>
+        <div class="column is-narrow">
+          <div class="control-label">
+            <label class="label">Method</label>
+          </div>
+          <div class="control">
+            <span class="select">
+              <select v-model="selectedMethod">
+                <option v-for="method in availableMethods" v-bind:value="method.name">
+                  {{ method.name }}
+                </option>
+              </select>
+            </span>
+          </div>
+        </div>
+    </div>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
           <div class="container">
@@ -16,14 +43,14 @@
         </div>
       </div>
     </transition>
+    <method :short='selectedMethod'></method>
   </section>
-
 </template>
 
 <script>
 import * as d3 from 'd3'
-import MapMenu from './Menu.vue'
 import Player from './Player.vue'
+import Method from '../Method.vue'
 import plot from './render.js'
 import store from '../store.js'
 import headers from './headers.js'
@@ -33,32 +60,41 @@ import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
 
 export default {
   components: {
-    MapMenu, Player, ScaleLoader
+    Selection, Player, ScaleLoader, Method
   },
   data: function() {
     return {
       data: [],
+      availableMethods: [],
+      selectedMethod: '-1',
+      availableIDs: [],
+      selectedID: '1',
       isLoading: true,
       loaderColor: 'orange',
       loaderHeight: '26px',
-      availableIDs: [],
     }
   },
   created: function() {
     this.isLoading = true;
+    this.availableMethods.push(
+      {
+        'name': 'REF'
+      }
+    );
+    for (let method of headers.methods) {
+      this.availableMethods.push(
+        {
+          'name': method
+        }
+      );
+    };
+    this.selectedMethod = this.$route.params.method
+    this.selectedID = this.$route.params.track_id
   },
   updated: function() {
     this.isLoading = false;
   },
   mounted: function() {
-    plot.setRoute(
-        this.$route.params.is_dev,
-        this.$route.params.target_id,
-        this.$route.params.metric_id,
-        this.$route.params.track_id,
-        this.$route.params.method
-    );
-    plot.init();
     d3.csv("/data/sisec_mus_2017.csv", function(data) {this.data = data}.bind(this));
     this.$http.get('/data/tracklist.json').then((response) => { return response.json(); }).then((json) => {
       for (let track of json) {
@@ -72,41 +108,47 @@ export default {
     });
   },
   methods: {
-    update: function() {
-      plot.setRoute(
-          this.$route.params.is_dev,
-          this.$route.params.target_id,
-          this.$route.params.metric_id,
-          this.$route.params.track_id,
-          this.$route.params.method
-      );
-      plot.update(this.subset);
+    changeTrack: function(add) {
+      for (let track of this.availableIDs) {
+        if (track.id == parseInt(this.selectedID) + add) {
+          this.selectedID = parseInt(this.selectedID) + add
+          return true
+        }
+      }
     },
+    updateMethod: function() {
+      this.selectedMethod = this.$route.params.method
+    },
+    updateID: function() {
+      this.selectedID = this.$route.params.track_id
+    },
+    updateURLforMethod: function() {
+      this.$router.push({ params: { method: this.selectedMethod }})
+    },
+    updateURLforID: function() {
+      this.$router.push({ params: { track_id: this.selectedID }})
+    },
+    toggleMode: function(d) {
+      this.decompose =! this.decompose
+    }
   },
   computed: {
     title: function() {
       for (let track of this.availableIDs) {
-        if (track.id == this.$route.params.track_id) {
+        if (track.id == this.selectedID) {
           return track.title;
         }
       }
     },
     method: function() {
-      return this.$route.params.method
-    },
-    subset: function() {
-      return this.data.filter(function(d) {
-        return (
-          d.target_id == this.$route.params.target_id &&
-          d.metric_id == this.$route.params.metric_id &&
-          d.is_dev == this.$route.params.is_dev
-        );
-      }.bind(this));
+      for (let method of this.availableMethods) {
+        if (method.name == this.selectedMethod) {
+          return method.name;
+        }
+      }
     },
     tracklist: function() {
-
       var trackstoload = []
-
       if (this.$route.params.method == 'REF') {
         trackstoload.push(
           { 'name': 'Mixture',
@@ -134,38 +176,19 @@ export default {
             }
           );
         }
-        return trackstoload;
       }
+      else {
+        var filterByMethod = this.data.filter(function(d) {
+          return (
+            d.track_id == this.$route.params.track_id &&
+            d.method_id == headers.methods.indexOf(this.selectedMethod) &&
+            d.metric_id == 2
+          );
+        }.bind(this));
 
-      var filterByMethod = this.data.filter(function(d) {
-        return (
-          d.track_id == this.$route.params.track_id &&
-          d.method_id == headers.methods.indexOf(this.$route.params.method) &&
-          d.metric_id == this.$route.params.metric_id
-        );
-      }.bind(this));
-
-      var filterByTarget = this.data.filter(function(d) {
-        return (
-          d.track_id == this.$route.params.track_id &&
-          d.target_id == this.$route.params.target_id &&
-          d.metric_id == this.$route.params.metric_id
-        );
-      }.bind(this));
-
-      if(this.$route.params.track_id == null || !filterByMethod.length) {
-        return [];
-      }
-
-      this.availableMethods = []
-      for (let track of filterByTarget) {
-        this.availableMethods.push(
-          {
-            'name': headers.methods[track.method_id],
-            'customClass': track.method_id
-          }
-        );
-      }
+        if(!filterByMethod.length) {
+          return [];
+        }
 
         trackstoload.push(
           { 'name': 'Mixture',
@@ -193,16 +216,15 @@ export default {
             }
           );
         }
+      }
       return trackstoload;
     }
   },
   watch: {
-    'data': 'update',
-    '$route.params.is_dev': 'update',
-    '$route.params.target_id': 'update',
-    '$route.params.metric_id': 'update',
-    '$route.params.method' : 'update',
-    '$route.params.track_id' : 'update'
+    '$route.params.method' : 'updateMethod',
+    '$route.params.track_id' : 'updateID',
+    'selectedMethod': 'updateURLforMethod',
+    'selectedID': 'updateURLforID'
   }
 }
 </script>

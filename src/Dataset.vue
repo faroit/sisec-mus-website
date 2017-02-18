@@ -45,13 +45,13 @@
               </tr>
               </thead>
               <tbody v-for="record in tracklist">
-                <tr v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
+                <tr>
                   <td>{{record.id}}</td>
                   <td>{{record.name}}</td>
                   <td>{{record.genre}}</td>
-                  <td class="is-icon">
-                    <router-link class='button is-active' :to="{ name: 'player', params: { is_dev: record.id > 50 ? 0 : 1, target_id: 0, track_id: record.id, metric_id: '2', method: 'REF' }}">
-                      Separate
+                  <td class="is-icon" v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
+                    <router-link class='button is-active' :to="{ name: 'standalone', params: { track_id: record.id.toString(), method: 'REF' }}">
+                      Decompose
                     </router-link>
                   </td>
                 </tr>

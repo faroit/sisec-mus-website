@@ -8,7 +8,7 @@
       comparison with the true source images using four objective
       performance criteria. For more information about the evaluation metrics see <a href='http://bass-db.gforge.inria.fr/bss_eval/'>BSSeval</a>.
     </div>
-    <div class='content  has-text-centered'>
+    <div class='content has-text-centered'>
       <div class="card">
         <table class="table">
             <tr>

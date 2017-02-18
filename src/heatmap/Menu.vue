@@ -1,6 +1,6 @@
 <template>
   <div class="columns">
-    <div class="column">
+    <div class="column is-narrow">
     </div>
     <div class="column is-narrow">
       <div class="control has-addons">

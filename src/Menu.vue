@@ -36,7 +36,7 @@
           Lecture Notes in Computer Science, vol 10169. Springer, Cham
         </div>
         <pre v-if="showBibtex">@inproceedings{
-  Liutkus2017,
+  SiSEC17,
   Title = {The 2016 Signal Separation Evaluation Campaign},
   Address = {Cham},
   Author = {Liutkus, Antoine and St{\"o}ter, Fabian-Robert and Rafii, Zafar and

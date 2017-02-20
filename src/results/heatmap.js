@@ -166,7 +166,7 @@ function rect(data) {
       .attr("class", "rect_group")
     .append("svg:a")
       .attr("xlink:href", function(d){
-        return "/#/heatmap/" + current_is_dev + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.track_id + '/' + headers.methods[d.method_id];
+        return "/#/results/" + current_is_dev + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.track_id + '/' + headers.methods[d.method_id];
       })
     .append("rect")
     .classed("oracle", function(d) { return d.method_id == headers.methods.indexOf("IBM"); })

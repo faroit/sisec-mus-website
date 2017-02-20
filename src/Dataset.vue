@@ -1,11 +1,11 @@
 <template>
   <div class="hero-body">
       <div class="container">
-        <div class="column is-8 is-offset-2">
+        <div class="column">
           <h1 class="title">The DSD100 Dataset</h1>
         </div>
         <div class="columns is-mobile">
-          <div class="column is-8 is-offset-2">
+          <div class="column">
             The data set consists of a total of 100 full-track songs of different
             styles and includes the mixtures and four original sources: </br>
 

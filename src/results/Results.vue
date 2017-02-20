@@ -28,7 +28,7 @@
             <player :urls="tracklist" :title="title" :method='method'></player>
           </div>
           <div class='column has-text-right'>
-            <router-link class='button is-danger' :to="{ name: 'standalone', params: { track_id: this.$route.params.track_id, method: this.$route.params.method }}">
+            <router-link class='button is-danger' :to="{ name: 'listen', params: { track_id: this.$route.params.track_id, method: this.$route.params.method }}">
               Show details
             </router-link>
           </div>

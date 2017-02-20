@@ -1,8 +1,8 @@
 <template>
   <div class="nav-center nav-menu">
-      <router-link class="nav-item is-tab" :to="{ path: '/dataset' }">Task/Dataset</router-link>
+      <router-link class="nav-item is-tab" :to="{ path: '/dataset' }">Dataset</router-link>
       <router-link class="nav-item is-tab" :to="{ path: '/methods' }">Methods</router-link>
-      <router-link class="nav-item is-tab" :to="{ path: '/heatmap' }">Results</router-link>
+      <router-link class="nav-item is-tab" :to="{ path: '/results' }">Results</router-link>
       <router-link class="nav-item is-tab" :to="{ path: '/listen' }">
         <span class="icon">
            <i class="fa fa-volume-up"></i>

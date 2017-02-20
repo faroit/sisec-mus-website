@@ -30,7 +30,7 @@
 
 <script>
 import bulma from 'bulma/css/bulma.css';
-import headers from './headers.js'
+import headers from '../headers.js'
 
 export default {
 }

@@ -43,10 +43,10 @@
 <script>
 import * as d3 from 'd3'
 import MapMenu from './Menu.vue'
-import Player from './Player.vue'
-import plot from './render.js'
+import Player from '../player/Player.vue'
+import plot from './heatmap.js'
 import store from '../store.js'
-import headers from './headers.js'
+import headers from '../headers.js'
 import balloon from 'balloon-css/balloon.css';
 
 import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
@@ -67,8 +67,9 @@ export default {
   created: function() {
     this.isLoading = true;
   },
-  updated: function() {
+  beforeUpdate: function() {
     this.isLoading = false;
+    console.log("updated")
   },
   mounted: function() {
     plot.setRoute(

@@ -4,9 +4,9 @@ import VueResource from 'vue-resource'
 import VueLazyload from 'vue-lazyload'
 
 import App from './App.vue'
-import Heatmap from './heatmap/Heatmap.vue'
-import Standalone from './heatmap/Standalone.vue'
-import Player from './heatmap/Player.vue'
+import Results from './results/Results.vue'
+import Listen from './Listen.vue'
+import Player from './player/Player.vue'
 import About from './About.vue'
 import Methods from './Methods.vue'
 import Method from './Method.vue'
@@ -25,11 +25,11 @@ const router = new VueRouter({
     { path: '/', component: App,
       children: [
         { path: '', component: Home },
-        { path: 'listen', redirect: { name: 'standalone', params: { track_id: '1', method: 'REF' }}},
-        { path: 'listen/:track_id/:method', name: 'standalone', component: Standalone},
-        { path: 'heatmap', redirect: { name: 'heatmap', params: { is_dev: '1', target_id: '4', metric_id: '2' } } },
-        { path: 'heatmap/:is_dev/:target_id/:metric_id', name: 'heatmap', component: Heatmap },
-        { path: 'heatmap/:is_dev/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Heatmap },
+        { path: 'listen', redirect: { name: 'listen', params: { track_id: '1', method: 'REF' }}},
+        { path: 'listen/:track_id/:method', name: 'listen', component: Listen},
+        { path: 'results', redirect: { name: 'results', params: { is_dev: '1', target_id: '4', metric_id: '2' } } },
+        { path: 'results/:is_dev/:target_id/:metric_id', name: 'results', component: Results },
+        { path: 'results/:is_dev/:target_id/:metric_id/play/:track_id/:method', name: 'player', component: Results },
         { path: 'about', component: About },
         { path: 'methods', component: Methods },
         { path: 'methods/:short', name: 'method', component: Method, props: true},

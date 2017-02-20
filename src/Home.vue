@@ -17,9 +17,10 @@
               different styles separated into five components: <strong>vocals, accompaniment, drums, bass and other</strong>.
           </h2>
           <br>
-          <!-- <p class="has-text-centered">
-              <router-link class="button is-large" :to="{ path: '/heatmap' }">View Results</router-link>
-          </p> -->
+          <p class="has-text-centered">
+              <router-link class="button is-large" :to="{ path: '/results' }">Show Results</router-link>
+              <router-link class="button is-large" :to="{ path: '/results' }">Paper</router-link>
+          </p>
 
         </div>
       </div>

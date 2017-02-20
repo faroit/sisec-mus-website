@@ -42,6 +42,7 @@
                 <th>Artist - Title</th>
                 <th>Genre</th>
                 <th></th>
+                <th></th>
               </tr>
               </thead>
               <tbody v-for="record in tracklist">
@@ -49,8 +50,13 @@
                   <td>{{record.id}}</td>
                   <td>{{record.name}}</td>
                   <td>{{record.genre}}</td>
-                  <td class="is-icon" v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
-                    <router-link class='button is-active' :to="{ name: 'standalone', params: { track_id: record.id.toString(), method: 'REF' }}">
+                  <td class="is-icon playback" v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
+                      <span class="icon">
+                         <i class="fa fa-volume-up"></i>
+                      </span>
+                  </td>
+                  <td class="is-icon">
+                    <router-link class='button is-active' :to="{ name: 'listen', params: { track_id: record.id.toString(), method: 'REF' }}">
                       Decompose
                     </router-link>
                   </td>
@@ -110,4 +116,7 @@ export default {
 </script>
 
 <style media="screen">
+.playback:hover {
+  color: orange;
+}
 </style>

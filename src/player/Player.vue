@@ -28,7 +28,7 @@
 <script>
 import bulma from 'bulma/css/bulma.css';
 import fontawesome from 'font-awesome/css/font-awesome.min.css';
-import headers from './headers.js'
+import headers from '../headers.js'
 import Mousetrap from 'mousetrap'
 import * as WaveformPlaylist from 'waveform-playlist'
 import player from './player.js'

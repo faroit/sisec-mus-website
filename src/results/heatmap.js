@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import headers from './headers.js'
+import headers from '../headers.js'
 
 var margin
 var gridSize

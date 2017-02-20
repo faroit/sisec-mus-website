@@ -1,5 +1,5 @@
 import * as WaveformPlaylist from 'waveform-playlist'
-import headers from './headers.js'
+import headers from '../headers.js'
 
 var Player = function() {
   this.playlist = WaveformPlaylist.init({

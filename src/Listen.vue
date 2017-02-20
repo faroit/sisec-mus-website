@@ -1,9 +1,9 @@
 <template>
   <section>
-      <div class="columns">
+      <div class="columns is-centered">
         <div class="column is-narrow">
           <div class="control-label">
-            <label id='track-label' class="label">Selected Track</label>
+            <label id='track-label' class="label">Track</label>
           </div>
           <p class="control has-addons has-addons-centered">
             <a  v-on:click="changeTrack(-1)" class="button">
@@ -12,7 +12,7 @@
             <span class="select">
               <select v-model="selectedID">
                 <option v-for="track in availableIDs" v-bind:value="track.id">
-                  {{ track.id }}
+                  {{ track.id + " " + track.title }} ({{ track.id > 50 ? "Dev": "Test"}})
                 </option>
               </select>
             </span>
@@ -35,6 +35,7 @@
             </span>
           </div>
         </div>
+
     </div>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">
@@ -49,10 +50,9 @@
 
 <script>
 import * as d3 from 'd3'
-import Player from './Player.vue'
-import Method from '../Method.vue'
-import plot from './render.js'
-import store from '../store.js'
+import Player from './player/Player.vue'
+import Method from './Method.vue'
+import store from './store.js'
 import headers from './headers.js'
 import balloon from 'balloon-css/balloon.css';
 

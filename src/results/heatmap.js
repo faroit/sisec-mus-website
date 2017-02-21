@@ -401,7 +401,7 @@ function update(data) {
   track_column_enter_label
     .append("svg:a")
     .attr("xlink:href", function(d){
-      return "/#/heatmap/" + current_is_dev + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.key + '/' + 'REF';
+      return "/#/results/" + current_is_dev + '/' + current_target_id + '/' + current_metric_id + '/play/' + d.key + '/' + 'REF';
     })
     .append('text')
     .attr("class", "track_label")

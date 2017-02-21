@@ -4,7 +4,7 @@ import headers from '../headers.js'
 var Player = function() {
   this.playlist = WaveformPlaylist.init({
     samplesPerPixel: 1260,
-    waveHeight: 60,
+    waveHeight: 80,
     container: document.getElementById("playlist"),
     timescale: true,
     mono: true,

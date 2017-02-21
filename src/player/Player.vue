@@ -157,9 +157,9 @@ export default {
 }
 
 
-.playlist .channel-wrapper .controls label {
+/*.playlist .channel-wrapper .controls label {
     display: none !important;
-}
+}*/
 
 .playlist .channel-wrapper .controls .btn {
     margin-left: 4px;

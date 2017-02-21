@@ -12,6 +12,13 @@
       <router-link class="nav-item is-tab" :to="{ path: '/about' }">About</router-link>
       <span class="nav-item">
         <a
+        href="http://sisec.inria.fr" class="button is-info is-outlined"
+        >
+          <span>SiSEC Website</span>
+        </a>
+      </span>
+      <span class="nav-item">
+        <a
         class="button is-primary"
         v-on:click="toggleCite"
         >

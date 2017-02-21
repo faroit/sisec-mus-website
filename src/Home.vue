@@ -18,8 +18,20 @@
           </h2>
           <br>
           <p class="has-text-centered">
-              <router-link class="button is-large" :to="{ path: '/results' }">Show Results</router-link>
-              <router-link class="button is-large" :to="{ path: '/results' }">Paper</router-link>
+              <router-link class="button is-large is-primary is-inverted" :to="{ path: '/listen/' + this.getRandomNumber() + '/REF'}">
+                  <span class="icon">
+                      <i class="fa fa-volume-up"></i>
+                  </span>
+                  <span>Listen to random Track</span>
+              </router-link>
+              <a class="button is-large is-info is-inverted" href="http://link.springer.com/chapter/10.1007/978-3-319-53547-0_31">
+                  <span class="icon">
+                      <i class="fa fa-book"></i>
+                  </span>
+                  <span>
+                        LVA/ICA Paper
+                  </span>
+              </a>
           </p>
 
         </div>
@@ -31,6 +43,13 @@
 import bulma from 'bulma/css/bulma.css';
 
 export default {
+    methods: {
+        getRandomNumber: function() {
+            var min = 1
+            var max = 100
+            return Math.floor(Math.random() * (max -min +1)) + min;
+        },
+    }
 }
 </script>
 

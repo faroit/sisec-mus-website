@@ -1,5 +1,7 @@
 <template>
-  <div class="hero-body">
+  <section>
+      <h1 id='title' class="title is-2">About SiSEC MUS 2016</h1>
+
     <div class="content">
       <h1 class='title'>Authors of this website</h1>
       <article class="media">
@@ -79,7 +81,7 @@
       </ul>
     </div>
 
-  </div>
+  </section>
 </template>
 
 <script>

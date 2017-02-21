@@ -2,7 +2,7 @@
   <div class="hero-body">
       <div class="container">
         <section>
-          <h1 class="title">The DSD100 Dataset</h1>
+          <h1 class="title is-2">The DSD100 Dataset</h1>
           <div class="columns">
             <div class="column is-half">
               <img src="./assets/hero.svg" width="512" alt="Description">

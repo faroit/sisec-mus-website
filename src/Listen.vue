@@ -1,6 +1,9 @@
 <template>
   <section>
       <div class="columns is-centered">
+        <div class="column">
+          <h1 id='title' class="title is-2">DSD100 Player</h1>
+        </div>
         <div class="column is-narrow">
           <div class="control-label">
             <label id='track-label' class="label">Track</label>
@@ -230,6 +233,9 @@ export default {
 </script>
 
 <style>
+#title {
+  margin-top: 20px;
+}
 
 #d3container {
   margin-top: -1em;

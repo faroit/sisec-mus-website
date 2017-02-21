@@ -1,5 +1,6 @@
 <template>
-  <div class="hero-body">
+  <section>
+    <h1 id='title' class="title is-2">Submitted Methods</h1>
     <table class="table">
       <thead>
         <tr>
@@ -46,7 +47,7 @@
       </tr>
       </tbody>
     </table>
-  </div>
+  </section>
 </template>
 
 <script>

@@ -1,70 +1,78 @@
 <template>
   <div class="hero-body">
       <div class="container">
-        <div class="column">
+        <section>
           <h1 class="title">The DSD100 Dataset</h1>
-        </div>
-        <div class="columns is-mobile">
-          <div class="column">
-            The data set consists of a total of 100 full-track songs of different
-            styles and includes the mixtures and four original sources: </br>
+          <div class="columns">
+            <div class="column is-half">
+              <img src="./assets/hero.svg" width="512" alt="Description">
+            </div>
 
-            <p><img src="./assets/hero.svg" alt="Description"></p>
+            <div class="column">
+              The data set consists of a total of 100 full-track songs of different
+              styles and includes the mixtures and four original sources: </br>
 
-            The dataset is evenly split divided between a development subset and a test subset.
-            The <a href="#/Methods">participants</a> are then t
-            separation function and return the estimated sources and the performance
-            results, and send us back the performance results
 
-            <p>
-              The dataset called Demixing Secrets Dataset 100 (DSD100).
-              The sources for MSD100 were created from stems downloaded
-              from The <a href="http://www.cambridge-mt.com/ms-mtk.htm">
-              ‘Mixing Secrets’ Free Multitrack Download Library.</a>
-              We would like to thank Mike Senior, not only for giving
-              us the permission to use this multitrack material, but also
-              for maintaining such resources for the audio community.
-            </p>
+              The dataset is evenly split divided between a development subset and a test subset.
+              The <a href="#/Methods">participants</a> are then t
+              separation function and return the estimated sources and the performance
+              results, and send us back the performance results
 
-            <p>
-              The complete dataset (~14 GB) can be downloaded
-              <a href="https://infinit.io/_/332Augp">here</a>.
-              For testing and development we provide a subset of the DSD100 <a href="https://www.loria.fr/~aliutkus/DSD100subset.zip">here</a>.
-              It has the same file and folder structure as well as the same audio
-              file formats but consists of only 4 tracks of 30s each.
-            </p>
-            <br/>
-            <h1 class='title'>Listing of all Tracks</h1>
-            <table class="table">
-              <thead>
-              <tr>
-                <th>Track ID</th>
-                <th>Artist - Title</th>
-                <th>Genre</th>
-                <th></th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody v-for="record in tracklist">
-                <tr>
-                  <td>{{record.id}}</td>
-                  <td>{{record.name}}</td>
-                  <td>{{record.genre}}</td>
-                  <td class="is-icon playback" v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
-                      <span class="icon">
-                         <i class="fa fa-volume-up"></i>
-                      </span>
-                  </td>
-                  <td class="is-icon">
-                    <router-link class='button is-active' :to="{ name: 'listen', params: { track_id: record.id.toString(), method: 'REF' }}">
-                      Decompose
-                    </router-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              <p>
+                The dataset called Demixing Secrets Dataset 100 (DSD100).
+                The sources for MSD100 were created from stems downloaded
+                from The <a href="http://www.cambridge-mt.com/ms-mtk.htm">
+                ‘Mixing Secrets’ Free Multitrack Download Library.</a>
+                We would like to thank Mike Senior, not only for giving
+                us the permission to use this multitrack material, but also
+                for maintaining such resources for the audio community.
+              </p>
+              <p>
+                The complete dataset is freely available. For testing and development we provide a subset of the DSD100.
+                It has the same file and folder structure as well as the same audio
+                file formats but consists of only 4 tracks of 30s each.
+              </p>
+              <br/>
+                <div class="block">
+                  <a href="http://liutkus.net/DSD100.zip" class="button is-danger is-outlined">Download DSD100 (14 GB)</a>
+                  <a href="https://www.loria.fr/~aliutkus/DSD100subset.zip" class="button is-primary is-outlined">Download Subset (120 MB)</a>
+                </div>
+                <br/>
+            </div>
           </div>
-        </div>
+        </section>
+        <section>
+          <h1 class='title'>Listing of all Tracks</h1>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Track ID</th>
+              <th>Artist - Title</th>
+              <th>Genre</th>
+              <th></th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody v-for="record in tracklist">
+              <tr>
+                <td>{{record.id}}</td>
+                <td>{{record.name}}</td>
+                <td>{{record.genre}}</td>
+                <td class="is-icon playback" v-on:mouseover="play(record.id.toString())" v-on:mouseout="stop()">
+                    <span class="icon">
+                       <i class="fa fa-volume-up"></i>
+                    </span>
+                </td>
+                <td class="is-icon">
+                  <router-link class='button is-info is-outlined' :to="{ name: 'listen', params: { track_id: record.id.toString(), method: 'REF' }}">
+                    Decompose
+                  </router-link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </section>
       </div>
   </div>
 </template>

@@ -1,8 +1,12 @@
-# Sisec-Website
+# SiSEC-MUS-2016-Website
 
-> SISEC Website
+![e092e6c7-a430-4f32-b1b2-5f24930c994f](https://cloud.githubusercontent.com/assets/72940/23162856/44244014-f830-11e6-8fbc-c1d66d74cdfa.png)
 
-## Build Setup
+## Related Projects
+
+* Post processing of RAW results https://github.com/faroit/sisec-mus-results
+
+## Build the website
 
 ``` bash
 # install dependencies

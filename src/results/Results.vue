@@ -69,7 +69,6 @@ export default {
   },
   beforeUpdate: function() {
     this.isLoading = false;
-    console.log("updated")
   },
   mounted: function() {
     plot.setRoute(

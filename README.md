@@ -4,7 +4,11 @@
 
 ## Related Projects
 
-* Post processing of RAW results https://github.com/faroit/sisec-mus-results
+* [_sisec-mus-results_: Original SiSEC MUS Results and Post-Precessing](https://github.com/faroit/sisec-mus-results)
+
+* [_sisec-mus-previews_: Scripts, to select excerpts of 30s preview]( https://github.com/faroit/sisec-mus-previews)
+
+* [_sisec-mus-trim_: Trim estimates based on 30s preview selection]( https://github.com/faroit/sisec-mus-trim)
 
 ## Build the website
 

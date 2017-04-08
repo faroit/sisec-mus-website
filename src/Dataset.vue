@@ -9,28 +9,33 @@
             </div>
 
             <div class="column">
-              The data set consists of a total of 100 full-track songs of different
-              styles and includes the mixtures and four original sources: </br>
-
-
-              The dataset is evenly split divided between a development subset and a test subset.
-              The <a href="#/Methods">participants</a> are then t
-              separation function and return the estimated sources and the performance
-              results, and send us back the performance results
+              The Demixing Secrets Dataset 100 (DSD100) consists of a total of
+              100 full-track songs of different styles and includes the
+              mixtures and four original sources/stems. </br>
 
               <p>
-                The dataset called Demixing Secrets Dataset 100 (DSD100).
-                The sources for MSD100 were created from stems downloaded
-                from The <a href="http://www.cambridge-mt.com/ms-mtk.htm">
+                The stems for MSD100 were created from sources downloaded
+                from the <a href="http://www.cambridge-mt.com/ms-mtk.htm">
                 ‘Mixing Secrets’ Free Multitrack Download Library.</a>
                 We would like to thank Mike Senior, not only for giving
                 us the permission to use this multitrack material, but also
                 for maintaining such resources for the audio community.
               </p>
               <p>
-                The complete dataset is freely available. For testing and development we provide a subset of the DSD100.
-                It has the same file and folder structure as well as the same audio
-                file formats but consists of only 4 tracks of 30s each.
+                The dataset is evenly split divided between a development
+                (<i>Dev</i>) subset and a test (<i>Test</i>) subset. Methods
+                that are using supervised learning, do not use the Test data during
+                training.
+                The <a href="#/Methods">participants</a> are asked to develop a
+                separation function and return the estimated sources and the performance
+                results, and send us back the performance results.
+              </p>
+              <p>
+                The complete dataset is freely available. For testing we
+                provide a small subset of the DSD100.
+                It has the same file and folder structure as well as the
+                same audio file formats but consists of only 4 tracks of
+                30s each.
               </p>
               <br/>
                 <div class="block">

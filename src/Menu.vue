@@ -39,24 +39,17 @@
         <div v-if="!showBibtex">
           Antoine Liutkus, Fabian-Robert Stöter, Zafar Rafii, Daichi Kitamura,</br>
           Bertrand Rivet, Nobutaka Ito, Nobutaka Ono, and Julie Fontecave </br>
-          Latent Variable Analysis and Signal Separation (LVA/ICA 2017)</br>
-          Lecture Notes in Computer Science, vol 10169. Springer, Cham
+          13th International Conference on Latent Variable Analysis and Signal Separation (LVA/ICA 2017)</br>
         </div>
         <pre v-if="showBibtex">@inproceedings{
   SiSEC17,
   Title = {The 2016 Signal Separation Evaluation Campaign},
-  Address = {Cham},
-  Author = {Liutkus, Antoine and St{\"o}ter, Fabian-Robert and Rafii, Zafar and
-    Kitamura, Daichi and Rivet, Bertrand and Ito, Nobutaka and
-    Ono, Nobutaka and Fontecave, Julie},
-  Editor = {Tichavsk{\'y}, Petr and Babaie-Zadeh, Massoud and
-    Michel, Olivier J.J. and Thirion-Moreau, Nad{\`e}ge},
+  Author = {Liutkus, Antoine and St{\"o}ter, Fabian-Robert and Rafii, Zafar and Kitamura, Daichi and Rivet, Bertrand and Ito, Nobutaka and Ono, Nobutaka and Fontecave, Julie},
+  booktitle = {Latent Variable Analysis and Signal Separation: 13th International Conference, LVA/ICA 2017, Grenoble, France, February 21-23},
   Pages = {323--332},
   Publisher = {Springer International Publishing},
   Year = {2017},
-  booktitle = {Latent Variable Analysis and Signal Separation - 12th International
-    Conference, {LVA/ICA} 2015, Liberec, Czech Republic, August 25-28,
-    2015, Proceedings},
+  2017, Proceedings}
 }</pre>
       </section>
       <footer class="modal-card-foot">

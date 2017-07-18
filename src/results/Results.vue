@@ -145,11 +145,17 @@ export default {
         );
 
         for (let target of headers.targets) {
+          var isAccompaniment
+          if(target == 'accompaniment') {
+            isAccompaniment = true
+          } else {
+            isAccompaniment = false
+          }
           trackstoload.push(
             { 'name': target,
               'customClass': target,
               'solo': false,
-              'mute': false,
+              'mute': isAccompaniment,
               'file': [
                 this.$route.params.track_id,
                 'REF',
@@ -204,11 +210,17 @@ export default {
         );
 
         for (let track of filterByMethod) {
+          var isAccompaniment
+          if(headers.targets[track.target_id] == 'accompaniment') {
+            isAccompaniment = true
+          } else {
+            isAccompaniment = false
+          }
           trackstoload.push(
             { 'name': headers.targets[track.target_id],
               'customClass': headers.targets[track.target_id],
               'solo': false,
-              'mute': false,
+              'mute': isAccompaniment,
               'file': [
                 track.track_id,
                 headers.methods[track.method_id],

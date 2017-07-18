@@ -27,7 +27,7 @@
     "vue-router": "^2.2.1",
     "vue-spinner": "^1.0.2",
     "vue-template-compiler": "^2.1.6",
-    "waveform-playlist": "^2.7.0"
+    "waveform-playlist": "^2.10.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

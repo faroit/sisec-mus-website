@@ -64,6 +64,9 @@ export default {
   },
   beforeDestroy: function() {
     Mousetrap.unbind('space');
+    for (i = 0; i < player.playlist.tracks.length; ++i) {
+      Mousetrap.unbind(String(i + 1));
+    }
     this.stop();
     delete this.player;
   },
@@ -74,7 +77,14 @@ export default {
         this.player.playlist.clear();
         this.isLoading = true;
         this.player.loadTargets(this.urls);
-      }
+        for (var i = 0; i < this.urls.length; ++i) {
+            (function(i, e) {
+                Mousetrap.bind(String(i + 1), function() {
+                  e.player.playlist.getEventEmitter().emit('solo', e.player.playlist.tracks[i])
+                });
+            })(i, this);
+          }
+        }
     },
     playpause: function(event) {
       if (this.isPlaying) {
@@ -82,6 +92,7 @@ export default {
       }
       else {
         this.player.playlist.getEventEmitter().emit('play')
+        this.player.playlist.getEventEmitter().on('finished', this.stop);
       }
       this.isPlaying = ! this.isPlaying
       event.stopPropagation();

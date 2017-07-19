@@ -35,7 +35,7 @@
         <p class="modal-card-title">The 2016 Signal Separation Evaluation Campaign</p>
         <button class="delete" v-on:click="toggleCite"></button>
       </header>
-      <section class="modal-card-body">
+      <section class="modal-card-body" v-bind:class="{ 'bibtex': showBibtex }" >
         <div v-if="!showBibtex">
           Antoine Liutkus, Fabian-Robert Stöter, Zafar Rafii, Daichi Kitamura,</br>
           Bertrand Rivet, Nobutaka Ito, Nobutaka Ono, and Julie Fontecave </br>
@@ -44,8 +44,14 @@
         <pre v-if="showBibtex">@inproceedings{
   SiSEC17,
   Title = {The 2016 Signal Separation Evaluation Campaign},
-  Author = {Liutkus, Antoine and St{\"o}ter, Fabian-Robert and Rafii, Zafar and Kitamura, Daichi and Rivet, Bertrand and Ito, Nobutaka and Ono, Nobutaka and Fontecave, Julie},
-  booktitle = {Latent Variable Analysis and Signal Separation: 13th International Conference, LVA/ICA 2017, Grenoble, France, February 21-23},
+  Author = {
+      Liutkus, Antoine and St{\"o}ter, Fabian-Robert and
+      Rafii, Zafar and Kitamura, Daichi and
+      Rivet, Bertrand and Ito, Nobutaka and
+      Ono, Nobutaka and Fontecave, Julie},
+  booktitle = {
+    Latent Variable Analysis and Signal Separation:
+    13th International Conference, LVA/ICA 2017, Grenoble, France},
   Pages = {323--332},
   Publisher = {Springer International Publishing},
   Year = {2017},
@@ -53,7 +59,7 @@
 }</pre>
       </section>
       <footer class="modal-card-foot">
-        <a class="button" v-bind:class="{ 'is-danger is-outlined': showBibtex }" v-on:click="toggleBibtex">
+        <a class="button" v-bind:class="{ 'is-danger': showBibtex }" v-on:click="toggleBibtex">
           <span class="icon">
              <i class="fa fa-book"></i>
           </span>
@@ -95,10 +101,30 @@ export default {
 
 <style media="screen">
 .nav {
-    margin-top: 10px
+    margin-top: 10px;
+    z-index: 1000;
 }
 
 .modal-card-body pre {
   text-align: left;
 }
+
+.modal {
+  z-index: 9998;
+}
+
+.modal-card {
+  z-index: 9999;
+}
+
+.bibtex {
+  background-color: #ff3860;
+  color: white;
+}
+
+.bibtex pre {
+  background-color: #ff3860;
+  color: white;
+}
+
 </style>

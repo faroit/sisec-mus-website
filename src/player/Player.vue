@@ -64,8 +64,10 @@ export default {
   },
   beforeDestroy: function() {
     Mousetrap.unbind('space');
-    for (i = 0; i < player.playlist.tracks.length; ++i) {
+    for (var i = 0; i < this.player.playlist.tracks.length; ++i) {
+      (function(i) {
       Mousetrap.unbind(String(i + 1));
+      })(i);
     }
     this.stop();
     delete this.player;

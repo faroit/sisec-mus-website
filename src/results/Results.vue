@@ -7,12 +7,6 @@
       comparison with the true source images using four objective
       performance criteria. For more information about the evaluation metrics see <a href='http://bass-db.gforge.inria.fr/bss_eval/'>BSSeval</a>.
     </div>
-    <div class="notification subtitle">
-      The <b>heatmap</b> below shows the result for each audio track and each submitted method.
-      You can use the selections below the heatmap to filter the results by <b>target source</b>, <b>metric</b> or if the track belongs to the <b>test or train data</b>.
-      </p></p>
-        You can click on each rectangle to open the multitrack player. For details about the selected method, click on the "Show Details" button below the player.
-    </div>
       <span><scale-loader :color="loaderColor" :size="loaderHeight" :loading="isLoading"></scale-loader></span>
       <div id="d3container" v-bind:class="{ 'hide': isLoading }" data-balloon="Click on any square to start playback" data-balloon-pos="top" >
         <svg id='heatmap'width="900" height="300"></svg>
@@ -34,6 +28,12 @@
           </div>
       </div>
     </transition>
+    <div class="notification subtitle">
+      The <b>heatmap</b> above shows the result for each audio track and each submitted method.
+      You can use the selections below the heatmap to filter the results by <b>target source</b>, <b>metric</b> or if the track belongs to the <b>test or train data</b>.
+      </p></p>
+        You can click on each rectangle to open the multitrack player. For details about the selected method, click on the "Show Details" button below the player.
+    </div>
     <div>
       <a href="https://sisec17.audiolabs-erlangen.de/data/sisec_mus_2017_full.csv" class="button is-danger is-outlined">Download all results as CSV</a>
     </div>

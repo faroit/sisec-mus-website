@@ -154,7 +154,7 @@ export default {
           trackstoload.push(
             { 'name': target,
               'customClass': target,
-              'solo': false,
+              'solo': headers.targets.indexOf(target) == this.$route.params.target_id,
               'mute': isAccompaniment,
               'file': [
                 this.$route.params.track_id,
@@ -219,7 +219,7 @@ export default {
           trackstoload.push(
             { 'name': headers.targets[track.target_id],
               'customClass': headers.targets[track.target_id],
-              'solo': false,
+              'solo': track.target_id == this.$route.params.target_id,
               'mute': isAccompaniment,
               'file': [
                 track.track_id,

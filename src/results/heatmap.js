@@ -388,10 +388,10 @@ function update(data) {
         classed("active", function(d) { return d.key == dclick.key; });
     })
     .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
-    // .style("fill-opacity", 1e-6)
+    .style("fill-opacity", 1e-6)
     .transition(t)
-    // .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
-    // .style("fill-opacity", 1)
+    .attr("transform", function(d) { return "translate(" + track_scale(d.key) + ", 0)"; })
+    .style("fill-opacity", 1)
     .each(rect)
 
   var track_column_enter_label = track_column_enter

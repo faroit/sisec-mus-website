@@ -22,10 +22,10 @@ Vue.use(VueLazyload)
 const router = new VueRouter({
   linkActiveClass: 'is-active',
   routes: [
-    { path: '/', component: App, props: (route) => ({ mode: route.query.mode }), 
+    { path: '/', component: App,
       children: [
         { path: '', component: Home },
-        { path: 'listen', redirect: { name: 'listen', params: { track_id: '1', method: 'REF' }}},
+        { path: 'listen', redirect: { name: 'listen', params: { track_id: '1', method: 'REF' }}, props: (route) => ({ mode: route.query.mode })},
         { path: 'listen/:track_id/:method', name: 'listen', component: Listen},
         { path: 'results', redirect: { name: 'results', params: { is_dev: '1', target_id: '4', metric_id: '2' } } },
         { path: 'results/:is_dev/:target_id/:metric_id', name: 'results', component: Results },
@@ -39,6 +39,17 @@ const router = new VueRouter({
   ]
 })
 
+function hasQueryParams(route) {
+  return !!Object.keys(route.query).length
+}
+
+router.beforeEach((to, from, next) => {
+   if(!hasQueryParams(to) && hasQueryParams(from)){
+    next({name: to.name, query: from.query});
+  } else {
+    next()
+  }
+})
 
 const app = new Vue({
   router

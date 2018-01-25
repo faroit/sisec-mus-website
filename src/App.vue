@@ -48,12 +48,9 @@ import MainMenu from './Menu.vue'
 
 export default {
   components: { MainMenu },
-  props: {
-    mode: String
-  },
   computed: {
     embed: function() {
-      if (this.mode == "embed") {
+      if (this.$route.query.mode == "embed") {
         return true;
       } else {
         return false;

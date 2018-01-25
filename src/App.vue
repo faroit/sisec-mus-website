@@ -1,6 +1,7 @@
 <template>
   <div>
     <section class="hero is-default is-bold">
+    <template v-if="!embed">
      <div class="hero-head">
        <div class="container">
          <nav class="nav has-shadow">
@@ -17,14 +18,14 @@
          </nav>
        </div>
      </div>
-
-     <div class="hero-body">
+   </template>
+     <div v-bind:class="{ 'hero-body': !embed }">
        <div class="container">
          <router-view></router-view>
        </div>
      </div>
    </section>
-   <footer class="footer">
+   <footer class="footer" v-if="!embed">
    <div class="container">
      <div class="content has-text-centered">
        <p>
@@ -32,8 +33,7 @@
          <span><img src="./assets/alabs_logo.svg" alt="audiolab" width="100px"></span>
        </p>
        <p>
-         The source code of this website is licensed
-         <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+         The website content
          is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
        </p>
      </div>
@@ -47,11 +47,24 @@ import bulma from 'bulma/css/bulma.css';
 import MainMenu from './Menu.vue'
 
 export default {
-  components: { MainMenu }
+  components: { MainMenu },
+  props: {
+    mode: String
+  },
+  computed: {
+    embed: function() {
+      if (this.mode == "embed") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  }
 }
 </script>
 
 <style>
+
 .nav-left img {
   margin-right: 1em;
 }

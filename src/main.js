@@ -22,7 +22,7 @@ Vue.use(VueLazyload)
 const router = new VueRouter({
   linkActiveClass: 'is-active',
   routes: [
-    { path: '/', component: App,
+    { path: '/', component: App, props: (route) => ({ mode: route.query.mode }), 
       children: [
         { path: '', component: Home },
         { path: 'listen', redirect: { name: 'listen', params: { track_id: '1', method: 'REF' }}},

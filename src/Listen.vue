@@ -1,12 +1,9 @@
 <template>
   <section>
       <div class="columns is-centered">
-        <div class="column">
-          <h1 id='title' class="title is-2">DSD100 Player</h1>
-        </div>
         <div class="column is-narrow">
           <div class="control-label">
-            <label id='track-label' class="label">Track</label>
+            <label id='track-label' class="label">Select Track</label>
           </div>
           <p class="control has-addons has-addons-centered">
             <a  v-on:click="changeTrack(-1)" class="button">
@@ -26,7 +23,7 @@
         </div>
         <div class="column is-narrow">
           <div class="control-label">
-            <label class="label">Method</label>
+            <label class="label">Select Method</label>
           </div>
           <div class="control">
             <span class="select">
@@ -38,7 +35,6 @@
             </span>
           </div>
         </div>
-
     </div>
     <transition name="slide-fade">
       <div v-if="tracklist.length > 0">

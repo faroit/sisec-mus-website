@@ -43,7 +43,7 @@
         </div>
       </div>
     </transition>
-    <method :short='selectedMethod'></method>
+    <method v-if="!embed" :short='selectedMethod'></method>
   </section>
 </template>
 

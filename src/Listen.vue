@@ -1,6 +1,6 @@
 <template>
   <section>
-      <div class="columns is-centered">
+      <div v-if="!embed" class="columns is-centered">
         <div class="column is-narrow">
           <div class="control-label">
             <label id='track-label' class="label">Select Track</label>
@@ -137,6 +137,13 @@ export default {
         if (track.id == this.selectedID) {
           return track.title;
         }
+      }
+    },
+    embed: function() {
+      if (this.$route.query.mode == "embed") {
+        return true;
+      } else {
+        return false;
       }
     },
     method: function() {
